@@ -315,12 +315,14 @@
 
         let connection = null;
         let blockhash = null;
+        let lastValidBlockHeight = null;
         for (const rpc of RPC_URLS) {
           try {
             log(`Connecting to Solana RPC (${rpc.replace('https://', '').split('/')[0]})...`);
             const conn = new Connection(rpc, 'confirmed');
             const res = await conn.getLatestBlockhash('confirmed');
             blockhash = res.blockhash;
+            lastValidBlockHeight = res.lastValidBlockHeight;
             connection = conn;
             log(`Connected! Recent Blockhash: ${blockhash.slice(0, 10)}...`, 'success');
             break;
@@ -333,13 +335,21 @@
           throw new Error('Could not fetch latest blockhash from Solana network. Please retry.');
         }
 
+        // Verify user wallet SOL balance for rent and fees
+        const userBalLamports = await connection.getBalance(connectedUserPubkey);
+        const userBalSol = userBalLamports / 1e9;
+        log(`Wallet Balance: ${userBalSol.toFixed(4)} SOL`, userBalSol >= 0.015 ? 'info' : 'warn');
+        if (userBalSol < 0.01) {
+          throw new Error(`Insufficient SOL in wallet (${userBalSol.toFixed(4)} SOL). You need at least ~0.015 SOL to pay for mint rent, ATA rent, and Metaplex metadata. Please transfer SOL to ${connectedUserPubkey.toBase58()} and retry.`);
+        }
+
         log('Generating unique $SIVLET Mint Keypair...');
         const mintKeypair = Keypair.generate();
         const mintPubkey = mintKeypair.publicKey;
         log(`Mint Address: ${mintPubkey.toBase58()}`, 'info');
 
         log('Building 7-in-1 genesis transaction...');
-        // Standard SPL Token Constants
+        // Standard SPL Token & Metaplex Constants
         const TOKEN_PROGRAM_ID = new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
         const ASSOCIATED_TOKEN_PROGRAM_ID = new PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL');
         const METAPLEX_PROGRAM_ID = new PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s');
@@ -418,7 +428,57 @@
           data: mintToData
         });
 
-        // 5. Revoke Mint Authority (0% inflation forever)
+        // 5. Attach Metaplex Token Metadata V3 (Name, Ticker, Logo)
+        const enc = new TextEncoder();
+        const tokenNameBytes = enc.encode('SivletLabs Token');
+        const tokenSymbolBytes = enc.encode('SIVLET');
+        const tokenUriBytes = enc.encode('https://sivletlabs.github.io/assets/token-metadata.json');
+
+        const metadataDataLen = 1 + 4 + tokenNameBytes.length + 4 + tokenSymbolBytes.length + 4 + tokenUriBytes.length + 2 + 1 + 1 + 1 + 1 + 1;
+        const metadataData = new Uint8Array(metadataDataLen);
+        const metaView = new DataView(metadataData.buffer);
+
+        let mOffset = 0;
+        metadataData[mOffset++] = 33; // CreateMetadataAccountV3 discriminator
+
+        metaView.setUint32(mOffset, tokenNameBytes.length, true);
+        mOffset += 4;
+        metadataData.set(tokenNameBytes, mOffset);
+        mOffset += tokenNameBytes.length;
+
+        metaView.setUint32(mOffset, tokenSymbolBytes.length, true);
+        mOffset += 4;
+        metadataData.set(tokenSymbolBytes, mOffset);
+        mOffset += tokenSymbolBytes.length;
+
+        metaView.setUint32(mOffset, tokenUriBytes.length, true);
+        mOffset += 4;
+        metadataData.set(tokenUriBytes, mOffset);
+        mOffset += tokenUriBytes.length;
+
+        metaView.setUint16(mOffset, 0, true); // sellerFeeBasisPoints: 0%
+        mOffset += 2;
+
+        metadataData[mOffset++] = 0; // creators: None
+        metadataData[mOffset++] = 0; // collection: None
+        metadataData[mOffset++] = 0; // uses: None
+        metadataData[mOffset++] = 1; // isMutable: true (retains creator update authority)
+        metadataData[mOffset++] = 0; // collectionDetails: None
+
+        tx.add({
+          keys: [
+            { pubkey: metadataPda, isSigner: false, isWritable: true },
+            { pubkey: mintPubkey, isSigner: false, isWritable: false },
+            { pubkey: connectedUserPubkey, isSigner: true, isWritable: false },
+            { pubkey: connectedUserPubkey, isSigner: true, isWritable: true },
+            { pubkey: connectedUserPubkey, isSigner: false, isWritable: false },
+            { pubkey: SystemProgram.programId, isSigner: false, isWritable: false }
+          ],
+          programId: METAPLEX_PROGRAM_ID,
+          data: metadataData
+        });
+
+        // 6. Revoke Mint Authority (0% inflation forever)
         const revokeMintData = new Uint8Array([6, 0, 0]);
 
         tx.add({
@@ -430,7 +490,7 @@
           data: revokeMintData
         });
 
-        // 6. Revoke Freeze Authority
+        // 7. Revoke Freeze Authority
         const revokeFreezeData = new Uint8Array([6, 1, 0]);
 
         tx.add({
@@ -447,27 +507,49 @@
 
         log('Requesting signature in your wallet... Please click "Approve" in OKX / Phantom.', 'warn');
         let txSig = null;
-        if (walletProvider.signAndSendTransaction) {
+
+        // Try standard signTransaction first to ensure multi-signer integrity
+        if (walletProvider.signTransaction) {
+          try {
+            const signedTx = await walletProvider.signTransaction(tx);
+            // Re-apply mintKeypair signature to guarantee both signers are present
+            signedTx.partialSign(mintKeypair);
+            log('Broadcasting signed transaction to Solana Mainnet...');
+            setStatus('BROADCASTING', 'amber');
+            const rawTx = signedTx.serialize();
+            txSig = await connection.sendRawTransaction(rawTx, { skipPreflight: false });
+          } catch (signErr) {
+            log(`signTransaction fallback: ${signErr.message}`, 'warn');
+          }
+        }
+
+        if (!txSig && walletProvider.signAndSendTransaction) {
           try {
             const sendRes = await walletProvider.signAndSendTransaction(tx);
             txSig = typeof sendRes === 'string' ? sendRes : (sendRes?.signature || sendRes?.txHash || sendRes);
           } catch (sendErr) {
-            log(`Direct wallet send note: ${sendErr.message}`, 'warn');
+            throw new Error(`Wallet signing failed: ${sendErr.message}`);
           }
         }
 
         if (!txSig) {
-          const signedTx = await walletProvider.signTransaction(tx);
-          log('Broadcasting signed transaction to Solana Mainnet...');
-          setStatus('BROADCASTING', 'amber');
-          const rawTx = signedTx.serialize();
-          txSig = await connection.sendRawTransaction(rawTx, { skipPreflight: false });
+          throw new Error('No signature received from wallet provider.');
         }
 
         log(`Transaction Broadcasted! Signature: ${txSig}`, 'info');
         log('Waiting for network confirmation...', 'info');
 
-        const confirmation = await connection.confirmTransaction(txSig, 'confirmed');
+        let confirmation = null;
+        try {
+          confirmation = await connection.confirmTransaction({
+            blockhash,
+            lastValidBlockHeight,
+            signature: txSig
+          }, 'confirmed');
+        } catch (cErr) {
+          confirmation = await connection.confirmTransaction(txSig, 'confirmed');
+        }
+
         if (confirmation && confirmation.value && confirmation.value.err) {
           throw new Error('Transaction confirmed with error: ' + JSON.stringify(confirmation.value.err));
         }
