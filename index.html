@@ -340,7 +340,7 @@
             <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
           </a>
 
-          <button onclick="addTokenToMetaMask()" class="px-3.5 py-2 rounded bg-lab-900 hover:bg-lab-800 border border-lab-border text-slate-300 text-xs font-mono transition-colors flex items-center gap-1.5">
+          <button onclick="addTokenToWallet()" class="px-3.5 py-2 rounded bg-lab-900 hover:bg-lab-800 border border-lab-border text-slate-300 text-xs font-mono transition-colors flex items-center gap-1.5">
             <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-slate-400"></i>
             <span>Add to Wallet</span>
           </button>
@@ -435,7 +435,7 @@
                 </span>
               </div>
               <p class="text-[11px] text-slate-400 font-sans leading-relaxed">
-                Zero unauthenticated bypass. Every forward pass strictly requires MetaMask off-chain ECDSA signature under RFC 7231 HTTP 402 specifications.
+                Zero unauthenticated bypass. Every forward pass strictly requires Web3 wallet off-chain ECDSA signature (EIP-712) under RFC 7231 HTTP 402 specifications. Compatible with OKX, Rabby, Phantom, Coinbase, MetaMask &amp; all EIP-1193 providers.
               </p>
             </div>
 
@@ -443,7 +443,7 @@
             <div class="flex items-center gap-3">
               <button onclick="executePlaygroundInference()" id="playRunBtn" class="flex-1 py-3 px-4 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-all shadow-lg shadow-emerald-950/40 flex items-center justify-center gap-2">
                 <i data-lucide="key-round" class="w-4 h-4 fill-current"></i>
-                <span id="playRunBtnText">Sign with MetaMask &amp; Run Forward Pass</span>
+                <span id="playRunBtnText">Sign with Web3 Wallet &amp; Run Forward Pass</span>
               </button>
 
               <button onclick="resetPlaygroundPreset()" class="py-3 px-4 rounded bg-lab-900 hover:bg-lab-800 border border-lab-border text-slate-400 hover:text-white text-xs font-mono transition-colors">
@@ -562,7 +562,7 @@
 
                 <!-- Handshake Step Log -->
                 <div class="mt-2 text-[10px] text-slate-400 bg-lab-950/60 p-2 rounded border border-lab-border/60 flex items-center justify-between" id="handshakeLogContainer">
-                  <span class="truncate" id="handshakeLogText">Ready: Requires MetaMask EIP-712 signature to execute x402 forward pass.</span>
+                  <span class="truncate" id="handshakeLogText">Ready: Requires Web3 wallet EIP-712 signature to execute x402 forward pass.</span>
                   <span class="text-[9px] text-slate-600 font-mono shrink-0 ml-1">402 &rarr; 200</span>
                 </div>
               </div>
@@ -855,6 +855,78 @@
 
     let userAccount = null;
     let lastPayloadResponse = null;
+    let eip6963Providers = [];
+
+    // EIP-6963 Multi-Injected Provider Discovery standard
+    window.addEventListener('eip6963:announceProvider', (event) => {
+      if (event.detail && !eip6963Providers.some(p => p.info.uuid === event.detail.info.uuid)) {
+        eip6963Providers.push(event.detail);
+        refreshWalletUI();
+      }
+    });
+    window.dispatchEvent(new Event('eip6963:requestProvider'));
+
+    function getWeb3Provider() {
+      if (eip6963Providers.length > 0) {
+        return eip6963Providers[0].provider;
+      }
+      if (typeof window.ethereum !== 'undefined') {
+        if (Array.isArray(window.ethereum.providers) && window.ethereum.providers.length > 0) {
+          return window.ethereum.providers[0];
+        }
+        return window.ethereum;
+      }
+      if (typeof window.okxwallet !== 'undefined') {
+        return window.okxwallet.ethereum || window.okxwallet;
+      }
+      if (typeof window.phantom !== 'undefined' && window.phantom.ethereum) {
+        return window.phantom.ethereum;
+      }
+      if (typeof window.coinbaseWalletExtension !== 'undefined') {
+        return window.coinbaseWalletExtension;
+      }
+      if (typeof window.bitkeep !== 'undefined' && window.bitkeep.ethereum) {
+        return window.bitkeep.ethereum;
+      }
+      if (typeof window.trustwallet !== 'undefined') {
+        return window.trustwallet.ethereum || window.trustwallet;
+      }
+      return null;
+    }
+
+    function getWalletInfo() {
+      if (eip6963Providers.length > 0) {
+        return {
+          name: eip6963Providers[0].info.name,
+          icon: eip6963Providers[0].info.icon,
+          provider: eip6963Providers[0].provider
+        };
+      }
+      const p = getWeb3Provider();
+      if (!p) return { name: 'Web3 Wallet', icon: null, provider: null };
+
+      let name = 'Web3 Wallet';
+      if (p.isRabby) name = 'Rabby';
+      else if (p.isOKExWallet || p.isOkxWallet || typeof window.okxwallet !== 'undefined') name = 'OKX Wallet';
+      else if (p.isCoinbaseWallet || typeof window.coinbaseWalletExtension !== 'undefined') name = 'Coinbase Wallet';
+      else if (p.isPhantom || (typeof window.phantom !== 'undefined' && window.phantom.ethereum)) name = 'Phantom';
+      else if (p.isBraveWallet) name = 'Brave Wallet';
+      else if (p.isBitKeep || typeof window.bitkeep !== 'undefined') name = 'Bitget Wallet';
+      else if (p.isTrust || p.isTrustWallet || typeof window.trustwallet !== 'undefined') name = 'Trust Wallet';
+      else if (p.isMetaMask) name = 'MetaMask';
+
+      return { name, icon: null, provider: p };
+    }
+
+    function refreshWalletUI() {
+      const info = getWalletInfo();
+      const runBtnText = document.getElementById('playRunBtnText');
+      if (runBtnText && !runBtnText.innerText.includes('...')) {
+        runBtnText.innerText = userAccount 
+          ? `Sign with ${info.name} & Run Forward Pass`
+          : `Sign with ${info.name} & Run Forward Pass`;
+      }
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
@@ -862,6 +934,24 @@
       fetchLiveOnChainTelemetry();
       setInterval(fetchLiveOnChainTelemetry, 15000);
       document.getElementById('playgroundState').addEventListener('input', updateCharCount);
+      refreshWalletUI();
+
+      const p = getWeb3Provider();
+      if (p && p.on) {
+        p.on('accountsChanged', (accounts) => {
+          if (accounts && accounts.length > 0) {
+            userAccount = accounts[0];
+            const shortAddr = userAccount.slice(0, 6) + '...' + userAccount.slice(-4);
+            const navText = document.getElementById('navWalletText');
+            if (navText) navText.innerText = shortAddr;
+          } else {
+            userAccount = null;
+            const navText = document.getElementById('navWalletText');
+            if (navText) navText.innerText = 'Connect Wallet';
+          }
+          refreshWalletUI();
+        });
+      }
     });
 
     // -------------------------------------------------------------------------
@@ -949,10 +1039,13 @@
         return;
       }
 
+      const provider = getWeb3Provider();
+      const info = getWalletInfo();
+
       // Check Web3 wallet availability: mandatory for x402 authorization
-      if (typeof window.ethereum === 'undefined') {
-        alert('MetaMask or Web3 wallet extension is required for x402 cryptographic authorization. Direct unauthenticated access is strictly rejected.');
-        updateHandshakeLog('AUTH REQUIRED', 'Web3 wallet not detected. Install MetaMask to sign x402 payload.', 'WALLET REQUIRED', 'rose');
+      if (!provider) {
+        alert('No Web3 wallet extension detected. Please install or unlock an EVM-compatible Web3 wallet (such as OKX Wallet, Rabby, Phantom, Coinbase Wallet, or MetaMask) to cryptographically authorize inference under RFC 7231 HTTP 402.');
+        updateHandshakeLog('AUTH REQUIRED', 'Web3 wallet not detected. Install or unlock an EVM wallet to sign x402 payload.', 'WALLET REQUIRED', 'rose');
         return;
       }
 
@@ -962,12 +1055,12 @@
 
       // Connect wallet if not already connected
       if (!userAccount) {
-        btnText.innerText = 'Connecting MetaMask...';
-        updateHandshakeLog('CONNECT', 'Requesting Web3 wallet connection...', 'CONNECTING', 'amber');
+        btnText.innerText = `Connecting ${info.name}...`;
+        updateHandshakeLog('CONNECT', `Requesting accounts from ${info.name}...`, 'CONNECTING', 'amber');
         await connectWallet();
         if (!userAccount) {
           btn.disabled = false;
-          btnText.innerText = 'Sign with MetaMask & Run Forward Pass';
+          refreshWalletUI();
           updateHandshakeLog('ABORTED', 'Wallet connection declined. 402 Payment Required.', 'ABORTED', 'amber');
           return;
         }
@@ -997,10 +1090,10 @@
         const nonce = ch.nonce;
         const requiredUsdc = ch.amountUsdc || '0.001';
 
-        btnText.innerText = 'Prompting MetaMask Signature...';
-        updateHandshakeLog('SIGNING', 'HTTP 402 challenge captured. Prompting EIP-712 off-chain signature (0 Gas)...', 'SIGNING', 'amber');
+        btnText.innerText = `Prompting ${info.name} Signature...`;
+        updateHandshakeLog('SIGNING', `HTTP 402 challenge captured. Prompting ${info.name} EIP-712 off-chain signature (0 Gas)...`, 'SIGNING', 'amber');
 
-        // Step 2: Prompt MetaMask for EIP-712 off-chain typed data signature
+        // Step 2: Prompt Web3 wallet for EIP-712 off-chain typed data signature
         const eip712Domain = ch.eip712?.domain || {
           name: 'SivletLabs x402 Gateway',
           version: '1',
@@ -1030,22 +1123,39 @@
           deadline: ch.deadline || Math.floor(Date.now() / 1000) + 300
         };
 
+        const typedData = {
+          types: eip712Types,
+          domain: eip712Domain,
+          primaryType: 'MicropaymentAuthorization',
+          message: eip712Message
+        };
+
         let signature;
         try {
-          signature = await window.ethereum.request({
+          signature = await provider.request({
             method: 'eth_signTypedData_v4',
-            params: [userAccount, JSON.stringify({
-              types: eip712Types,
-              domain: eip712Domain,
-              primaryType: 'MicropaymentAuthorization',
-              message: eip712Message
-            })]
+            params: [userAccount, JSON.stringify(typedData)]
           });
-        } catch (signErr) {
-          console.warn('MetaMask signature declined by user:', signErr);
-          updateHandshakeLog('DECLINED', 'MetaMask signature declined by user. HTTP 402 Payment Required.', 'REJECTED', 'rose');
-          alert('Inference Aborted: Cryptographic authorization signature is strictly required to execute System-1 forward pass.');
-          return; // Strictly abort. Zero fallback. Zero mock.
+        } catch (firstErr) {
+          // Compatibility: Some wallets expect unstringified object parameter
+          if (firstErr.message && (firstErr.message.includes('JSON') || firstErr.message.includes('parse') || firstErr.message.includes('object'))) {
+            try {
+              signature = await provider.request({
+                method: 'eth_signTypedData_v4',
+                params: [userAccount, typedData]
+              });
+            } catch (secErr) {
+              console.warn('Wallet signature declined:', secErr);
+              updateHandshakeLog('DECLINED', `Signature declined in ${info.name}. HTTP 402 Payment Required.`, 'REJECTED', 'rose');
+              alert('Inference Aborted: Cryptographic authorization signature is strictly required to execute System-1 forward pass.');
+              return;
+            }
+          } else {
+            console.warn('Wallet signature declined:', firstErr);
+            updateHandshakeLog('DECLINED', `Signature declined in ${info.name}. HTTP 402 Payment Required.`, 'REJECTED', 'rose');
+            alert('Inference Aborted: Cryptographic authorization signature is strictly required to execute System-1 forward pass.');
+            return;
+          }
         }
 
         // Step 3: Signature acquired. Submit authorized request with X-Payment-Authorization header
@@ -1085,7 +1195,7 @@
         alert('Inference failed: ' + (err.message || 'Network error'));
       } finally {
         btn.disabled = false;
-        btnText.innerText = 'Sign with MetaMask & Run Forward Pass';
+        refreshWalletUI();
         lucide.createIcons();
       }
     }
@@ -1241,22 +1351,28 @@
     // Web3 Helpers
     // -------------------------------------------------------------------------
     async function connectWallet() {
-      if (typeof window.ethereum === 'undefined') {
-        alert('Web3 wallet not detected. Please install MetaMask or another Web3 extension.');
+      const provider = getWeb3Provider();
+      if (!provider) {
+        alert('No Web3 wallet extension detected. SivletLabs supports all EVM-compatible Web3 wallets (OKX Wallet, Rabby, Phantom, Coinbase Wallet, MetaMask, etc.). Please install or unlock an extension.');
         return;
       }
 
       try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const accounts = await provider.request({ method: 'eth_requestAccounts' });
         if (accounts && accounts.length > 0) {
           userAccount = accounts[0];
           const shortAddr = userAccount.slice(0, 6) + '...' + userAccount.slice(-4);
           document.getElementById('navWalletText').innerText = shortAddr;
+          refreshWalletUI();
 
           // Check if on Robinhood Chain
-          const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
-          if (currentChainId !== ROBINHOOD_CHAIN_ID_HEX) {
-            switchToRobinhoodChain();
+          try {
+            const currentChainId = await provider.request({ method: 'eth_chainId' });
+            if (currentChainId !== ROBINHOOD_CHAIN_ID_HEX) {
+              switchToRobinhoodChain();
+            }
+          } catch (chainErr) {
+            console.warn('Chain ID check notice:', chainErr);
           }
         }
       } catch (err) {
@@ -1265,17 +1381,18 @@
     }
 
     async function switchToRobinhoodChain() {
-      if (typeof window.ethereum === 'undefined') return;
+      const provider = getWeb3Provider();
+      if (!provider) return;
 
       try {
-        await window.ethereum.request({
+        await provider.request({
           method: 'wallet_switchEthereumChain',
           params: [{ chainId: ROBINHOOD_CHAIN_ID_HEX }]
         });
       } catch (switchError) {
-        if (switchError.code === 4902 || switchError.data?.originalError?.code === 4902) {
+        if (switchError.code === 4902 || switchError.data?.originalError?.code === 4902 || switchError.message?.includes('4902')) {
           try {
-            await window.ethereum.request({
+            await provider.request({
               method: 'wallet_addEthereumChain',
               params: [{
                 chainId: ROBINHOOD_CHAIN_ID_HEX,
@@ -1294,14 +1411,15 @@
       }
     }
 
-    async function addTokenToMetaMask() {
-      if (typeof window.ethereum === 'undefined') {
-        alert('MetaMask not detected.');
+    async function addTokenToWallet() {
+      const provider = getWeb3Provider();
+      if (!provider) {
+        alert('No Web3 wallet detected.');
         return;
       }
 
       try {
-        await window.ethereum.request({
+        await provider.request({
           method: 'wallet_watchAsset',
           params: {
             type: 'ERC20',
