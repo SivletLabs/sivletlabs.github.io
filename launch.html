@@ -298,15 +298,36 @@
 
       try {
         const { Connection, Keypair, Transaction, SystemProgram, PublicKey } = solanaWeb3;
-        const connection = new Connection('https://api.mainnet-beta.solana.com', 'confirmed');
+
+        const RPC_URLS = [
+          'https://sivlet-x402-gateway.sivletlabs.workers.dev/rpc',
+          'https://solana-rpc.publicnode.com'
+        ];
+
+        let connection = null;
+        let blockhash = null;
+        for (const rpc of RPC_URLS) {
+          try {
+            log(`Connecting to Solana RPC (${rpc.replace('https://', '').split('/')[0]})...`);
+            const conn = new Connection(rpc, 'confirmed');
+            const res = await conn.getLatestBlockhash('confirmed');
+            blockhash = res.blockhash;
+            connection = conn;
+            log(`Connected! Recent Blockhash: ${blockhash.slice(0, 10)}...`, 'success');
+            break;
+          } catch (rpcErr) {
+            log(`RPC note: ${rpcErr.message}`, 'warn');
+          }
+        }
+
+        if (!connection || !blockhash) {
+          throw new Error('Could not fetch latest blockhash from Solana network. Please retry.');
+        }
 
         log('Generating unique $SIVLET Mint Keypair...');
         const mintKeypair = Keypair.generate();
         const mintPubkey = mintKeypair.publicKey;
         log(`Mint Address: ${mintPubkey.toBase58()}`, 'info');
-
-        log('Fetching latest Solana blockhash...');
-        const { blockhash } = await connection.getLatestBlockhash('confirmed');
 
         log('Building 7-in-1 genesis transaction...');
         // Standard SPL Token Constants
@@ -420,19 +441,30 @@
         // Partial sign with ephemeral mint keypair
         tx.partialSign(mintKeypair);
 
-        log('Requesting signature in your wallet... Please click "Approve" in Phantom / Solflare.', 'warn');
-        const signedTx = await walletProvider.signTransaction(tx);
+        log('Requesting signature in your wallet... Please click "Approve" in OKX / Phantom.', 'warn');
+        let txSig = null;
+        if (walletProvider.signAndSendTransaction) {
+          try {
+            const sendRes = await walletProvider.signAndSendTransaction(tx);
+            txSig = typeof sendRes === 'string' ? sendRes : (sendRes?.signature || sendRes?.txHash || sendRes);
+          } catch (sendErr) {
+            log(`Direct wallet send note: ${sendErr.message}`, 'warn');
+          }
+        }
 
-        log('Broadcasting signed transaction to Solana Mainnet...');
-        setStatus('BROADCASTING', 'amber');
-        const rawTx = signedTx.serialize();
-        const txSig = await connection.sendRawTransaction(rawTx, { skipPreflight: false });
+        if (!txSig) {
+          const signedTx = await walletProvider.signTransaction(tx);
+          log('Broadcasting signed transaction to Solana Mainnet...');
+          setStatus('BROADCASTING', 'amber');
+          const rawTx = signedTx.serialize();
+          txSig = await connection.sendRawTransaction(rawTx, { skipPreflight: false });
+        }
 
         log(`Transaction Broadcasted! Signature: ${txSig}`, 'info');
         log('Waiting for network confirmation...', 'info');
 
         const confirmation = await connection.confirmTransaction(txSig, 'confirmed');
-        if (confirmation.value.err) {
+        if (confirmation && confirmation.value && confirmation.value.err) {
           throw new Error('Transaction confirmed with error: ' + JSON.stringify(confirmation.value.err));
         }
 
