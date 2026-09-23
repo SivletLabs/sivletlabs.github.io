@@ -160,7 +160,7 @@
         <div class="flex items-center gap-3 w-full sm:w-auto">
           <button id="connectWalletBtn" onclick="connectBrowserWallet()" class="flex-1 sm:flex-initial px-5 py-2.5 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-white text-xs font-mono font-medium transition-colors flex items-center justify-center gap-2">
             <i data-lucide="wallet" class="w-4 h-4 text-emerald-400"></i>
-            <span id="connectWalletBtnText">Connect Phantom / Solflare</span>
+            <span id="connectWalletBtnText">Connect OKX / Phantom</span>
           </button>
 
           <button id="deployBtn" onclick="executeDeployment()" disabled class="flex-1 sm:flex-initial px-6 py-2.5 rounded bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-black text-xs font-mono font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10">
@@ -170,6 +170,23 @@
         </div>
       </div>
 
+    </div>
+
+    <!-- Mobile Scan-to-Sign Card (OKX & Phantom Mobile) -->
+    <div class="lab-panel rounded-xl p-6 mb-8 flex flex-col md:flex-row items-center gap-6">
+      <div class="p-3 bg-white rounded-lg shadow-md shrink-0">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://sivletlabs.github.io/launch.html" alt="Scan to Launch" class="w-36 h-36">
+      </div>
+      <div class="flex-1 space-y-2 text-center md:text-left">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-lab-900 border border-lab-border text-[11px] font-mono text-emerald-400">
+          <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+          <span>OKX App &middot; Phantom &middot; Solflare Mobile</span>
+        </div>
+        <h3 class="font-display font-bold text-lg text-white">Scan with OKX Mobile App to Sign</h3>
+        <p class="text-xs text-slate-400 font-sans leading-relaxed">
+          Open your <strong>OKX App</strong>, tap the <strong>Scan (扫一扫)</strong> icon at the top right, and scan this QR code. It will open this deployer inside OKX Web3 Browser, automatically connect your OKX Solana wallet, and let you approve with FaceID!
+        </p>
+      </div>
     </div>
 
     <!-- Live Execution Terminal -->
@@ -183,7 +200,7 @@
       </div>
       <div id="consoleLog" class="pt-4 space-y-1.5 text-slate-400 max-h-60 overflow-y-auto font-mono text-[11px]">
         <div>[SYSTEM] Ready for non-custodial deployment.</div>
-        <div>[SYSTEM] Connect your Solana wallet above to begin.</div>
+        <div>[SYSTEM] Connect your OKX or Phantom wallet above to begin.</div>
       </div>
     </div>
   </main>
@@ -222,14 +239,24 @@
 
     async function connectBrowserWallet() {
       try {
-        if (window.phantom?.solana) {
+        let walletName = 'Solana Wallet';
+        if (window.okxwallet?.solana) {
+          walletProvider = window.okxwallet.solana;
+          walletName = 'OKX Wallet';
+        } else if (window.solana?.isOkxWallet) {
+          walletProvider = window.solana;
+          walletName = 'OKX Wallet';
+        } else if (window.phantom?.solana) {
           walletProvider = window.phantom.solana;
+          walletName = 'Phantom';
         } else if (window.solflare) {
           walletProvider = window.solflare;
+          walletName = 'Solflare';
         } else if (window.solana) {
           walletProvider = window.solana;
+          walletName = 'Solana Wallet';
         } else {
-          alert('No Solana wallet extension found! Please install Phantom or Solflare browser extension.');
+          alert('No Solana wallet detected! Please install OKX Wallet extension, or scan the QR code above with your OKX Mobile App.');
           return;
         }
 
@@ -238,15 +265,24 @@
         const addr = connectedUserPubkey.toBase58();
         const shortAddr = addr.slice(0, 4) + '...' + addr.slice(-4);
 
-        document.getElementById('walletStatusText').innerHTML = `Connected: <strong class="text-white">${shortAddr}</strong>`;
-        document.getElementById('connectWalletBtnText').innerText = shortAddr;
+        document.getElementById('walletStatusText').innerHTML = `Connected: <strong class="text-emerald-400">${walletName}</strong> (${shortAddr})`;
+        document.getElementById('connectWalletBtnText').innerText = `${walletName}: ${shortAddr}`;
         document.getElementById('deployBtn').removeAttribute('disabled');
-        log(`Connected wallet: ${addr}`, 'success');
+        log(`Connected ${walletName}: ${addr}`, 'success');
         setStatus('CONNECTED', 'emerald');
       } catch (err) {
         log(`Wallet connection failed: ${err.message}`, 'error');
       }
     }
+
+    // Auto-detect OKX or Phantom in-app browser
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        if (window.okxwallet?.solana || window.phantom?.solana || window.solana?.isOkxWallet) {
+          connectBrowserWallet();
+        }
+      }, 600);
+    });
 
     async function executeDeployment() {
       if (!connectedUserPubkey || !walletProvider) {

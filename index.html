@@ -1027,6 +1027,13 @@
     // Universal Solana Wallet Detection (Phantom, Solflare, Backpack, Standard)
     // -------------------------------------------------------------------------
     function getSolanaWallet() {
+      // 0. OKX Wallet detection (Extension or OKX App Web3 browser)
+      if (window.okxwallet?.solana) {
+        return { name: 'OKX Wallet', provider: window.okxwallet.solana };
+      }
+      if (window.solana?.isOkxWallet) {
+        return { name: 'OKX Wallet', provider: window.solana };
+      }
       // 1. Phantom detection
       if (window.phantom?.solana?.isPhantom) {
         return { name: 'Phantom', provider: window.phantom.solana };
