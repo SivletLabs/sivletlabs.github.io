@@ -433,9 +433,9 @@
                 <button type="button" onclick="setSettlementMode('sandbox')" id="mode-btn-sandbox" class="p-2.5 rounded bg-emerald-500/10 border border-emerald-500/60 text-left font-mono text-xs text-white transition-all">
                   <div class="font-medium flex items-center justify-between">
                     <span>Dev Sandbox Quota</span>
-                    <span class="text-[9px] px-1 py-0.2 bg-emerald-500/20 text-emerald-300 rounded font-mono">0.000 USDC</span>
+                    <span id="sandboxQuotaPill" class="text-[9px] px-1.5 py-0.5 bg-emerald-500/20 text-emerald-300 rounded font-mono">10 / 10 Free Left</span>
                   </div>
-                  <div class="text-[10px] text-slate-400 mt-0.5">Automated 402 challenge &amp; grant</div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">Daily rate-limited sandbox access</div>
                 </button>
                 <button type="button" onclick="setSettlementMode('web3')" id="mode-btn-web3" class="p-2.5 rounded bg-lab-900 border border-lab-border text-left font-mono text-xs text-slate-400 hover:text-white transition-all">
                   <div class="font-medium flex items-center justify-between">
@@ -561,6 +561,10 @@
                   <div class="flex justify-between items-center">
                     <span class="text-slate-500">Protocol Fee:</span>
                     <span class="text-emerald-400 font-medium" id="settlementFee">&mdash;</span>
+                  </div>
+                  <div class="flex justify-between items-center" id="settlementQuotaRow">
+                    <span class="text-slate-500">Free Quota Left:</span>
+                    <span class="text-emerald-400 font-medium font-mono text-[10px]" id="settlementQuotaVal">10 / 10 calls today</span>
                   </div>
                   <div class="flex justify-between items-center">
                     <span class="text-slate-500">Authorization:</span>
@@ -869,6 +873,7 @@
       selectScenario('tool_routing');
       fetchLiveOnChainTelemetry();
       setInterval(fetchLiveOnChainTelemetry, 15000);
+      syncDailyQuota();
       document.getElementById('playgroundState').addEventListener('input', updateCharCount);
     });
 
@@ -924,10 +929,51 @@
     }
 
     // -------------------------------------------------------------------------
-    // Settlement Mode & Protocol State
+    // Settlement Mode, Quota & Protocol State
     // -------------------------------------------------------------------------
     let currentSettlementMode = 'sandbox'; // 'sandbox' or 'web3'
     let clientSandboxSession = 'sbx_' + Math.random().toString(36).substring(2, 10);
+    let clientDailyQuota = { limit: 10, remaining: 10, used: 0 };
+
+    async function syncDailyQuota() {
+      try {
+        const res = await fetch('https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/quota');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.daily_limit !== undefined) {
+            clientDailyQuota.limit = data.daily_limit;
+            clientDailyQuota.remaining = data.remaining;
+            clientDailyQuota.used = data.used;
+            updateQuotaUI();
+          }
+        }
+      } catch (err) {
+        console.warn('Quota sync notice:', err);
+      }
+    }
+
+    function updateQuotaUI() {
+      const pill = document.getElementById('sandboxQuotaPill');
+      const val = document.getElementById('settlementQuotaVal');
+      if (pill) {
+        if (clientDailyQuota.remaining > 0) {
+          pill.innerText = `${clientDailyQuota.remaining} / ${clientDailyQuota.limit} Free Left`;
+          pill.className = 'text-[9px] px-1.5 py-0.5 bg-emerald-500/20 text-emerald-300 rounded font-mono';
+        } else {
+          pill.innerText = `0 / ${clientDailyQuota.limit} Exhausted`;
+          pill.className = 'text-[9px] px-1.5 py-0.5 bg-rose-500/20 text-rose-300 rounded font-mono';
+        }
+      }
+      if (val) {
+        if (currentSettlementMode === 'web3') {
+          val.innerText = 'Unlimited (Web3 Gasless Signer)';
+          val.className = 'text-emerald-400 font-medium font-mono text-[10px]';
+        } else {
+          val.innerText = `${clientDailyQuota.remaining} / ${clientDailyQuota.limit} calls left today`;
+          val.className = clientDailyQuota.remaining > 0 ? 'text-emerald-400 font-medium font-mono text-[10px]' : 'text-rose-400 font-medium font-mono text-[10px]';
+        }
+      }
+    }
 
     async function setSettlementMode(mode) {
       currentSettlementMode = mode;
@@ -960,6 +1006,7 @@
           web3Btn.classList.add('bg-lab-900', 'border-lab-border', 'text-slate-400');
         }
       }
+      updateQuotaUI();
     }
 
     function updateHandshakeLog(step, message, badgeText = 'IN PROGRESS', badgeColor = 'emerald') {
@@ -991,6 +1038,12 @@
         return;
       }
 
+      if (currentSettlementMode === 'sandbox' && clientDailyQuota.remaining <= 0) {
+        alert('Daily free sandbox quota (10/10) has been exhausted for today. Please switch to Web3 Signature mode (0 Gas).');
+        setSettlementMode('web3');
+        return;
+      }
+
       const btn = document.getElementById('playRunBtn');
       const btnText = document.getElementById('playRunBtnText');
       btn.disabled = true;
@@ -1014,6 +1067,19 @@
 
         if (initialRes.status === 402) {
           const challengePayload = await initialRes.json();
+          if (challengePayload.error === "Quota Exceeded") {
+            clientDailyQuota.remaining = 0;
+            updateQuotaUI();
+            alert('Daily free sandbox quota (10/10) has been exhausted for today. Please switch to Web3 Signature mode (0 Gas).');
+            setSettlementMode('web3');
+            btn.disabled = false;
+            btnText.innerText = 'Run System-1 Forward Pass';
+            return;
+          }
+          if (challengePayload.quota && challengePayload.quota.remaining !== undefined) {
+            clientDailyQuota.remaining = challengePayload.quota.remaining;
+            updateQuotaUI();
+          }
           const ch = challengePayload.challenge || {};
           const nonce = ch.nonce || '0xnonce';
           const requiredUsdc = ch.amountUsdc || '0.001';
@@ -1196,6 +1262,13 @@
         pAuthHash.innerText = st.authorization_hash || st.nonce || 'verified';
         pAuthHash.title = st.authorization_hash || '';
       }
+
+      if (st.quota && st.quota.remaining !== undefined) {
+        clientDailyQuota.remaining = st.quota.remaining;
+        clientDailyQuota.limit = st.quota.daily_limit || 10;
+        clientDailyQuota.used = st.quota.used || 0;
+      }
+      updateQuotaUI();
     }
 
     function renderInferenceResults(data, options, latency) {
