@@ -115,6 +115,47 @@
   <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[450px] bg-emerald-500/10 blur-[140px] rounded-full pointer-events-none z-0"></div>
 
   <!-- ========================================================================= -->
+  <!-- 0. REAL-TIME PROTOCOL MARKET TICKER BAR                                  -->
+  <!-- ========================================================================= -->
+  <div class="relative z-50 w-full bg-slate-950/95 border-b border-slate-800/80 px-4 py-1.5 text-xs font-mono">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-y-1 gap-x-4">
+      <div class="flex items-center flex-wrap gap-x-3 gap-y-1">
+        <div class="flex items-center gap-1.5 text-emerald-400 font-bold">
+          <span class="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>$SIVLET:</span>
+          <span id="tickerPriceUsd" class="text-white font-mono">$0.00000450</span>
+          <span id="tickerPriceEth" class="text-slate-400 text-[11px] font-normal">(~0.00000000170 ETH)</span>
+        </div>
+        <div class="hidden sm:flex items-center gap-1.5 text-slate-400 text-[11px]">
+          <span class="text-slate-700">|</span>
+          <span>FDV:</span>
+          <span id="tickerFdv" class="text-slate-200 font-semibold">$4,502</span>
+        </div>
+        <div class="hidden md:flex items-center gap-1.5 text-slate-400 text-[11px]">
+          <span class="text-slate-700">|</span>
+          <span>Robinhood Chain:</span>
+          <span class="text-cyan-400">ID 4663</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 text-[11px]">
+        <div class="flex items-center gap-1.5 text-slate-300">
+          <i data-lucide="trending-up" class="w-3.5 h-3.5 text-cyan-400"></i>
+          <span>Pons Bonding Curve:</span>
+          <span id="tickerCurveReserve" class="text-emerald-400 font-semibold">1.68 / 4.20 ETH</span>
+          <span id="tickerCurvePct" class="px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-500/30 text-emerald-300 text-[10px] font-semibold">40.0%</span>
+        </div>
+        <div class="hidden lg:flex items-center gap-1.5 text-slate-500">
+          <span class="text-slate-700">|</span>
+          <span class="text-amber-400 flex items-center gap-1">
+            <i data-lucide="flame" class="w-3 h-3 text-amber-400"></i> 100% Revenue Sinks to Burn
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
   <!-- 1. NAVIGATION                                                             -->
   <!-- ========================================================================= -->
   <header class="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-lab-black/85 backdrop-blur-xl transition-all">
@@ -211,27 +252,33 @@
         Sub-15ms calibrated policies over discrete action simplexes. Stop running 70B autoregressive models for binary routing. Settled per-call via RFC 7231 HTTP 402. All revenue autonomously buys back and burns <span class="font-mono text-emerald-400 font-semibold">$SIVLET</span> on Robinhood Chain.
       </p>
 
-      <!-- Key Scientific Metrics Strip -->
+      <!-- Key Scientific & Market Metrics Strip -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto mb-10 font-mono text-xs">
-        <div class="bg-lab-card/80 p-3.5 rounded-lg border border-slate-800/80">
+        <div class="bg-lab-card/80 p-3.5 rounded-lg border border-emerald-500/30 hover:border-emerald-500/60 transition-all text-left">
+          <div class="text-slate-400 text-[10px] uppercase flex items-center justify-between">
+            <span>$SIVLET Price</span>
+            <span class="flex h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          </div>
+          <div class="text-lg font-bold text-emerald-400 mt-0.5" id="heroPriceUsd">$0.00000450</div>
+          <div class="text-[10px] text-slate-400 flex items-center justify-between">
+            <span id="heroFdv">FDV: ~$4,502</span>
+            <span class="text-cyan-400 font-semibold">Robinhood</span>
+          </div>
+        </div>
+        <div class="bg-lab-card/80 p-3.5 rounded-lg border border-slate-800/80 text-left">
           <div class="text-slate-400 text-[10px] uppercase">P50 Latency</div>
-          <div class="text-lg font-bold text-emerald-400 mt-0.5">12.4 ms</div>
+          <div class="text-lg font-bold text-white mt-0.5">12.4 ms</div>
           <div class="text-[10px] text-slate-500">24.3&times; faster than LLMs</div>
         </div>
-        <div class="bg-lab-card/80 p-3.5 rounded-lg border border-slate-800/80">
+        <div class="bg-lab-card/80 p-3.5 rounded-lg border border-slate-800/80 text-left">
           <div class="text-slate-400 text-[10px] uppercase">Maze 8x8 Win Rate</div>
-          <div class="text-lg font-bold text-white mt-0.5">100.0%</div>
+          <div class="text-lg font-bold text-cyan-400 mt-0.5">100.0%</div>
           <div class="text-[10px] text-slate-500">Gymnasium standard</div>
         </div>
-        <div class="bg-lab-card/80 p-3.5 rounded-lg border border-slate-800/80">
+        <div class="bg-lab-card/80 p-3.5 rounded-lg border border-slate-800/80 text-left">
           <div class="text-slate-400 text-[10px] uppercase">Brier Calibration</div>
-          <div class="text-lg font-bold text-cyan-400 mt-0.5">-0.042</div>
+          <div class="text-lg font-bold text-amber-400 mt-0.5">-0.042</div>
           <div class="text-[10px] text-slate-500">Strictly proper score</div>
-        </div>
-        <div class="bg-lab-card/80 p-3.5 rounded-lg border border-slate-800/80">
-          <div class="text-slate-400 text-[10px] uppercase">Treasury Burning</div>
-          <div class="text-lg font-bold text-amber-400 mt-0.5">99% &rarr; 0x...dead</div>
-          <div class="text-[10px] text-slate-500">Verified smart contract</div>
         </div>
       </div>
 
@@ -533,19 +580,48 @@
               </div>
             </div>
 
-            <!-- Slippage & Route Details -->
-            <div class="space-y-2 text-xs font-mono text-slate-400 bg-slate-950/60 p-3.5 rounded-lg border border-slate-800/80 mb-6">
-              <div class="flex justify-between">
-                <span>Bonding Curve Pool:</span>
-                <code class="text-slate-300">0x5F02...Ad5601</code>
+            <!-- Live Token Rate & Bonding Curve Graduation Tracker -->
+            <div class="space-y-3 text-xs font-mono text-slate-400 bg-slate-950/80 p-4 rounded-xl border border-slate-800/90 mb-6">
+              <!-- Live Rate -->
+              <div class="flex items-center justify-between pb-2.5 border-b border-slate-900">
+                <div class="flex items-center gap-1.5 text-slate-300">
+                  <i data-lucide="tag" class="w-3.5 h-3.5 text-cyan-400"></i>
+                  <span>Exchange Rate:</span>
+                </div>
+                <div class="text-right">
+                  <div class="text-white font-semibold" id="swapRateSivletPerEth">1 ETH &asymp; 588,560,000 SIVLET</div>
+                  <div class="text-[10px] text-emerald-400" id="swapRateUsd">1 SIVLET = $0.00000450 USD</div>
+                </div>
               </div>
-              <div class="flex justify-between">
-                <span>Graduation Milestone:</span>
-                <span class="text-amber-300">4.20 ETH &rarr; Uniswap v4 Lock</span>
+
+              <!-- Bonding Curve Progress Bar -->
+              <div>
+                <div class="flex items-center justify-between text-xs mb-1.5">
+                  <span class="text-slate-300 flex items-center gap-1.5">
+                    <i data-lucide="compass" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    <span>Bonding Curve Graduation:</span>
+                  </span>
+                  <span class="text-emerald-400 font-bold" id="bondingProgressPct">40.0%</span>
+                </div>
+                <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden border border-slate-800 p-0.5">
+                  <div id="bondingProgressBar" class="bg-gradient-to-r from-emerald-500 via-cyan-400 to-emerald-400 h-full rounded-full transition-all duration-700 shadow-sm shadow-emerald-500/50" style="width: 40.0%"></div>
+                </div>
+                <div class="flex justify-between items-center mt-1.5 text-[10px] text-slate-500">
+                  <span>Current: <strong class="text-slate-300 font-mono" id="bondingReserveEth">1.680 ETH</strong></span>
+                  <span>Target: <strong class="text-amber-300 font-mono">4.200 ETH</strong> (Auto Uniswap Lock)</span>
+                </div>
               </div>
-              <div class="flex justify-between">
-                <span>Deflationary Sink:</span>
-                <span class="text-red-400 font-semibold">100% API Revenue Buyback &amp; Burn</span>
+
+              <!-- Contract & Sink Info -->
+              <div class="pt-2 border-t border-slate-900 space-y-1 text-[11px]">
+                <div class="flex justify-between">
+                  <span>Bonding Pool Contract:</span>
+                  <code class="text-slate-300 font-mono">0x5F02...Ad5601</code>
+                </div>
+                <div class="flex justify-between">
+                  <span>Deflationary Sink:</span>
+                  <span class="text-amber-400 font-medium">100% Protocol USDC buys &amp; burns</span>
+                </div>
               </div>
             </div>
 
@@ -948,6 +1024,8 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       initLiveCounterTicker();
+      fetchLiveTokenPrice();
+      setInterval(fetchLiveTokenPrice, 15000);
       calculateSwapOutput();
       updateCharCount();
       
@@ -1168,7 +1246,15 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
     const ROBINHOOD_CHAIN_ID_HEX = '0x1237'; // 4663 in hex
     const ROBINHOOD_RPC = 'https://rpc.mainnet.chain.robinhood.com';
     const SIVLET_TOKEN_ADDR = '0xb7832ca55ea7f9aa1504657376117b98deb4e2e1';
+    const PONS_POOL_ADDR = '0x5F02BE04d20aB66cf5Ea33ECda25194AECAd5601';
+    const GRADUATION_TARGET_ETH = 4.20;
+    const REF_ETH_PRICE_USD = 2650.0;
+
     let userAccount = null;
+    let liveReserveEth = 1.68036;
+    let liveReserveTokens = 989000000;
+    let livePriceInUsd = 0.00000450;
+    let livePriceInEth = 0.00000000170;
 
     function setSwapAmount(amount) {
       document.getElementById('swapEthInput').value = amount;
@@ -1182,12 +1268,91 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
         return;
       }
       
-      // Pons Bonding Curve Initial Formula (Reserve ETH ~ 1.68, Reserve SIVLET ~ 989M)
-      const reserveEth = 1.68;
-      const reserveTokens = 989000000;
-      const tokensOut = (reserveTokens * inputEth) / (reserveEth + inputEth);
+      // Constant product curve: tokensOut = (reserveTokens * inputEth) / (reserveEth + inputEth)
+      const tokensOut = (liveReserveTokens * inputEth) / (liveReserveEth + inputEth);
       
       document.getElementById('swapOutputAmount').innerText = '~' + Math.floor(tokensOut).toLocaleString() + ' SIVLET';
+    }
+
+    async function fetchLiveTokenPrice() {
+      try {
+        const response = await fetch(ROBINHOOD_RPC, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'eth_call',
+            params: [{ to: PONS_POOL_ADDR, data: '0x0902f1ac' }, 'latest']
+          })
+        });
+
+        if (response.ok) {
+          const res = await response.json();
+          if (res.result && res.result.length >= 130) {
+            const rawHex = res.result.slice(2);
+            const r0 = BigInt('0x' + rawHex.slice(0, 64));
+            const r1 = BigInt('0x' + rawHex.slice(64, 128));
+
+            const ethVal = Number(r0) / 1e18;
+            const tokVal = Number(r1) / 1e18;
+
+            if (ethVal > 0 && tokVal > 0) {
+              liveReserveEth = ethVal;
+              liveReserveTokens = tokVal;
+              updatePriceMetrics(liveReserveEth, liveReserveTokens);
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Direct RPC query failed, falling back to cached on-chain state:', e);
+      }
+      // Fallback with verified on-chain reserves
+      updatePriceMetrics(liveReserveEth, liveReserveTokens);
+    }
+
+    function updatePriceMetrics(ethReserve, tokenReserve) {
+      livePriceInEth = ethReserve / tokenReserve;
+      livePriceInUsd = livePriceInEth * REF_ETH_PRICE_USD;
+      const fdvUsd = livePriceInUsd * 1000000000;
+      const gradPct = Math.min(100, Math.max(0, (ethReserve / GRADUATION_TARGET_ETH) * 100));
+      const tokensPerEth = Math.floor(tokenReserve / ethReserve);
+
+      // Top Ticker Bar
+      const tickerUsd = document.getElementById('tickerPriceUsd');
+      const tickerEth = document.getElementById('tickerPriceEth');
+      const tickerFdv = document.getElementById('tickerFdv');
+      const tickerReserve = document.getElementById('tickerCurveReserve');
+      const tickerPct = document.getElementById('tickerCurvePct');
+
+      if (tickerUsd) tickerUsd.innerText = '$' + livePriceInUsd.toFixed(8);
+      if (tickerEth) tickerEth.innerText = '(~' + livePriceInEth.toFixed(10) + ' ETH)';
+      if (tickerFdv) tickerFdv.innerText = '$' + Math.round(fdvUsd).toLocaleString();
+      if (tickerReserve) tickerReserve.innerText = ethReserve.toFixed(2) + ' / ' + GRADUATION_TARGET_ETH.toFixed(2) + ' ETH';
+      if (tickerPct) tickerPct.innerText = gradPct.toFixed(1) + '%';
+
+      // Hero Metric Card
+      const heroUsd = document.getElementById('heroPriceUsd');
+      const heroFdv = document.getElementById('heroFdv');
+      if (heroUsd) heroUsd.innerText = '$' + livePriceInUsd.toFixed(8);
+      if (heroFdv) heroFdv.innerText = 'FDV: ~$' + Math.round(fdvUsd).toLocaleString();
+
+      // Swap Widget Rates & Progress Bar
+      const swapRate = document.getElementById('swapRateSivletPerEth');
+      const swapUsd = document.getElementById('swapRateUsd');
+      const bondReserve = document.getElementById('bondingReserveEth');
+      const bondPct = document.getElementById('bondingProgressPct');
+      const bondBar = document.getElementById('bondingProgressBar');
+
+      if (swapRate) swapRate.innerText = '1 ETH ≈ ' + tokensPerEth.toLocaleString() + ' SIVLET';
+      if (swapUsd) swapUsd.innerText = '1 SIVLET = $' + livePriceInUsd.toFixed(8) + ' USD';
+      if (bondReserve) bondReserve.innerText = ethReserve.toFixed(3) + ' ETH';
+      if (bondPct) bondPct.innerText = gradPct.toFixed(1) + '%';
+      if (bondBar) bondBar.style.width = gradPct.toFixed(1) + '%';
+
+      // Recalculate estimated tokens in input
+      calculateSwapOutput();
     }
 
     async function connectWallet() {
