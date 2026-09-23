@@ -632,7 +632,7 @@
                 <span id="swapSubmitBtnText">Swap via Connected Wallet</span>
               </button>
               
-              <a href="https://www.ponsfamily.com/launchpad/0xb7832ca55ea7f9aa1504657376117b98deb4e2e1" target="_blank" class="py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-mono font-medium transition-all flex items-center justify-center gap-2">
+              <a href="https://www.ponsfamily.com/launchpad/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-mono font-medium transition-all flex items-center justify-center gap-2">
                 <i data-lucide="external-link" class="w-4 h-4 text-cyan-400"></i>
                 <span>Open on Pons</span>
               </a>
@@ -664,10 +664,10 @@
               <div class="p-3 rounded-lg bg-slate-950 border border-slate-800">
                 <div class="text-[10px] text-slate-500 uppercase">Token Contract (SIVLET)</div>
                 <div class="flex items-center justify-between mt-1">
-                  <a href="https://robinhoodchain.blockscout.com/token/0xb7832ca55ea7f9aa1504657376117b98deb4e2e1" target="_blank" class="text-cyan-400 hover:text-cyan-300 truncate font-semibold">
-                    0xb7832ca55ea7f9aa1504657376117b98deb4e2e1
+                  <a href="https://robinhoodchain.blockscout.com/token/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="text-cyan-400 hover:text-cyan-300 truncate font-semibold">
+                    0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1
                   </a>
-                  <button onclick="copyToClipboard('0xb7832ca55ea7f9aa1504657376117b98deb4e2e1')" class="p-1 hover:text-white text-slate-500" title="Copy">
+                  <button onclick="copyToClipboard('0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1')" class="p-1 hover:text-white text-slate-500" title="Copy">
                     <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                   </button>
                 </div>
@@ -818,6 +818,9 @@
   <!-- ========================================================================= -->
   <!-- 6. LIVE STATUS & PROTOCOL TELEMETRY                                       -->
   <!-- ========================================================================= -->
+  <!-- ========================================================================= -->
+  <!-- 6. LIVE STATUS & REAL ON-CHAIN PROTOCOL TELEMETRY                         -->
+  <!-- ========================================================================= -->
   <section id="live-status" class="py-20 relative z-10 border-t border-slate-800 bg-lab-darker">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
@@ -825,71 +828,103 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-800 gap-4">
           <div>
             <div class="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-cyan-400 mb-1">
-              <i data-lucide="activity" class="w-4 h-4"></i> Protocol Deflation Metrics (x402)
+              <i data-lucide="activity" class="w-4 h-4"></i> Real On-Chain Telemetry (Robinhood Chain)
             </div>
-            <h3 class="font-display font-bold text-xl text-white">Live On-Chain Settlement Stream</h3>
+            <h3 class="font-display font-bold text-xl text-white">Live On-Chain Protocol &amp; Reserve Metrics</h3>
           </div>
-          <div class="flex items-center gap-2 font-mono text-xs text-slate-400">
-            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-            <span>Network: Robinhood Chain &middot; Contracts Active</span>
+          <div class="flex items-center gap-2 font-mono text-xs text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>RPC Live &middot; Chain ID: 4663 &middot; Zero Synthetic Mock</span>
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
           
-          <div class="bg-slate-950 p-5 rounded-lg border border-slate-800">
-            <div class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
-              <span>Total API Calls</span>
-              <i data-lucide="arrow-up-right" class="w-4 h-4 text-cyan-400"></i>
+          <!-- Card 1: Pons Bonding Pool Reserve -->
+          <div class="bg-slate-950 p-5 rounded-lg border border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
+                <span>Pons Bonding Reserve</span>
+                <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
+              </div>
+              <div class="font-mono font-bold text-2xl sm:text-3xl text-emerald-400 tracking-tight" id="realCurveEthReserve">
+                1.680 ETH
+              </div>
+              <div class="mt-2 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <span>Curve Tokens:</span>
+                <span class="text-white font-semibold" id="realCurveTokens">989,000,000 SIVLET</span>
+              </div>
             </div>
-            <div class="font-mono font-bold text-2xl sm:text-3xl text-white tracking-tight" id="counterApiCalls">
-              1,438,924
-            </div>
-            <div class="mt-2 flex items-center gap-2 text-[11px] font-mono text-emerald-400">
-              <span class="flex h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-              <span>+38 calls in last 60s</span>
-            </div>
-          </div>
-
-          <div class="bg-slate-950 p-5 rounded-lg border border-slate-800">
-            <div class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
-              <span>Protocol Revenue</span>
-              <i data-lucide="dollar-sign" class="w-4 h-4 text-blue-400"></i>
-            </div>
-            <div class="font-mono font-bold text-2xl sm:text-3xl text-blue-300 tracking-tight" id="counterRevenue">
-              $1,438.92
-            </div>
-            <div class="mt-2 text-[11px] font-mono text-slate-400">
-              100% Routed to Treasury (0x6B50...5F8A)
+            <div class="mt-4 pt-3 border-t border-slate-900 flex items-center justify-between text-[11px] font-mono">
+              <span class="text-slate-500">Graduation Progress</span>
+              <span class="text-emerald-400 font-bold" id="realCurveGradPct">40.0% / 4.20 ETH</span>
             </div>
           </div>
 
-          <div class="bg-slate-950 p-5 rounded-lg border border-amber-500/25">
-            <div class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
-              <span>Total $SIVLET Burned</span>
-              <i data-lucide="flame" class="w-4 h-4 text-amber-400"></i>
+          <!-- Card 2: Treasury Engine Balance -->
+          <div class="bg-slate-950 p-5 rounded-lg border border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
+                <span>Treasury Balance</span>
+                <i data-lucide="shield-check" class="w-4 h-4 text-blue-400"></i>
+              </div>
+              <div class="font-mono font-bold text-2xl sm:text-3xl text-white tracking-tight" id="realTreasuryBalance">
+                0.0000 ETH
+              </div>
+              <div class="mt-2 text-[11px] font-mono text-slate-400 flex items-center justify-between">
+                <span>Auto-Trigger Threshold:</span>
+                <span class="text-cyan-300 font-semibold">50.0 USDC / 0.005 ETH</span>
+              </div>
             </div>
-            <div class="font-mono font-bold text-2xl sm:text-3xl text-amber-400 tracking-tight" id="counterBurned">
-              2,877,848
+            <div class="mt-4 pt-3 border-t border-slate-900 flex items-center justify-between text-[11px] font-mono">
+              <span class="text-slate-500">Engine Contract</span>
+              <span class="text-blue-400 font-mono">0x6B50...5F8A</span>
             </div>
-            <div class="mt-2 text-[11px] font-mono text-red-300 flex items-center justify-between">
-              <span>Permanent Sink</span>
-              <span class="text-slate-400 font-mono">0x0...dead</span>
+          </div>
+
+          <!-- Card 3: Total $SIVLET Burned (Real Proof of Burn) -->
+          <div class="bg-slate-950 p-5 rounded-lg border border-amber-500/25 flex flex-col justify-between">
+            <div>
+              <div class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
+                <span>Verified Tokens Burned</span>
+                <i data-lucide="flame" class="w-4 h-4 text-amber-400"></i>
+              </div>
+              <div class="font-mono font-bold text-2xl sm:text-3xl text-amber-400 tracking-tight" id="realBurnedCount">
+                0 SIVLET
+              </div>
+              <div class="mt-2 text-[11px] font-mono text-red-300 flex items-center justify-between">
+                <span>Burn Destination:</span>
+                <span class="text-slate-400 font-mono">0x0...dead</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-900 flex items-center justify-between text-[11px] font-mono">
+              <span class="text-slate-500">Proof of Burn Status</span>
+              <span class="text-amber-400 font-semibold" id="realBurnStatus">Awaiting 1st Buyback</span>
             </div>
           </div>
 
         </div>
 
-        <div class="mt-6 pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs font-mono text-slate-400 gap-3">
-          <div class="flex items-center gap-2">
-            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
-            <span>Latest Engine Tx:</span>
-            <code class="text-cyan-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">0x6888...91b9</code>
-            <span class="text-slate-500">&middot; Deployed on Pons</span>
+        <!-- On-Chain Proof Badges -->
+        <div class="mt-6 pt-4 border-t border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between text-xs font-mono text-slate-400 gap-3">
+          <div class="flex items-center flex-wrap gap-2">
+            <span class="flex items-center gap-1.5 text-emerald-400 font-semibold">
+              <i data-lucide="check-circle-2" class="w-4 h-4"></i> Verified Contracts:
+            </span>
+            <a href="https://robinhoodchain.blockscout.com/token/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="text-cyan-300 bg-slate-900 hover:bg-slate-800 px-2 py-0.5 rounded border border-slate-800 hover:underline">
+              Token: 0xb783...e2E1
+            </a>
+            <a href="https://robinhoodchain.blockscout.com/address/0x6B50f02D2292a28928bCe0F97b654E4DCbC75F8A" target="_blank" class="text-cyan-300 bg-slate-900 hover:bg-slate-800 px-2 py-0.5 rounded border border-slate-800 hover:underline">
+              Treasury: 0x6B50...5F8A
+            </a>
+            <a href="https://robinhoodchain.blockscout.com/address/0x5F02BE04d20aB66cf5Ea33ECda25194AECAd5601" target="_blank" class="text-cyan-300 bg-slate-900 hover:bg-slate-800 px-2 py-0.5 rounded border border-slate-800 hover:underline">
+              Pons Pool: 0x5F02...5601
+            </a>
           </div>
-          <a href="https://robinhoodchain.blockscout.com/address/0x6B50f02D2292a28928bCe0F97b654E4DCbC75F8A" target="_blank" class="text-cyan-400 hover:text-cyan-300 flex items-center gap-1 hover:underline">
-            <span>Verify Treasury on Blockscout</span>
-            <i data-lucide="external-link" class="w-3 h-3"></i>
+
+          <a href="https://www.ponsfamily.com/launchpad/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 hover:underline font-semibold flex-shrink-0">
+            <span>Trade on Pons Launchpad</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
           </a>
         </div>
 
@@ -988,8 +1023,8 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
         <div class="space-y-3 font-mono text-xs">
           <h4 class="font-bold text-white uppercase text-[11px] text-emerald-400">On-Chain Protocol</h4>
           <ul class="space-y-2 text-slate-400">
-            <li><a href="https://www.ponsfamily.com/launchpad/0xb7832ca55ea7f9aa1504657376117b98deb4e2e1" target="_blank" class="hover:text-emerald-300">Pons Fair Launch (Robinhood)</a></li>
-            <li><a href="https://robinhoodchain.blockscout.com/token/0xb7832ca55ea7f9aa1504657376117b98deb4e2e1" target="_blank" class="hover:text-cyan-300">Token Contract (0xb783...e2e1)</a></li>
+            <li><a href="https://www.ponsfamily.com/launchpad/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="hover:text-emerald-300">Pons Fair Launch (Robinhood)</a></li>
+            <li><a href="https://robinhoodchain.blockscout.com/token/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="hover:text-cyan-300">Token Contract (0xb783...e2E1)</a></li>
             <li><a href="https://robinhoodchain.blockscout.com/address/0x6B50f02D2292a28928bCe0F97b654E4DCbC75F8A" target="_blank" class="hover:text-cyan-300">Treasury Contract (0x6B50...5F8A)</a></li>
             <li><a href="https://robinhoodchain.blockscout.com/address/0x000000000000000000000000000000000000dead" target="_blank" class="hover:text-cyan-300">Burn Black Hole (0x0...dead)</a></li>
           </ul>
@@ -1023,9 +1058,8 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
-      initLiveCounterTicker();
-      fetchLiveTokenPrice();
-      setInterval(fetchLiveTokenPrice, 15000);
+      fetchLiveOnChainTelemetry();
+      setInterval(fetchLiveOnChainTelemetry, 15000);
       calculateSwapOutput();
       updateCharCount();
       
@@ -1245,8 +1279,9 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
     // -------------------------------------------------------------------------
     const ROBINHOOD_CHAIN_ID_HEX = '0x1237'; // 4663 in hex
     const ROBINHOOD_RPC = 'https://rpc.mainnet.chain.robinhood.com';
-    const SIVLET_TOKEN_ADDR = '0xb7832ca55ea7f9aa1504657376117b98deb4e2e1';
+    const SIVLET_TOKEN_ADDR = '0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1';
     const PONS_POOL_ADDR = '0x5F02BE04d20aB66cf5Ea33ECda25194AECAd5601';
+    const TREASURY_ADDR = '0x6B50f02D2292a28928bCe0F97b654E4DCbC75F8A';
     const GRADUATION_TARGET_ETH = 4.20;
     const REF_ETH_PRICE_USD = 2650.0;
 
@@ -1274,41 +1309,69 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
       document.getElementById('swapOutputAmount').innerText = '~' + Math.floor(tokensOut).toLocaleString() + ' SIVLET';
     }
 
-    async function fetchLiveTokenPrice() {
+    async function fetchLiveOnChainTelemetry() {
+      const DEAD_BALANCE_DATA = '0x70a08231000000000000000000000000000000000000000000000000000000000000dead';
+
       try {
         const response = await fetch(ROBINHOOD_RPC, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            jsonrpc: '2.0',
-            id: 1,
-            method: 'eth_call',
-            params: [{ to: PONS_POOL_ADDR, data: '0x0902f1ac' }, 'latest']
-          })
+          body: JSON.stringify([
+            // 1. Pons Pool Reserves (getReserves selector: 0x0902f1ac)
+            { jsonrpc: '2.0', id: 1, method: 'eth_call', params: [{ to: PONS_POOL_ADDR, data: '0x0902f1ac' }, 'latest'] },
+            // 2. Protocol Treasury ETH Balance
+            { jsonrpc: '2.0', id: 2, method: 'eth_getBalance', params: [TREASURY_ADDR, 'latest'] },
+            // 3. Burn Address Token Balance (balanceOf(0x0...dead))
+            { jsonrpc: '2.0', id: 3, method: 'eth_call', params: [{ to: SIVLET_TOKEN_ADDR, data: DEAD_BALANCE_DATA }, 'latest'] }
+          ])
         });
 
         if (response.ok) {
-          const res = await response.json();
-          if (res.result && res.result.length >= 130) {
-            const rawHex = res.result.slice(2);
-            const r0 = BigInt('0x' + rawHex.slice(0, 64));
-            const r1 = BigInt('0x' + rawHex.slice(64, 128));
+          const results = await response.json();
+          if (Array.isArray(results) && results.length >= 3) {
+            // Process Pool Reserves
+            const res0 = results.find(r => r.id === 1);
+            if (res0 && res0.result && res0.result.length >= 130) {
+              const rawHex = res0.result.slice(2);
+              const r0 = Number(BigInt('0x' + rawHex.slice(0, 64))) / 1e18;
+              const r1 = Number(BigInt('0x' + rawHex.slice(64, 128))) / 1e18;
 
-            const ethVal = Number(r0) / 1e18;
-            const tokVal = Number(r1) / 1e18;
-
-            if (ethVal > 0 && tokVal > 0) {
-              liveReserveEth = ethVal;
-              liveReserveTokens = tokVal;
-              updatePriceMetrics(liveReserveEth, liveReserveTokens);
-              return;
+              if (r0 > 0 && r1 > 0) {
+                liveReserveEth = r0;
+                liveReserveTokens = r1;
+                updatePriceMetrics(liveReserveEth, liveReserveTokens);
+              }
             }
+
+            // Process Treasury Balance
+            const res1 = results.find(r => r.id === 2);
+            if (res1 && res1.result) {
+              const treasuryEth = Number(BigInt(res1.result)) / 1e18;
+              const el = document.getElementById('realTreasuryBalance');
+              if (el) el.innerText = treasuryEth.toFixed(4) + ' ETH';
+            }
+
+            // Process Burned Tokens
+            const res2 = results.find(r => r.id === 3);
+            if (res2 && res2.result) {
+              const burnedTokens = Number(BigInt(res2.result)) / 1e18;
+              const elCount = document.getElementById('realBurnedCount');
+              const elStatus = document.getElementById('realBurnStatus');
+              if (elCount) elCount.innerText = Math.floor(burnedTokens).toLocaleString() + ' SIVLET';
+              if (elStatus) {
+                elStatus.innerText = burnedTokens > 0 
+                  ? 'Active · Incinerated'
+                  : 'Awaiting 1st Buyback';
+              }
+            }
+            return;
           }
         }
-      } catch (e) {
-        console.warn('Direct RPC query failed, falling back to cached on-chain state:', e);
+      } catch (err) {
+        console.warn('On-chain telemetry query failed, using verified baseline:', err);
       }
-      // Fallback with verified on-chain reserves
+
+      // Fallback update
       updatePriceMetrics(liveReserveEth, liveReserveTokens);
     }
 
@@ -1350,6 +1413,15 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
       if (bondReserve) bondReserve.innerText = ethReserve.toFixed(3) + ' ETH';
       if (bondPct) bondPct.innerText = gradPct.toFixed(1) + '%';
       if (bondBar) bondBar.style.width = gradPct.toFixed(1) + '%';
+
+      // Section 6 Real Telemetry Cards
+      const realCurveEth = document.getElementById('realCurveEthReserve');
+      const realCurveTok = document.getElementById('realCurveTokens');
+      const realCurvePct = document.getElementById('realCurveGradPct');
+
+      if (realCurveEth) realCurveEth.innerText = ethReserve.toFixed(3) + ' ETH';
+      if (realCurveTok) realCurveTok.innerText = Math.floor(tokenReserve).toLocaleString() + ' SIVLET';
+      if (realCurvePct) realCurvePct.innerText = gradPct.toFixed(1) + '% / ' + GRADUATION_TARGET_ETH.toFixed(2) + ' ETH';
 
       // Recalculate estimated tokens in input
       calculateSwapOutput();
@@ -1471,7 +1543,7 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
       }
 
       // Forward to Pons launchpad with user's configured token
-      window.open('https://www.ponsfamily.com/launchpad/0xb7832ca55ea7f9aa1504657376117b98deb4e2e1', '_blank');
+      window.open('https://www.ponsfamily.com/launchpad/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1', '_blank');
     }
 
     function copyToClipboard(text) {
@@ -1489,24 +1561,6 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
     function closeLitepaperModal() {
       document.getElementById('litepaperModal').classList.add('hidden');
       document.body.style.overflow = 'auto';
-    }
-
-    // Live Telemetry Ticker Animation
-    function initLiveCounterTicker() {
-      let apiCalls = 1438924;
-      let revenue = 1438.92;
-      let burned = 2877848;
-
-      setInterval(() => {
-        const delta = Math.floor(Math.random() * 3) + 1;
-        apiCalls += delta;
-        revenue += delta * 0.001;
-        burned += Math.floor(delta * 2);
-
-        document.getElementById('counterApiCalls').innerText = apiCalls.toLocaleString();
-        document.getElementById('counterRevenue').innerText = '$' + revenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        document.getElementById('counterBurned').innerText = burned.toLocaleString();
-      }, 3500);
     }
   </script>
 </body>
