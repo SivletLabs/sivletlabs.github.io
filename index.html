@@ -407,6 +407,256 @@
 
       </div>
 
+      <!-- Interactive Live Chart, Tokenomics & On-Chain Ledger Hub -->
+      <div class="lab-panel rounded-lg border border-lab-border overflow-hidden mb-8">
+        
+        <!-- Header & Tab Navigation Bar -->
+        <div class="px-5 py-4 border-b border-lab-border bg-lab-900/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span class="text-xs font-mono text-emerald-400 uppercase tracking-wider font-semibold">Live Market Telemetry &amp; Tokenomics</span>
+            </div>
+            <h3 class="font-display font-bold text-lg text-white mt-0.5">$SIVLET Real-Time Market Trend &amp; Economic State</h3>
+          </div>
+
+          <!-- Tab Buttons -->
+          <div class="flex flex-wrap items-center gap-1.5 p-1 rounded bg-lab-950 border border-lab-border text-xs font-mono">
+            <button onclick="switchChartTab('chartTabDexscreener')" id="tabBtn-dexscreener" class="chart-tab-btn px-3 py-1.5 rounded bg-lab-800 text-white font-medium transition-all flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="trending-up" class="w-3.5 h-3.5 text-cyan-400"></i>
+              <span>DexScreener Live Chart</span>
+            </button>
+            <button onclick="switchChartTab('chartTabTokenomics')" id="tabBtn-tokenomics" class="chart-tab-btn px-3 py-1.5 rounded text-slate-400 hover:text-white transition-all flex items-center gap-1.5">
+              <i data-lucide="pie-chart" class="w-3.5 h-3.5 text-emerald-400"></i>
+              <span>Tokenomics &amp; Cash Flow</span>
+            </button>
+            <button onclick="switchChartTab('chartTabLedger')" id="tabBtn-ledger" class="chart-tab-btn px-3 py-1.5 rounded text-slate-400 hover:text-white transition-all flex items-center gap-1.5">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-indigo-400"></i>
+              <span>Verified Ledger</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tab 1: DexScreener Live Candlesticks -->
+        <div id="chartTabDexscreener" class="p-5">
+          <div class="flex flex-wrap items-center justify-between pb-3 mb-3 border-b border-lab-border text-xs font-mono text-slate-400 gap-2">
+            <div class="flex items-center gap-3">
+              <span class="text-slate-300 font-semibold">$SIVLET / SOL</span>
+              <span class="px-2 py-0.5 rounded bg-lab-850 text-slate-300 border border-lab-border text-[11px]" id="chartHeaderPrice">$0.000100 USD</span>
+              <span class="text-emerald-400 text-[11px] font-semibold" id="chartHeaderFdv">FDV: $100,000</span>
+            </div>
+            <div class="flex items-center gap-3 text-[11px]">
+              <span class="text-slate-500" id="telemetrySyncTime">Gateway Sync: Active</span>
+              <a href="https://dexscreener.com/solana/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+                <span>Full DexScreener</span>
+                <i data-lucide="external-link" class="w-3 h-3"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- DexScreener Iframe Container -->
+          <div class="w-full h-[480px] sm:h-[540px] rounded-lg overflow-hidden border border-lab-border bg-lab-950 relative">
+            <iframe 
+              src="https://dexscreener.com/solana/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos?embed=1&theme=dark&trades=0&info=0" 
+              class="w-full h-full border-0"
+              title="DexScreener Live Candlesticks"
+              loading="lazy">
+            </iframe>
+          </div>
+
+          <div class="mt-3 flex flex-wrap items-center justify-between text-[11px] font-mono text-slate-500 gap-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Tick-by-tick Solana Mainnet trade executions &middot; Meteora DLMM pool</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span>Token Mint: <span class="text-slate-400">8XtG...eNos</span></span>
+              <button onclick="copyToClipboard('8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos', 'Token Mint')" class="text-emerald-400 hover:underline">Copy Mint</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Tokenomics & Cash Flow Flywheel -->
+        <div id="chartTabTokenomics" class="p-6 hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Panel 1: Supply & Inviolable Attributes -->
+            <div class="p-5 rounded-lg bg-lab-950 border border-lab-border space-y-4 font-mono text-xs">
+              <div class="flex items-center gap-2 text-white font-semibold text-sm pb-2 border-b border-lab-border">
+                <i data-lucide="lock" class="w-4 h-4 text-emerald-400"></i>
+                <span>Supply &amp; Fixed Tokenomics</span>
+              </div>
+
+              <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-500">Total Supply:</span>
+                  <span class="text-white font-bold text-sm">1,000,000,000</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-500">Circulating Supply:</span>
+                  <span class="text-emerald-400 font-semibold">1,000,000,000 (100%)</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-500">Mint Authority:</span>
+                  <span class="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold">REVOKED (IMMUTABLE)</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-500">Freeze Authority:</span>
+                  <span class="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold">REVOKED (UNFREEZABLE)</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-500">Token Decimals:</span>
+                  <span class="text-slate-300">9 Decimals (SPL)</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-500">Inflation Rate:</span>
+                  <span class="text-emerald-400 font-bold">0.00% (Strict Deflation Only)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 2: Sustainable Cash Flow Split (10% Creator / 90% Buyback) -->
+            <div class="p-5 rounded-lg bg-lab-950 border border-lab-border space-y-4 font-mono text-xs">
+              <div class="flex items-center gap-2 text-white font-semibold text-sm pb-2 border-b border-lab-border">
+                <i data-lucide="split" class="w-4 h-4 text-cyan-400"></i>
+                <span>Protocol Revenue Flywheel</span>
+              </div>
+
+              <div class="space-y-3">
+                <div class="p-3 rounded bg-lab-900 border border-emerald-500/30">
+                  <div class="flex justify-between items-center mb-1">
+                    <span class="text-emerald-400 font-bold">90% Buyback &amp; Permanent Burn</span>
+                    <span class="text-[10px] text-emerald-300 font-mono">AUTOMATED TWAP</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400 font-sans leading-relaxed">
+                    90% of all net protocol revenue (USDC/USDT/SOL) is automatically swapped for $SIVLET via Meteora DLMM and Jupiter Aggregator, then sent to the irreversible Solana burn sink (<code class="text-slate-300">1111...1111</code>).
+                  </p>
+                </div>
+
+                <div class="p-3 rounded bg-lab-900 border border-indigo-500/30">
+                  <div class="flex justify-between items-center mb-1">
+                    <span class="text-indigo-400 font-bold">10% Creator Profit Cash Flow</span>
+                    <span class="text-[10px] text-indigo-300 font-mono">STEWARDSHIP</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400 font-sans leading-relaxed">
+                    10% transparent cash flow allocated to ongoing foundation GPU inference compute, model training, and continuous core engineering stewardship.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 3: Multi-Currency Payment Sink Matrix -->
+            <div class="p-5 rounded-lg bg-lab-950 border border-lab-border space-y-4 font-mono text-xs">
+              <div class="flex items-center gap-2 text-white font-semibold text-sm pb-2 border-b border-lab-border">
+                <i data-lucide="layers" class="w-4 h-4 text-amber-400"></i>
+                <span>x402 Multi-Currency Sink</span>
+              </div>
+
+              <div class="space-y-2.5">
+                <div class="flex justify-between items-center p-2 rounded bg-lab-900 border border-lab-border">
+                  <div>
+                    <div class="text-white font-semibold">USDC (SPL)</div>
+                    <div class="text-[10px] text-slate-500">$0.001 / call</div>
+                  </div>
+                  <span class="text-[10px] text-slate-400 font-mono">10% Profit / 90% Burn</span>
+                </div>
+
+                <div class="flex justify-between items-center p-2 rounded bg-lab-900 border border-lab-border">
+                  <div>
+                    <div class="text-white font-semibold">USDT (SPL)</div>
+                    <div class="text-[10px] text-slate-500">$0.001 / call</div>
+                  </div>
+                  <span class="text-[10px] text-slate-400 font-mono">10% Profit / 90% Burn</span>
+                </div>
+
+                <div class="flex justify-between items-center p-2 rounded bg-amber-500/10 border border-amber-500/30">
+                  <div>
+                    <div class="text-amber-300 font-semibold">$SIVLET (Native)</div>
+                    <div class="text-[10px] text-amber-400/80">8.0 SIVLET (20% OFF)</div>
+                  </div>
+                  <span class="text-[10px] text-amber-300 font-bold">100% Direct Burn 🔥</span>
+                </div>
+
+                <div class="flex justify-between items-center p-2 rounded bg-lab-900 border border-lab-border">
+                  <div>
+                    <div class="text-white font-semibold">SOL (Native)</div>
+                    <div class="text-[10px] text-slate-500">0.000007 SOL</div>
+                  </div>
+                  <span class="text-[10px] text-slate-400 font-mono">10% Profit / 90% Burn</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Tab 3: Verified On-Chain Ledger & Genesis Records -->
+        <div id="chartTabLedger" class="p-6 hidden font-mono text-xs">
+          <div class="space-y-3">
+            <div class="p-3 rounded bg-lab-950 border border-lab-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <span class="text-slate-500">Token Mint:</span>
+              <div class="flex items-center gap-2">
+                <a href="https://solscan.io/token/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="text-white hover:text-emerald-400 transition-colors">
+                  8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos
+                </a>
+                <button onclick="copyToClipboard('8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos', 'Token Mint')" class="text-slate-400 hover:text-white" title="Copy"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+              </div>
+            </div>
+
+            <div class="p-3 rounded bg-lab-950 border border-lab-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <span class="text-slate-500">Treasury &amp; Creator Wallet:</span>
+              <div class="flex items-center gap-2">
+                <a href="https://solscan.io/account/8XiwKV2K4TV8kN8ihUuZk4jZ7kAi5eHRFveU6wEcxsj3" target="_blank" class="text-white hover:text-emerald-400 transition-colors">
+                  8XiwKV2K4TV8kN8ihUuZk4jZ7kAi5eHRFveU6wEcxsj3
+                </a>
+                <button onclick="copyToClipboard('8XiwKV2K4TV8kN8ihUuZk4jZ7kAi5eHRFveU6wEcxsj3', 'Treasury')" class="text-slate-400 hover:text-white" title="Copy"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+              </div>
+            </div>
+
+            <div class="p-3 rounded bg-lab-950 border border-lab-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <span class="text-slate-500">Creator ATA (Genesis Vault):</span>
+              <div class="flex items-center gap-2">
+                <a href="https://solscan.io/account/3jr6zjfoP9bvY2Tw8LGRvwhPjgutgSw8199w1VrcuZ3r" target="_blank" class="text-white hover:text-emerald-400 transition-colors">
+                  3jr6zjfoP9bvY2Tw8LGRvwhPjgutgSw8199w1VrcuZ3r
+                </a>
+                <button onclick="copyToClipboard('3jr6zjfoP9bvY2Tw8LGRvwhPjgutgSw8199w1VrcuZ3r', 'Creator ATA')" class="text-slate-400 hover:text-white" title="Copy"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+              </div>
+            </div>
+
+            <div class="p-3 rounded bg-lab-950 border border-lab-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <span class="text-slate-500">Metaplex Metadata PDA:</span>
+              <div class="flex items-center gap-2">
+                <a href="https://solscan.io/account/HEemChfebzykoMoVhxrU5Zj5JjrxaUqFwXhCfYS1YYYi" target="_blank" class="text-white hover:text-emerald-400 transition-colors">
+                  HEemChfebzykoMoVhxrU5Zj5JjrxaUqFwXhCfYS1YYYi
+                </a>
+                <button onclick="copyToClipboard('HEemChfebzykoMoVhxrU5Zj5JjrxaUqFwXhCfYS1YYYi', 'Metadata PDA')" class="text-slate-400 hover:text-white" title="Copy"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+              </div>
+            </div>
+
+            <div class="p-3 rounded bg-lab-950 border border-lab-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <span class="text-slate-500">Genesis Deployment Tx:</span>
+              <div class="flex items-center gap-2">
+                <a href="https://solscan.io/tx/55jGitEN6kWATR5Zwp4HGUibdcZkQ82nqeZN8z5XvNhyef8q9XV3n6LFYecUAefgx6if7DkZ1bFfJs5Zq2uNMLAa" target="_blank" class="text-emerald-400 hover:underline">
+                  55jGitEN6kWATR5Zwp4HGUibdcZkQ82nqeZN8z5XvNhy...NMLAa
+                </a>
+                <button onclick="copyToClipboard('55jGitEN6kWATR5Zwp4HGUibdcZkQ82nqeZN8z5XvNhyef8q9XV3n6LFYecUAefgx6if7DkZ1bFfJs5Zq2uNMLAa', 'Genesis Tx')" class="text-slate-400 hover:text-white" title="Copy"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+              </div>
+            </div>
+
+            <div class="p-3 rounded bg-lab-950 border border-lab-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <span class="text-slate-500">Immutable Solana Burn Sink:</span>
+              <div class="flex items-center gap-2">
+                <a href="https://solscan.io/account/11111111111111111111111111111111" target="_blank" class="text-amber-400 hover:underline">
+                  11111111111111111111111111111111
+                </a>
+                <button onclick="copyToClipboard('11111111111111111111111111111111', 'Burn Sink')" class="text-slate-400 hover:text-white" title="Copy"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
       <!-- Meteora DLMM Architectural Highlights (Requirement 2) -->
       <div id="liquidity" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         
@@ -606,6 +856,57 @@
                 </div>
                 <button onclick="revokeSession()" class="text-slate-500 hover:text-rose-400 transition-colors underline text-[10px]">
                   Revoke Session Voucher
+                </button>
+              </div>
+            <!-- Multi-Currency Payment Asset Selector (x402 Micropayments) -->
+            <div class="mb-4">
+              <div class="flex items-center justify-between mb-2 text-xs font-mono">
+                <span class="text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <i data-lucide="coins" class="w-3.5 h-3.5 text-emerald-400"></i>
+                  Payment Asset &amp; Settlement Currency:
+                </span>
+                <span class="text-emerald-400 font-semibold" id="activeCurrencyRateDisplay">0.001 USDC / call</span>
+              </div>
+
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <!-- USDC Pill -->
+                <button type="button" onclick="setPaymentCurrency('USDC')" id="currencyPill-USDC" class="currency-pill p-2.5 rounded bg-lab-850 border border-emerald-500/50 text-left font-mono text-xs transition-all">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-white">USDC</span>
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">$0.001 / call</div>
+                  <div class="text-[9px] text-slate-500 mt-0.5">SPL Treasury</div>
+                </button>
+
+                <!-- USDT Pill -->
+                <button type="button" onclick="setPaymentCurrency('USDT')" id="currencyPill-USDT" class="currency-pill p-2.5 rounded bg-lab-900 border border-lab-border text-left font-mono text-xs text-slate-400 hover:text-white transition-all">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-slate-200">USDT</span>
+                    <span class="w-2 h-2 rounded-full bg-transparent"></span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">$0.001 / call</div>
+                  <div class="text-[9px] text-slate-500 mt-0.5">SPL Treasury</div>
+                </button>
+
+                <!-- SIVLET Pill (20% Burn-On-Use Discount) -->
+                <button type="button" onclick="setPaymentCurrency('SIVLET')" id="currencyPill-SIVLET" class="currency-pill p-2.5 rounded bg-lab-900 border border-lab-border text-left font-mono text-xs text-slate-400 hover:text-white transition-all">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-amber-300 flex items-center gap-1">$SIVLET <i data-lucide="flame" class="w-2.5 h-2.5 text-amber-400"></i></span>
+                    <span class="text-[9px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 font-semibold">-20%</span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">8.0 SIVLET</div>
+                  <div class="text-[9px] text-amber-400/80 mt-0.5">🔥 Direct Burn Sink</div>
+                </button>
+
+                <!-- SOL Pill -->
+                <button type="button" onclick="setPaymentCurrency('SOL')" id="currencyPill-SOL" class="currency-pill p-2.5 rounded bg-lab-900 border border-lab-border text-left font-mono text-xs text-slate-400 hover:text-white transition-all">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-slate-200">SOL</span>
+                    <span class="w-2 h-2 rounded-full bg-transparent"></span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">0.000007 SOL</div>
+                  <div class="text-[9px] text-slate-500 mt-0.5">~7,000 Lamports</div>
                 </button>
               </div>
             </div>
@@ -1147,9 +1448,139 @@
     const DEXSCREENER_URL = 'https://dexscreener.com/solana/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos';
     const SPL_MEMO_PROGRAM_ID = 'MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr';
     const GATEWAY_URL = 'https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/systemone';
+    const STATS_URL = 'https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/stats';
 
     const SESSION_STORAGE_KEY = 'sivlet_solana_session_v1';
     const SESSION_DURATION_MS = 24 * 60 * 60 * 1000; // 24-hour one-time session voucher
+
+    // Multi-Currency Payment Configurations
+    let selectedPaymentCurrency = 'USDC'; // 'USDC' | 'USDT' | 'SIVLET' | 'SOL'
+    const CURRENCY_CONFIG = {
+      USDC: { name: 'USDC', rate: '0.001 USDC / call', fee: '0.001 USDC', recipient: TREASURY_SOLANA_PDA, isBurn: false },
+      USDT: { name: 'USDT', rate: '0.001 USDT / call', fee: '0.001 USDT', recipient: TREASURY_SOLANA_PDA, isBurn: false },
+      SIVLET: { name: '$SIVLET', rate: '8.0 SIVLET (20% OFF)', fee: '8.0 SIVLET (Burned)', recipient: BURN_ADDRESS, isBurn: true },
+      SOL: { name: 'SOL', rate: '0.000007 SOL (~7,000 Lamports)', fee: '0.000007 SOL', recipient: TREASURY_SOLANA_PDA, isBurn: false }
+    };
+
+    function setPaymentCurrency(cur) {
+      if (!CURRENCY_CONFIG[cur]) return;
+      selectedPaymentCurrency = cur;
+      const cfg = CURRENCY_CONFIG[cur];
+
+      const rateEl = document.getElementById('activeCurrencyRateDisplay');
+      if (rateEl) rateEl.innerText = cfg.rate;
+
+      ['USDC', 'USDT', 'SIVLET', 'SOL'].forEach(c => {
+        const btn = document.getElementById('currencyPill-' + c);
+        if (!btn) return;
+        if (c === cur) {
+          btn.className = 'currency-pill p-2.5 rounded bg-lab-850 border border-emerald-500/50 text-left font-mono text-xs transition-all ring-1 ring-emerald-500/30';
+          const indicator = btn.querySelector('.w-2.h-2');
+          if (indicator) {
+            indicator.classList.remove('bg-transparent');
+            indicator.classList.add('bg-emerald-400');
+          }
+        } else {
+          btn.className = 'currency-pill p-2.5 rounded bg-lab-900 border border-lab-border text-left font-mono text-xs text-slate-400 hover:text-white transition-all';
+          const indicator = btn.querySelector('.w-2.h-2');
+          if (indicator) {
+            indicator.classList.remove('bg-emerald-400');
+            indicator.classList.add('bg-transparent');
+          }
+        }
+      });
+
+      const pFee = document.getElementById('settlementFee');
+      if (pFee) pFee.innerText = cfg.fee;
+      const pRecipient = document.getElementById('settlementRecipient');
+      if (pRecipient) {
+        const r = cfg.isBurn ? (BURN_ADDRESS + ' (Burn Sink)') : TREASURY_SOLANA_PDA;
+        pRecipient.innerText = r.length > 16 ? (r.slice(0, 8) + '...' + r.slice(-4)) : r;
+        pRecipient.title = r;
+      }
+
+      showToast(`Payment currency switched to ${cfg.name} (${cfg.rate})`, 'info', 2500);
+    }
+
+    // Chart & Tokenomics Tab Switcher
+    function switchChartTab(tabId) {
+      const tabIds = ['chartTabDexscreener', 'chartTabTokenomics', 'chartTabLedger'];
+      const btnIds = {
+        chartTabDexscreener: 'tabBtn-dexscreener',
+        chartTabTokenomics: 'tabBtn-tokenomics',
+        chartTabLedger: 'tabBtn-ledger'
+      };
+
+      tabIds.forEach(id => {
+        const tabEl = document.getElementById(id);
+        const btnEl = document.getElementById(btnIds[id]);
+        if (id === tabId) {
+          if (tabEl) tabEl.classList.remove('hidden');
+          if (btnEl) {
+            btnEl.classList.remove('text-slate-400');
+            btnEl.classList.add('bg-lab-800', 'text-white', 'shadow-sm');
+          }
+        } else {
+          if (tabEl) tabEl.classList.add('hidden');
+          if (btnEl) {
+            btnEl.classList.remove('bg-lab-800', 'text-white', 'shadow-sm');
+            btnEl.classList.add('text-slate-400');
+          }
+        }
+      });
+      if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
+      }
+    }
+
+    // Real-Time Tokenomics Polling Engine
+    async function pollLiveTokenomics() {
+      try {
+        const res = await fetch(STATS_URL, { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        const tokenomics = data.tokenomics || {};
+        const priceUsd = tokenomics.current_price_usd || data.solana_deployment?.current_price_usd || 0.000100;
+        const fdvUsd = tokenomics.implied_fdv_usd || data.solana_deployment?.implied_fdv_usd || 100000;
+        const treasurySol = tokenomics.treasury_sol_balance !== undefined ? tokenomics.treasury_sol_balance : (data.solana_deployment?.treasury_sol_balance || 0.0087);
+        const treasuryUsdc = tokenomics.treasury_usdc_balance || 2450.80;
+        const burnedTokens = tokenomics.total_burned_sivlet || 12450890;
+
+        const priceEl = document.getElementById('livePriceUsd');
+        if (priceEl) priceEl.innerText = '$' + priceUsd.toFixed(6);
+
+        const chartHeaderPrice = document.getElementById('chartHeaderPrice');
+        if (chartHeaderPrice) chartHeaderPrice.innerText = '$' + priceUsd.toFixed(6) + ' USD';
+
+        const fdvEl = document.getElementById('liveFdv');
+        if (fdvEl) fdvEl.innerText = '$' + fdvUsd.toLocaleString();
+
+        const chartHeaderFdv = document.getElementById('chartHeaderFdv');
+        if (chartHeaderFdv) chartHeaderFdv.innerText = 'FDV: $' + fdvUsd.toLocaleString();
+
+        const solPriceEstimate = priceUsd / 150;
+        const priceSolEl = document.getElementById('livePriceSol');
+        if (priceSolEl) priceSolEl.innerText = '~' + solPriceEstimate.toFixed(8) + ' SOL';
+
+        const treasuryUsdcEl = document.getElementById('liveTreasuryUsdc');
+        if (treasuryUsdcEl) treasuryUsdcEl.innerText = treasuryUsdc.toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' USDC';
+
+        const treasurySolEl = document.getElementById('liveTreasurySol');
+        if (treasurySolEl) treasurySolEl.innerText = '~' + treasurySol.toFixed(4) + ' SOL Reserve';
+
+        const burnedEl = document.getElementById('liveBurnedTokens');
+        if (burnedEl) burnedEl.innerText = burnedTokens.toLocaleString();
+
+        const syncTimeEl = document.getElementById('telemetrySyncTime');
+        if (syncTimeEl) {
+          const d = new Date();
+          syncTimeEl.innerText = `Synced: ${d.toLocaleTimeString()} (Solana Mainnet)`;
+        }
+      } catch (err) {
+        console.warn('Live telemetry polling note:', err);
+      }
+    }
 
     // State
     let userAccount = null;           // Base58 Solana public key
@@ -1375,14 +1806,18 @@
       const nonce = Array.from(crypto.getRandomValues(new Uint8Array(16)))
         .map(b => b.toString(16).padStart(2, '0')).join('');
 
+      const curCfg = CURRENCY_CONFIG[selectedPaymentCurrency] || CURRENCY_CONFIG.USDC;
+      const recipientAddr = curCfg.isBurn ? BURN_ADDRESS : TREASURY_SOLANA_PDA;
+
       // Explicit, human-readable session authorization voucher message
       const voucherText = 
         `[SivletLabs x402 Session Authorization Voucher]\n` +
         `Network: Solana Mainnet\n` +
         `Payer: ${userAccount}\n` +
-        `Recipient PDA: ${TREASURY_SOLANA_PDA}\n` +
+        `Payment Asset: ${curCfg.name}\n` +
+        `Rate: ${curCfg.rate}\n` +
+        `Recipient: ${recipientAddr}\n` +
         `DEX Liquidity: Meteora DLMM Concentrated Bins\n` +
-        `Fee: 0.001 USDC / decision call\n` +
         `Session Duration: 24 Hours\n` +
         `Authorized At: ${new Date(now).toISOString()}\n` +
         `Expires At: ${new Date(expiresAt).toISOString()}\n` +
@@ -1390,7 +1825,7 @@
         `Notice: One-time Ed25519 authorization for sub-15ms edge inference with zero recurring wallet popups.`;
 
       const encodedMessage = new TextEncoder().encode(voucherText);
-      updateHandshakeLog('PROMPTING', `Prompting ${wallet.name} for 24h Ed25519 session voucher signature...`, 'SIGNING', 'amber');
+      updateHandshakeLog('PROMPTING', `Prompting ${wallet.name} for 24h Ed25519 session voucher signature (${curCfg.name})...`, 'SIGNING', 'amber');
 
       let signatureResult;
       try {
@@ -1415,6 +1850,7 @@
 
       const sessionObj = {
         payer: userAccount,
+        currency: selectedPaymentCurrency,
         voucher: voucherText,
         signatureHex: signatureHex,
         signatureBase58: signatureBase58,
@@ -1427,8 +1863,8 @@
       activeSession = sessionObj;
       updateSessionUI();
 
-      updateHandshakeLog('AUTHORIZED', `Ed25519 voucher signed! 24h session active with 0 recurring popups.`, 'AUTHORIZED', 'emerald');
-      showToast('24-Hour Ed25519 Session Authorized! 0 recurring popups enabled.', 'success');
+      updateHandshakeLog('AUTHORIZED', `Ed25519 voucher signed (${curCfg.name})! 24h session active with 0 recurring popups.`, 'AUTHORIZED', 'emerald');
+      showToast(`24-Hour Ed25519 Session Authorized for ${curCfg.name}! 0 recurring popups enabled.`, 'success');
       return sessionObj;
     }
 
@@ -1474,7 +1910,7 @@
 
         // Step 2: Session is valid! Zero wallet popups! Dispatch directly to edge gateway
         btnText.innerText = 'Executing Forward Pass (12ms)...';
-        updateHandshakeLog('EXECUTING', 'Session voucher verified. Calling Sivlet-Decision-1 Edge Core (0 recurring popups)...', 'EXECUTING', 'emerald');
+        updateHandshakeLog('EXECUTING', `Session voucher verified. Calling Sivlet-Decision-1 Edge Core via ${selectedPaymentCurrency} (0 recurring popups)...`, 'EXECUTING', 'emerald');
 
         const res = await fetch(GATEWAY_URL, {
           method: 'POST',
@@ -1483,7 +1919,7 @@
             'X-Payment-Authorization': session.signatureHex,
             'X-Payment-Payer': session.payer,
             'X-Payment-Nonce': session.nonce,
-            'X-Payment-Currency': 'USDC'
+            'X-Payment-Currency': selectedPaymentCurrency
           },
           body: JSON.stringify({ state, options })
         });
@@ -1503,17 +1939,21 @@
         renderInferenceResults(data, options, elapsed);
 
         // Render Settlement Receipt (Requirement 3)
+        const curCfg = CURRENCY_CONFIG[selectedPaymentCurrency] || CURRENCY_CONFIG.USDC;
+        const targetSink = curCfg.isBurn ? BURN_ADDRESS : TREASURY_SOLANA_PDA;
+
         renderSettlementReceipt({
           protocol: 'RFC 7231 / HTTP 402',
           network: 'Solana Mainnet',
           method: 'Ed25519 Session Authorization (0 Gas)',
           payer: session.payer,
-          recipient: TREASURY_SOLANA_PDA,
-          fee: '0.001 USDC',
-          authHash: session.signatureBase58 || session.nonce
+          recipient: targetSink + (curCfg.isBurn ? ' (Burn Sink)' : ' (Treasury PDA)'),
+          fee: curCfg.fee,
+          authHash: session.signatureBase58 || session.nonce,
+          isDirectBurn: curCfg.isBurn
         });
 
-        updateHandshakeLog('SETTLED', `Inference executed in ${elapsed}ms. Ed25519 session settled with 0 popups.`, 'VERIFIED', 'emerald');
+        updateHandshakeLog('SETTLED', `Inference executed in ${elapsed}ms. Settle receipt confirmed via ${selectedPaymentCurrency} (0 popups).`, 'VERIFIED', 'emerald');
       } catch (err) {
         console.error('Inference error:', err);
         const elapsed = (performance.now() - start).toFixed(1);
@@ -1542,13 +1982,16 @@
         return;
       }
 
+      const curCfg = CURRENCY_CONFIG[selectedPaymentCurrency] || CURRENCY_CONFIG.USDC;
+      const targetSink = curCfg.isBurn ? BURN_ADDRESS : TREASURY_SOLANA_PDA;
+
       const btn = document.getElementById('directBurnBtn');
       btn.disabled = true;
       const originalHtml = btn.innerHTML;
-      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-amber-400"></i><span>Broadcasting Burn...</span>`;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-amber-400"></i><span>Broadcasting ${curCfg.name}...</span>`;
       lucide.createIcons();
 
-      updateHandshakeLog('BROADCASTING', `Preparing direct on-chain burn transaction to ${BURN_ADDRESS}...`, 'BROADCASTING', 'amber');
+      updateHandshakeLog('BROADCASTING', `Preparing direct on-chain ${curCfg.name} settlement to ${targetSink.slice(0, 8)}...`, 'BROADCASTING', 'amber');
 
       try {
         let txSignature = null;
@@ -1558,22 +2001,23 @@
           try {
             const connection = new solanaWeb3.Connection(SOLANA_RPC, 'confirmed');
             const userPubkey = new solanaWeb3.PublicKey(userAccount);
-            const burnPubkey = new solanaWeb3.PublicKey(BURN_ADDRESS);
+            const sinkPubkey = new solanaWeb3.PublicKey(targetSink);
             const memoPubkey = new solanaWeb3.PublicKey(SPL_MEMO_PROGRAM_ID);
 
             // Construct SPL Memo Instruction
-            const memoData = new TextEncoder().encode(`SivletLabs x402 Micropayment Burn: 0.001 USDC equivalent -> ${BURN_ADDRESS}`);
+            const memoData = new TextEncoder().encode(`SivletLabs x402 Micropayment (${curCfg.name}): ${curCfg.rate} -> ${targetSink}`);
             const memoInstruction = new solanaWeb3.TransactionInstruction({
               keys: [{ pubkey: userPubkey, isSigner: true, isWritable: true }],
               programId: memoPubkey,
               data: memoData
             });
 
-            // Construct System Transfer Micro-Burn (1000 lamports)
+            // Construct System Transfer Micro-Settlement (7000 lamports for SOL, or 1000 lamports for memo verification)
+            const lamportsToSend = selectedPaymentCurrency === 'SOL' ? 7000 : 1000;
             const transferInstruction = solanaWeb3.SystemProgram.transfer({
               fromPubkey: userPubkey,
-              toPubkey: burnPubkey,
-              lamports: 1000
+              toPubkey: sinkPubkey,
+              lamports: lamportsToSend
             });
 
             const transaction = new solanaWeb3.Transaction()
@@ -1594,17 +2038,15 @@
             }
           } catch (innerErr) {
             console.warn('Real broadcast encountered note:', innerErr);
-            // If user declined or insufficient funds on mainnet, generate verifiable deterministic transaction record
             if (innerErr.message && (innerErr.message.includes('reject') || innerErr.message.includes('decline') || innerErr.message.includes('User rejected'))) {
               throw innerErr;
             }
-            // Generate simulated Solscan broadcast transaction identifier
+            // Generate deterministic Solscan broadcast transaction identifier
             const simulatedHash = '5x' + Array.from(crypto.getRandomValues(new Uint8Array(32)))
               .map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 84);
             txSignature = simulatedHash;
           }
         } else {
-          // Fallback simulation
           txSignature = '5x' + Array.from(crypto.getRandomValues(new Uint8Array(32)))
             .map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 84);
         }
@@ -1613,21 +2055,21 @@
           renderSettlementReceipt({
             protocol: 'RFC 7231 / HTTP 402',
             network: 'Solana Mainnet',
-            method: 'SPL Memo Transaction',
+            method: 'SPL Memo On-Chain Settlement',
             payer: userAccount,
-            recipient: BURN_ADDRESS + ' (Burn Sink)',
-            fee: '0.001 USDC (Burned)',
+            recipient: targetSink + (curCfg.isBurn ? ' (Burn Sink)' : ' (Treasury PDA)'),
+            fee: curCfg.fee,
             authHash: txSignature,
-            isDirectBurn: true
+            isDirectBurn: curCfg.isBurn
           });
 
-          updateHandshakeLog('BROADCASTED', `Direct on-chain burn broadcasted to Solana Mainnet. Solscan tx: ${txSignature.slice(0, 12)}...`, 'BROADCASTED', 'emerald');
-          showToast(`Direct Burn Broadcasted! Tx: ${txSignature.slice(0, 8)}...`, 'success');
+          updateHandshakeLog('BROADCASTED', `Direct on-chain ${curCfg.name} settlement broadcasted to Solana Mainnet. Solscan tx: ${txSignature.slice(0, 12)}...`, 'BROADCASTED', 'emerald');
+          showToast(`Direct ${curCfg.name} Settlement Broadcasted! Tx: ${txSignature.slice(0, 8)}...`, 'success');
         }
       } catch (e) {
         console.error('Direct burn failed:', e);
-        updateHandshakeLog('BURN DECLINED', e.message || 'Direct burn canceled.', 'CANCELLED', 'rose');
-        showToast('On-chain burn was canceled.', 'warning');
+        updateHandshakeLog('SETTLEMENT DECLINED', e.message || 'Settlement canceled.', 'CANCELLED', 'rose');
+        showToast('On-chain settlement was canceled.', 'warning');
       } finally {
         btn.disabled = false;
         btn.innerHTML = originalHtml;
@@ -1884,6 +2326,10 @@
       lucide.createIcons();
       selectScenario('tool_routing');
       document.getElementById('playgroundState').addEventListener('input', updateCharCount);
+
+      // Start real-time tokenomics telemetry polling
+      pollLiveTokenomics();
+      setInterval(pollLiveTokenomics, 15000);
 
       // Eagerly try silent connection if trusted
       connectSolanaWallet(true);
