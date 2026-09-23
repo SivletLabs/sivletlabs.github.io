@@ -152,12 +152,12 @@
 
       <!-- Main Headline -->
       <h1 class="font-display font-bold text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.1] max-w-4xl mb-6">
-        Non-Autoregressive System-1 Decision Policies for Autonomous Agents
+        Typed Decisions, Not Token Generation: JEV-Equivalent Models for AI Agents
       </h1>
 
       <!-- Executive Subtitle -->
       <p class="text-base sm:text-lg text-slate-400 font-sans leading-relaxed max-w-3xl mb-10">
-        Trained foundation decision models matching JEV benchmark performance with single forward-pass inference over calibrated probability simplexes. Accessible globally via RFC 7231 HTTP 402 micropayments on Robinhood Chain, programmatically funding automated token buyback and burn.
+        LLMs generate words; JEV makes decisions. Rather than wasting compute on autoregressive decoding loops for discrete choices, SivletLabs trains foundation decision models matching JEV performance benchmarks. By freezing observation context with prefix KV-cache rewinding, the engine scores candidate actions in parallel in a single forward pass—delivering sub-15ms calibrated probabilities over native typed primitives (<code class="text-slate-200">choice</code>, <code class="text-slate-200">score</code>, <code class="text-slate-200">noul</code>). Served permissionlessly via RFC 7231 HTTP 402 on Robinhood Chain, programmatically funding automated token buyback and burn.
       </p>
 
       <!-- Primary Action Buttons -->
@@ -179,21 +179,21 @@
       <!-- Institutional Specs Grid (Authentic, Factual Data) -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-lab-border border border-lab-border rounded-lg overflow-hidden font-mono text-xs">
         <div class="bg-lab-900 p-4">
-          <div class="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Architecture</div>
-          <div class="text-sm font-semibold text-white">Non-Autoregressive Simplex</div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Single forward pass: &pi;<sub>&theta;</sub> &isin; &Delta;<sup>K-1</sup></div>
+          <div class="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Inference Engine</div>
+          <div class="text-sm font-semibold text-white">Prefix KV-Cache Rewind</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Zero decoding loops &middot; Parallel candidate scoring</div>
         </div>
 
         <div class="bg-lab-900 p-4">
-          <div class="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Scoring Metric</div>
-          <div class="text-sm font-semibold text-white">Strictly Proper Scoring</div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Negative Brier &amp; Logarithmic rewards</div>
+          <div class="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Typed Primitives</div>
+          <div class="text-sm font-semibold text-white">choice / score / noul</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Calibrated probabilities over discrete actions</div>
         </div>
 
         <div class="bg-lab-900 p-4">
-          <div class="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Evaluation Framework</div>
-          <div class="text-sm font-semibold text-white">Gymnasium RL Harness</div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Full MDP transitions &amp; GAE advantage</div>
+          <div class="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Benchmark Calibration</div>
+          <div class="text-sm font-semibold text-white">JEV-Equivalent Parity</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Negative Brier &amp; Log strictly proper scoring</div>
         </div>
 
         <div class="bg-lab-900 p-4">
@@ -527,35 +527,36 @@
   </section>
 
   <!-- ========================================================================= -->
-  <!-- 5. SCIENTIFIC ARCHITECTURE & RL EVALUATION MATRIX                         -->
+  <!-- ========================================================================= -->
+  <!-- 5. SCIENTIFIC ARCHITECTURE & JEV-EQUIVALENT SYSTEM-1 FORMULATION          -->
   <!-- ========================================================================= -->
   <section id="research" class="py-20 border-b border-lab-border z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="max-w-3xl mb-12">
-        <div class="text-xs font-mono text-emerald-400 uppercase tracking-wider mb-1">Architecture &amp; Theory</div>
-        <h2 class="font-display font-bold text-2xl sm:text-3xl text-white">Why System-1 Policies Replace LLM Routing</h2>
+        <div class="text-xs font-mono text-emerald-400 uppercase tracking-wider mb-1">Architecture &amp; Methodology</div>
+        <h2 class="font-display font-bold text-2xl sm:text-3xl text-white">How JEV-Style System-1 Decisions Work</h2>
         <p class="text-xs sm:text-sm text-slate-400 mt-2 font-sans leading-relaxed">
-          Autoregressive models incur severe latency jitter (800ms+), GPU memory bandwidth bottlenecks, and token sampling errors when applied to discrete action spaces. SivletLabs formulates single-pass policy simplex networks trained with proper scoring rules.
+          Autoregressive language models decode sequentially, token-by-token. For discrete decisions—such as agent tool selection, classification, and MDP action choices—this introduces 800ms+ latency, high cost, and uncalibrated probabilities. SivletLabs adopts the JEV paradigm: freezing state context in KV-cache and scoring all candidate actions in parallel in a single forward pass.
         </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        <!-- Pillar 1: Non-Autoregressive Simplex -->
+        <!-- Pillar 1: Zero Decoding Loops & Prefix KV Rewind -->
         <div class="lab-panel p-6 rounded-lg flex flex-col justify-between">
           <div>
             <div class="w-7 h-7 rounded bg-lab-850 border border-lab-border flex items-center justify-center text-emerald-400 mb-4 font-mono text-xs">
               01
             </div>
-            <h3 class="font-display font-semibold text-lg text-white mb-2">Non-Autoregressive Policy Simplex</h3>
+            <h3 class="font-display font-semibold text-lg text-white mb-2">Prefix KV-Cache Rewinding</h3>
             <p class="text-xs text-slate-400 font-sans leading-relaxed mb-4">
-              Discrete decisions do not require sequential token-by-token decoding. Sivlet-Decision-1 performs a single forward pass, evaluating all candidate actions simultaneously into a continuous probability simplex:
+              The observation state is ingested once. We freeze the prompt's key-value activations and rewind to the prompt boundary to score all candidate continuations in parallel—eliminating token decoding loops entirely:
             </p>
             <div class="p-3 bg-lab-950 rounded border border-lab-border font-mono text-xs text-slate-200">
-              <div class="text-emerald-400 font-semibold text-[11px] uppercase tracking-wider mb-1">Simplex Formulation:</div>
-              <div class="text-sm font-bold text-white tracking-wide">&pi;<sub>&theta;</sub>(a | s) &isin; &Delta;<sup>K-1</sup></div>
-              <div class="text-slate-400 text-[11px] mt-1.5 font-sans">&Sigma;<sub>k</sub> &pi;<sub>&theta;</sub>(c<sub>k</sub> | s) = 1.0 &middot; Single forward pass</div>
+              <div class="text-emerald-400 font-semibold text-[11px] uppercase tracking-wider mb-1">Single Forward Scoring:</div>
+              <div class="text-sm font-bold text-white tracking-wide">score(s, c<sub>k</sub>) &rarr; &pi;<sub>&theta;</sub> &isin; &Delta;<sup>K-1</sup></div>
+              <div class="text-slate-400 text-[11px] mt-1.5 font-sans">Prompt cached once &middot; Zero sequential generation</div>
             </div>
           </div>
           <div class="pt-4 border-t border-lab-border mt-4 text-[11px] font-mono text-slate-500">
@@ -563,41 +564,41 @@
           </div>
         </div>
 
-        <!-- Pillar 2: Strictly Proper Scoring Rules -->
+        <!-- Pillar 2: Native Typed Decision Primitives -->
         <div class="lab-panel p-6 rounded-lg flex flex-col justify-between">
           <div>
             <div class="w-7 h-7 rounded bg-lab-850 border border-lab-border flex items-center justify-center text-emerald-400 mb-4 font-mono text-xs">
               02
             </div>
-            <h3 class="font-display font-semibold text-lg text-white mb-2">Strictly Proper Scoring Rules</h3>
+            <h3 class="font-display font-semibold text-lg text-white mb-2">Native Typed Primitives</h3>
             <p class="text-xs text-slate-400 font-sans leading-relaxed mb-4">
-              Standard RL scalar rewards lead to overconfidence. Sivlet models optimize under strictly proper scoring rules, mathematically incentivizing the policy to report its true posterior belief:
+              Instead of unstructured text parsed with fragile regexes, the model natively emits typed decision primitives: discrete routing (<code class="text-slate-300">choice</code>), expected ordinal score (<code class="text-slate-300">score</code>), and calibrated boolean belief (<code class="text-slate-300">noul</code>):
             </p>
             <div class="p-3 bg-lab-950 rounded border border-lab-border font-mono text-xs text-slate-200">
-              <div class="text-emerald-400 font-semibold text-[11px] uppercase tracking-wider mb-1">Negative Brier Reward:</div>
-              <div class="text-sm font-bold text-white tracking-wide">S<sub>Brier</sub>(p, y*) = &minus;&Sigma;<sub>k</sub> (p<sub>k</sub> &minus; <b>1</b><sub>[k=y*]</sub>)<sup>2</sup></div>
-              <div class="text-slate-400 text-[11px] mt-1.5 font-sans">Strictly proper scoring guarantees calibrated confidence</div>
+              <div class="text-emerald-400 font-semibold text-[11px] uppercase tracking-wider mb-1">Typed Primitives (JEV Protocol):</div>
+              <div class="text-sm font-bold text-white tracking-wide">choice(K) &middot; score(&Epsilon;[k]) &middot; noul(p<sub>true</sub>)</div>
+              <div class="text-slate-400 text-[11px] mt-1.5 font-sans">Confidence = 1 &minus; Normalized Entropy</div>
             </div>
           </div>
           <div class="pt-4 border-t border-lab-border mt-4 text-[11px] font-mono text-slate-500">
-            Calibrated probabilistic confidence
+            Zero hallucination &middot; Type-safe outputs
           </div>
         </div>
 
-        <!-- Pillar 3: Gymnasium Harness (jev-eval) -->
+        <!-- Pillar 3: Strictly Proper Scoring Calibration -->
         <div id="evaluation" class="lab-panel p-6 rounded-lg flex flex-col justify-between">
           <div>
             <div class="w-7 h-7 rounded bg-lab-850 border border-lab-border flex items-center justify-center text-emerald-400 mb-4 font-mono text-xs">
               03
             </div>
-            <h3 class="font-display font-semibold text-lg text-white mb-2">Gymnasium RL Harness (jev-eval)</h3>
+            <h3 class="font-display font-semibold text-lg text-white mb-2">Strictly Proper Scoring Calibration</h3>
             <p class="text-xs text-slate-400 font-sans leading-relaxed mb-4">
-              Fully compliant with Farama Gymnasium APIs. Benchmarks agent decision policies across MDP simulation environments (Maze, Routing, Security, Snake) with Generalized Advantage Estimation (GAE):
+              Softmax token distributions suffer from overconfidence. We train and benchmark under Gneiting &amp; Raftery (2007) strictly proper scoring rules, mathematically penalizing miscalibrated epistemic uncertainty:
             </p>
             <div class="p-3 bg-lab-950 rounded border border-lab-border font-mono text-xs text-slate-200">
-              <div class="text-emerald-400 font-semibold text-[11px] uppercase tracking-wider mb-1">Advantage Estimation:</div>
-              <div class="text-sm font-bold text-white tracking-wide">A&#770;<sub>t</sub><sup>GAE</sup> = &Sigma;<sub>l</sub> (&gamma;&lambda;)<sup>l</sup> &delta;<sub>t+l</sub><sup>V</sup></div>
-              <div class="text-slate-400 text-[11px] mt-1.5 font-sans">Variance-reduced temporal credit assignment</div>
+              <div class="text-emerald-400 font-semibold text-[11px] uppercase tracking-wider mb-1">Proper Scoring Rule:</div>
+              <div class="text-sm font-bold text-white tracking-wide">S<sub>Brier</sub>(p, y*) = &minus;&Sigma;<sub>k</sub> (p<sub>k</sub> &minus; <b>1</b><sub>[k=y*]</sub>)<sup>2</sup></div>
+              <div class="text-slate-400 text-[11px] mt-1.5 font-sans">Evaluated via Gymnasium harness (jev-eval)</div>
             </div>
           </div>
           <div class="pt-4 border-t border-lab-border mt-4 text-[11px] font-mono">
