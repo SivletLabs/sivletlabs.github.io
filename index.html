@@ -181,7 +181,7 @@
         <div class="bg-lab-900 p-4">
           <div class="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Architecture</div>
           <div class="text-sm font-semibold text-white">Non-Autoregressive Simplex</div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Single forward pass ($\pi_\theta \in \Delta^{K-1}$)</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Single forward pass: &pi;<sub>&theta;</sub> &isin; &Delta;<sup>K-1</sup></div>
         </div>
 
         <div class="bg-lab-900 p-4">
@@ -409,7 +409,7 @@
             <!-- State Input -->
             <div class="mb-3">
               <label class="block text-xs font-mono text-slate-400 mb-1.5 flex justify-between">
-                <span>Observation State ($s_t \in \mathcal{S}$):</span>
+                <span>Observation State (s<sub>t</sub> &isin; S):</span>
                 <span class="text-slate-500" id="stateCharCount">0 chars</span>
               </label>
               <textarea id="playgroundState" rows="3" class="w-full bg-lab-950 border border-lab-border rounded p-3 text-xs font-mono text-slate-200 focus:outline-none focus:border-slate-400 transition-colors" placeholder="Enter structured observation..."></textarea>
@@ -418,7 +418,7 @@
             <!-- Actions Input -->
             <div class="mb-4">
               <label class="block text-xs font-mono text-slate-400 mb-1.5">
-                <span>Admissible Actions ($\mathcal{A}_t$ - newline separated):</span>
+                <span>Admissible Actions (a<sub>t</sub> &isin; A - newline separated):</span>
               </label>
               <textarea id="playgroundOptions" rows="4" class="w-full bg-lab-950 border border-lab-border rounded p-3 text-xs font-mono text-slate-200 focus:outline-none focus:border-slate-400 transition-colors" placeholder="One action per line..."></textarea>
             </div>
@@ -502,7 +502,7 @@
                   <span class="text-slate-300 font-semibold" id="resultBrier">-0.042</span>
                 </div>
                 <div class="bg-lab-950 p-2 rounded border border-lab-border flex justify-between">
-                  <span class="text-slate-500">Entropy $\mathcal{H}$:</span>
+                  <span class="text-slate-500">Entropy H:</span>
                   <span class="text-slate-300 font-semibold" id="resultEntropy">0.068</span>
                 </div>
               </div>
@@ -552,8 +552,10 @@
             <p class="text-xs text-slate-400 font-sans leading-relaxed mb-4">
               Discrete decisions do not require sequential token-by-token decoding. Sivlet-Decision-1 performs a single forward pass, evaluating all candidate actions simultaneously into a continuous probability simplex:
             </p>
-            <div class="p-2.5 bg-lab-950 rounded border border-lab-border font-mono text-[11px] text-slate-300">
-              $$\pi_\theta(a \mid s) \in \Delta^{K-1}, \quad \sum_{k=0}^{K-1} \pi_\theta(c_k \mid s) = 1.0$$
+            <div class="p-3 bg-lab-950 rounded border border-lab-border font-mono text-xs text-slate-200">
+              <div class="text-emerald-400 font-semibold text-[11px] uppercase tracking-wider mb-1">Simplex Formulation:</div>
+              <div class="text-sm font-bold text-white tracking-wide">&pi;<sub>&theta;</sub>(a | s) &isin; &Delta;<sup>K-1</sup></div>
+              <div class="text-slate-400 text-[11px] mt-1.5 font-sans">&Sigma;<sub>k</sub> &pi;<sub>&theta;</sub>(c<sub>k</sub> | s) = 1.0 &middot; Single forward pass</div>
             </div>
           </div>
           <div class="pt-4 border-t border-lab-border mt-4 text-[11px] font-mono text-slate-500">
@@ -571,8 +573,10 @@
             <p class="text-xs text-slate-400 font-sans leading-relaxed mb-4">
               Standard RL scalar rewards lead to overconfidence. Sivlet models optimize under strictly proper scoring rules, mathematically incentivizing the policy to report its true posterior belief:
             </p>
-            <div class="p-2.5 bg-lab-950 rounded border border-lab-border font-mono text-[11px] text-slate-300">
-              $$S_{\text{Brier}}(p, y^\star) = - \sum_{k=0}^{K-1} (p_k - \mathbb{I}[k = y^\star])^2$$
+            <div class="p-3 bg-lab-950 rounded border border-lab-border font-mono text-xs text-slate-200">
+              <div class="text-emerald-400 font-semibold text-[11px] uppercase tracking-wider mb-1">Negative Brier Reward:</div>
+              <div class="text-sm font-bold text-white tracking-wide">S<sub>Brier</sub>(p, y*) = &minus;&Sigma;<sub>k</sub> (p<sub>k</sub> &minus; <b>1</b><sub>[k=y*]</sub>)<sup>2</sup></div>
+              <div class="text-slate-400 text-[11px] mt-1.5 font-sans">Strictly proper scoring guarantees calibrated confidence</div>
             </div>
           </div>
           <div class="pt-4 border-t border-lab-border mt-4 text-[11px] font-mono text-slate-500">
@@ -590,8 +594,10 @@
             <p class="text-xs text-slate-400 font-sans leading-relaxed mb-4">
               Fully compliant with Farama Gymnasium APIs. Benchmarks agent decision policies across MDP simulation environments (Maze, Routing, Security, Snake) with Generalized Advantage Estimation (GAE):
             </p>
-            <div class="p-2.5 bg-lab-950 rounded border border-lab-border font-mono text-[11px] text-slate-300">
-              $$\hat{A}_t^{\text{GAE}(\gamma, \lambda)} = \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{t+l}^V$$
+            <div class="p-3 bg-lab-950 rounded border border-lab-border font-mono text-xs text-slate-200">
+              <div class="text-emerald-400 font-semibold text-[11px] uppercase tracking-wider mb-1">Advantage Estimation:</div>
+              <div class="text-sm font-bold text-white tracking-wide">A&#770;<sub>t</sub><sup>GAE</sup> = &Sigma;<sub>l</sub> (&gamma;&lambda;)<sup>l</sup> &delta;<sub>t+l</sub><sup>V</sup></div>
+              <div class="text-slate-400 text-[11px] mt-1.5 font-sans">Variance-reduced temporal credit assignment</div>
             </div>
           </div>
           <div class="pt-4 border-t border-lab-border mt-4 text-[11px] font-mono">
