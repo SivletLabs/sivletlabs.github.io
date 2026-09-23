@@ -101,66 +101,103 @@
   <!-- ========================================================================= -->
   <!-- 1. NAVIGATION BAR                                                         -->
   <!-- ========================================================================= -->
-  <header class="sticky top-0 z-50 w-full border-b border-lab-border bg-lab-950/90 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+  <!-- ========================================================================= -->
+  <!-- 1. NAVIGATION BAR                                                         -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-50 w-full border-b border-lab-border bg-lab-950/95 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
       
-      <!-- Brand Logo & Network Badge -->
-      <div class="flex items-center gap-4">
-        <a href="#" class="flex items-center gap-3 group">
-          <div class="w-8 h-8 rounded-md bg-lab-850 border border-lab-border flex items-center justify-center p-1 group-hover:border-emerald-500/50 transition-colors">
+      <!-- Brand Logo & Network Status Pill -->
+      <div class="flex items-center gap-3 shrink-0">
+        <a href="#" class="flex items-center gap-2.5 group shrink-0">
+          <div class="w-8 h-8 rounded-md bg-lab-850 border border-lab-border flex items-center justify-center p-1 group-hover:border-emerald-500/50 transition-colors shrink-0">
             <img src="assets/logo.png" alt="SivletLabs Logo" class="w-full h-full object-contain">
           </div>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5 shrink-0">
             <span class="font-display font-semibold text-base text-white tracking-wide">SivletLabs</span>
             <span class="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-lab-850 border border-lab-border text-slate-400">RESEARCH</span>
           </div>
         </a>
 
-        <!-- Network Badge: Solana Mainnet · Sub-15ms · Meteora DLMM -->
-        <div class="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded bg-lab-900 border border-lab-border text-[11px] font-mono text-slate-300">
+        <!-- Network Badge: Solana Mainnet (Shown only on extra-wide screens to prevent crowding) -->
+        <div class="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-lab-900 border border-lab-border text-[11px] font-mono text-slate-300 shrink-0 whitespace-nowrap">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>Solana Mainnet &middot; Sub-15ms &middot; Meteora DLMM</span>
+          <span>Solana Mainnet &middot; Sub-15ms</span>
         </div>
       </div>
 
-      <!-- Desktop Nav Links -->
-      <nav class="hidden md:flex items-center gap-5 font-mono text-xs text-slate-400">
-        <a href="#playground" class="hover:text-white transition-colors">Playground</a>
-        <a href="#research" class="hover:text-white transition-colors">Architecture</a>
-        <a href="#evaluation" class="hover:text-white transition-colors">Harness (jev-eval)</a>
-        <a href="#telemetry" class="hover:text-white transition-colors">Telemetry</a>
-        <a href="#liquidity" class="hover:text-white transition-colors">Meteora DLMM</a>
-        <a href="https://solscan.io" target="_blank" class="hover:text-white transition-colors flex items-center gap-1">
-          <span>Solscan</span>
-          <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
-        </a>
-        <a href="https://launch.meteora.ag" target="_blank" class="hover:text-white transition-colors flex items-center gap-1">
+      <!-- Desktop Nav Links (Visible on lg+ screens, strictly single-line) -->
+      <nav class="hidden lg:flex items-center gap-5 xl:gap-6 font-mono text-xs text-slate-400 shrink-0">
+        <a href="#playground" class="hover:text-white transition-colors whitespace-nowrap">Playground</a>
+        <a href="#research" class="hover:text-white transition-colors whitespace-nowrap">Architecture</a>
+        <a href="#evaluation" class="hover:text-white transition-colors whitespace-nowrap">Harness</a>
+        <a href="#telemetry" class="hover:text-white transition-colors whitespace-nowrap">Telemetry</a>
+        <a href="#liquidity" class="hover:text-white transition-colors whitespace-nowrap">Meteora DLMM</a>
+        <a href="https://launch.meteora.ag" target="_blank" class="hover:text-indigo-300 text-indigo-400 transition-colors whitespace-nowrap flex items-center gap-1">
           <span>Launchpad</span>
           <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
         </a>
-        <a href="https://app.meteora.ag/" target="_blank" class="hover:text-white transition-colors flex items-center gap-1">
-          <span>Meteora</span>
-          <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
-        </a>
-        <a href="https://github.com/SivletLabs/jev-eval" target="_blank" class="hover:text-white transition-colors flex items-center gap-1">
+        <a href="https://github.com/SivletLabs/jev-eval" target="_blank" class="hover:text-white transition-colors whitespace-nowrap flex items-center gap-1">
           <span>GitHub</span>
           <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
         </a>
       </nav>
 
-      <!-- Action Buttons -->
-      <div class="flex items-center gap-3">
-        <button onclick="connectSolanaWallet()" id="navWalletBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-xs font-mono text-slate-300 transition-colors">
-          <i data-lucide="wallet" class="w-3.5 h-3.5 text-emerald-400"></i>
-          <span id="navWalletText">Connect Solana Wallet</span>
+      <!-- Action Buttons & Mobile Hamburger -->
+      <div class="flex items-center gap-2.5 shrink-0">
+        <button onclick="connectSolanaWallet()" id="navWalletBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-xs font-mono text-slate-300 transition-colors shrink-0 whitespace-nowrap">
+          <i data-lucide="wallet" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i>
+          <span id="navWalletText" class="whitespace-nowrap">Connect Wallet</span>
         </button>
 
-        <a href="https://app.meteora.ag/" target="_blank" class="px-3.5 py-1.5 rounded bg-white hover:bg-slate-100 text-black font-semibold text-xs font-mono transition-all flex items-center gap-1.5 shadow-sm">
+        <a href="https://launch.meteora.ag" target="_blank" class="px-3.5 py-1.5 rounded bg-white hover:bg-slate-100 text-black font-semibold text-xs font-mono transition-all flex items-center gap-1.5 shadow-sm shrink-0 whitespace-nowrap">
           <span>Trade on Meteora</span>
-          <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+          <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 shrink-0"></i>
         </a>
+
+        <!-- Mobile Menu Toggle Button (Visible on < lg screens) -->
+        <button onclick="toggleMobileMenu()" id="mobileMenuBtn" class="lg:hidden p-2 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-slate-400 hover:text-white transition-colors shrink-0" aria-label="Toggle menu">
+          <i data-lucide="menu" id="mobileMenuIcon" class="w-4 h-4"></i>
+        </button>
       </div>
 
+    </div>
+
+    <!-- Mobile Dropdown Menu Drawer -->
+    <div id="mobileMenu" class="hidden lg:hidden border-t border-lab-border bg-lab-950/98 px-4 py-4 font-mono text-xs text-slate-300 space-y-3">
+      <div class="flex items-center justify-between pb-3 border-b border-lab-border">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-xs text-slate-300">Solana Mainnet &middot; Sub-15ms</span>
+        </div>
+        <span class="text-[10px] text-emerald-400 uppercase tracking-widest">Meteora DBC</span>
+      </div>
+      <div class="grid grid-cols-2 gap-2 text-xs">
+        <a href="#playground" onclick="toggleMobileMenu()" class="block p-2.5 rounded bg-lab-900 border border-lab-border/50 hover:bg-lab-850 text-slate-300">
+          Playground
+        </a>
+        <a href="#research" onclick="toggleMobileMenu()" class="block p-2.5 rounded bg-lab-900 border border-lab-border/50 hover:bg-lab-850 text-slate-300">
+          Architecture
+        </a>
+        <a href="#evaluation" onclick="toggleMobileMenu()" class="block p-2.5 rounded bg-lab-900 border border-lab-border/50 hover:bg-lab-850 text-slate-300">
+          Harness (jev-eval)
+        </a>
+        <a href="#telemetry" onclick="toggleMobileMenu()" class="block p-2.5 rounded bg-lab-900 border border-lab-border/50 hover:bg-lab-850 text-slate-300">
+          Telemetry
+        </a>
+        <a href="#liquidity" onclick="toggleMobileMenu()" class="block p-2.5 rounded bg-lab-900 border border-lab-border/50 hover:bg-lab-850 text-slate-300">
+          Meteora DLMM
+        </a>
+        <a href="https://launch.meteora.ag" target="_blank" class="block p-2.5 rounded bg-lab-900 border border-indigo-500/30 hover:bg-lab-850 text-indigo-400">
+          Launchpad &nearr;
+        </a>
+        <a href="https://solscan.io" target="_blank" class="block p-2.5 rounded bg-lab-900 border border-lab-border/50 hover:bg-lab-850 text-slate-300">
+          Solscan &nearr;
+        </a>
+        <a href="https://github.com/SivletLabs/jev-eval" target="_blank" class="block p-2.5 rounded bg-lab-900 border border-lab-border/50 hover:bg-lab-850 text-slate-300">
+          GitHub &nearr;
+        </a>
+      </div>
     </div>
   </header>
 
@@ -967,6 +1004,24 @@
     let connectedWallet = null;       // Wallet provider object ({ name, provider })
     let activeSession = null;         // { payer, voucher, signatureHex, signatureBase58, nonce, expiresAt }
     let lastPayloadResponse = null;
+
+    // Mobile Navigation Drawer Toggle
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const icon = document.getElementById('mobileMenuIcon');
+      if (!menu) return;
+      const isHidden = menu.classList.contains('hidden');
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        if (icon) icon.setAttribute('data-lucide', 'x');
+      } else {
+        menu.classList.add('hidden');
+        if (icon) icon.setAttribute('data-lucide', 'menu');
+      }
+      if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
+      }
+    }
 
     // -------------------------------------------------------------------------
     // Universal Solana Wallet Detection (Phantom, Solflare, Backpack, Standard)
