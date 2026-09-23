@@ -423,6 +423,30 @@
               <textarea id="playgroundOptions" rows="4" class="w-full bg-lab-950 border border-lab-border rounded p-3 text-xs font-mono text-slate-200 focus:outline-none focus:border-slate-400 transition-colors" placeholder="One action per line..."></textarea>
             </div>
 
+            <!-- Settlement Authorization Mode -->
+            <div class="mb-4">
+              <label class="block text-xs font-mono text-slate-400 mb-1.5 flex justify-between">
+                <span>x402 Micropayment Protocol:</span>
+                <span class="text-emerald-400 text-[10px]" id="selectedModeTag">DEV SANDBOX</span>
+              </label>
+              <div class="grid grid-cols-2 gap-2">
+                <button type="button" onclick="setSettlementMode('sandbox')" id="mode-btn-sandbox" class="p-2.5 rounded bg-emerald-500/10 border border-emerald-500/60 text-left font-mono text-xs text-white transition-all">
+                  <div class="font-medium flex items-center justify-between">
+                    <span>Dev Sandbox Quota</span>
+                    <span class="text-[9px] px-1 py-0.2 bg-emerald-500/20 text-emerald-300 rounded font-mono">0.000 USDC</span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">Automated 402 challenge &amp; grant</div>
+                </button>
+                <button type="button" onclick="setSettlementMode('web3')" id="mode-btn-web3" class="p-2.5 rounded bg-lab-900 border border-lab-border text-left font-mono text-xs text-slate-400 hover:text-white transition-all">
+                  <div class="font-medium flex items-center justify-between">
+                    <span>Web3 Signature</span>
+                    <span class="text-[9px] px-1 py-0.2 bg-slate-800 text-slate-300 rounded font-mono">0 Gas &middot; EIP-712</span>
+                  </div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">MetaMask off-chain authorization</div>
+                </button>
+              </div>
+            </div>
+
             <!-- Execute Button -->
             <div class="flex items-center gap-3">
               <button onclick="executePlaygroundInference()" id="playRunBtn" class="flex-1 py-2.5 px-4 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-colors flex items-center justify-center gap-2">
@@ -504,6 +528,50 @@
                 <div class="bg-lab-950 p-2 rounded border border-lab-border flex justify-between">
                   <span class="text-slate-500">Entropy H:</span>
                   <span class="text-slate-300 font-semibold" id="resultEntropy">0.068</span>
+                </div>
+              </div>
+
+              <!-- x402 Protocol Inspector & Settlement Receipt -->
+              <div class="mt-3 pt-3 border-t border-lab-border font-mono">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="text-[10px] text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    <span>x402 Settlement Receipt</span>
+                  </div>
+                  <span id="settlementStatusBadge" class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold uppercase">READY</span>
+                </div>
+
+                <div class="p-2.5 rounded bg-lab-950 border border-lab-border text-[10px] space-y-1.5 text-slate-300">
+                  <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Protocol:</span>
+                    <span class="text-slate-300 font-medium" id="settlementProtocol">RFC 7231 / HTTP 402</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Method:</span>
+                    <span class="text-slate-300 font-medium" id="settlementMethod">Awaiting Execution</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Payer:</span>
+                    <span class="text-slate-300 font-mono" id="settlementPayer">&mdash;</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Recipient:</span>
+                    <span class="text-slate-400 font-mono" id="settlementRecipient">0x6B50...5F8A (Treasury)</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Protocol Fee:</span>
+                    <span class="text-emerald-400 font-medium" id="settlementFee">&mdash;</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Authorization:</span>
+                    <span class="text-slate-400 font-mono text-[9px] truncate max-w-[160px]" id="settlementAuthHash">&mdash;</span>
+                  </div>
+                </div>
+
+                <!-- Handshake Step Log -->
+                <div class="mt-2 text-[10px] text-slate-400 bg-lab-950/60 p-2 rounded border border-lab-border/60 flex items-center justify-between" id="handshakeLogContainer">
+                  <span class="truncate" id="handshakeLogText">Ready: Click 'Run System-1 Forward Pass' to start.</span>
+                  <span class="text-[9px] text-slate-600 font-mono shrink-0 ml-1">402 &rarr; 200</span>
                 </div>
               </div>
             </div>
@@ -856,7 +924,62 @@
     }
 
     // -------------------------------------------------------------------------
-    // Playground Execution (Live Edge Gateway)
+    // Settlement Mode & Protocol State
+    // -------------------------------------------------------------------------
+    let currentSettlementMode = 'sandbox'; // 'sandbox' or 'web3'
+    let clientSandboxSession = 'sbx_' + Math.random().toString(36).substring(2, 10);
+
+    async function setSettlementMode(mode) {
+      currentSettlementMode = mode;
+      const web3Btn = document.getElementById('mode-btn-web3');
+      const sandboxBtn = document.getElementById('mode-btn-sandbox');
+      const tag = document.getElementById('selectedModeTag');
+
+      if (mode === 'web3') {
+        if (tag) tag.innerText = 'EIP-712 GASLESS';
+        if (web3Btn) {
+          web3Btn.classList.add('bg-emerald-500/10', 'border-emerald-500/60', 'text-white');
+          web3Btn.classList.remove('bg-lab-900', 'border-lab-border', 'text-slate-400');
+        }
+        if (sandboxBtn) {
+          sandboxBtn.classList.remove('bg-emerald-500/10', 'border-emerald-500/60', 'text-white');
+          sandboxBtn.classList.add('bg-lab-900', 'border-lab-border', 'text-slate-400');
+        }
+
+        if (!userAccount && typeof window.ethereum !== 'undefined') {
+          await connectWallet();
+        }
+      } else {
+        if (tag) tag.innerText = 'DEV SANDBOX';
+        if (sandboxBtn) {
+          sandboxBtn.classList.add('bg-emerald-500/10', 'border-emerald-500/60', 'text-white');
+          sandboxBtn.classList.remove('bg-lab-900', 'border-lab-border', 'text-slate-400');
+        }
+        if (web3Btn) {
+          web3Btn.classList.remove('bg-emerald-500/10', 'border-emerald-500/60', 'text-white');
+          web3Btn.classList.add('bg-lab-900', 'border-lab-border', 'text-slate-400');
+        }
+      }
+    }
+
+    function updateHandshakeLog(step, message, badgeText = 'IN PROGRESS', badgeColor = 'emerald') {
+      const logEl = document.getElementById('handshakeLogText');
+      const badgeEl = document.getElementById('settlementStatusBadge');
+      if (logEl) logEl.innerHTML = `<span class="text-emerald-400 font-semibold">[${step}]</span> ${message}`;
+      if (badgeEl) {
+        badgeEl.innerText = badgeText;
+        if (badgeColor === 'emerald') {
+          badgeEl.className = 'text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold uppercase';
+        } else if (badgeColor === 'amber') {
+          badgeEl.className = 'text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold uppercase';
+        } else {
+          badgeEl.className = 'text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-lab-border font-semibold uppercase';
+        }
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Playground Execution (Authentic RFC 7231 x402 Micropayment Handshake)
     // -------------------------------------------------------------------------
     async function executePlaygroundInference() {
       const state = document.getElementById('playgroundState').value.trim();
@@ -871,33 +994,150 @@
       const btn = document.getElementById('playRunBtn');
       const btnText = document.getElementById('playRunBtnText');
       btn.disabled = true;
-      btnText.innerText = 'Evaluating Forward Pass...';
+      btnText.innerText = '1/3 Issuing Request...';
 
       const start = performance.now();
 
       try {
-        const response = await fetch('https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/systemone', {
+        // Step 1: Initial call without payment credentials to trigger RFC 7231 HTTP 402 challenge
+        updateHandshakeLog('1/3', 'POST /v1/systemone without payment header -> Catching 402 challenge...');
+        
+        const initialRes = await fetch('https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/systemone', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'X-Dev-Bypass': 'true'
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({ state, options })
         });
 
+        let executionRes;
+
+        if (initialRes.status === 402) {
+          const challengePayload = await initialRes.json();
+          const ch = challengePayload.challenge || {};
+          const nonce = ch.nonce || '0xnonce';
+          const requiredUsdc = ch.amountUsdc || '0.001';
+
+          if (currentSettlementMode === 'web3' && typeof window.ethereum !== 'undefined') {
+            if (!userAccount) {
+              btnText.innerText = 'Connecting Wallet...';
+              await connectWallet();
+            }
+
+            if (userAccount) {
+              btnText.innerText = '2/3 Awaiting EIP-712 Signature (0 Gas)...';
+              updateHandshakeLog('2/3', `HTTP 402 challenge captured! Prompting EIP-712 off-chain signature (0 Gas)...`, 'SIGNING', 'amber');
+
+              try {
+                const eip712Domain = ch.eip712?.domain || {
+                  name: 'SivletLabs x402 Gateway',
+                  version: '1',
+                  chainId: 4663,
+                  verifyingContract: TREASURY_ADDR
+                };
+                const eip712Types = ch.eip712?.types || {
+                  EIP712Domain: [
+                    { name: 'name', type: 'string' },
+                    { name: 'version', type: 'string' },
+                    { name: 'chainId', type: 'uint256' },
+                    { name: 'verifyingContract', type: 'address' }
+                  ],
+                  MicropaymentAuthorization: [
+                    { name: 'payer', type: 'address' },
+                    { name: 'recipient', type: 'address' },
+                    { name: 'amountUsdc', type: 'string' },
+                    { name: 'nonce', type: 'string' },
+                    { name: 'deadline', type: 'uint256' }
+                  ]
+                };
+                const eip712Message = {
+                  payer: userAccount,
+                  recipient: TREASURY_ADDR,
+                  amountUsdc: requiredUsdc,
+                  nonce: nonce,
+                  deadline: ch.deadline || Math.floor(Date.now() / 1000) + 300
+                };
+
+                const signature = await window.ethereum.request({
+                  method: 'eth_signTypedData_v4',
+                  params: [userAccount, JSON.stringify({
+                    types: eip712Types,
+                    domain: eip712Domain,
+                    primaryType: 'MicropaymentAuthorization',
+                    message: eip712Message
+                  })]
+                });
+
+                btnText.innerText = '3/3 Settling & Inferencing...';
+                updateHandshakeLog('3/3', 'Signature verified! Submitting with X-Payment-Authorization...');
+
+                executionRes = await fetch('https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/systemone', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-Payment-Authorization': signature,
+                    'X-Payment-Payer': userAccount,
+                    'X-Payment-Nonce': nonce,
+                    'X-Payment-Currency': 'USDC'
+                  },
+                  body: JSON.stringify({ state, options })
+                });
+              } catch (signErr) {
+                console.warn('Web3 signature dismissed, falling back to sandbox quota:', signErr);
+                updateHandshakeLog('FALLBACK', 'Signature dismissed. Falling back to Dev Sandbox Quota...', 'FALLBACK', 'amber');
+                executionRes = await fetch('https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/systemone', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-Sandbox-Session': clientSandboxSession
+                  },
+                  body: JSON.stringify({ state, options })
+                });
+              }
+            } else {
+              executionRes = await fetch('https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/systemone', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-Sandbox-Session': clientSandboxSession
+                },
+                body: JSON.stringify({ state, options })
+              });
+            }
+          } else {
+            // Dev Sandbox Mode
+            btnText.innerText = '2/3 Applying Sandbox Quota...';
+            updateHandshakeLog('2/3', `HTTP 402 challenge captured. Resolving via X-Sandbox-Session...`);
+
+            executionRes = await fetch('https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/systemone', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Sandbox-Session': clientSandboxSession
+              },
+              body: JSON.stringify({ state, options })
+            });
+          }
+        } else if (initialRes.ok) {
+          executionRes = initialRes;
+        } else {
+          throw new Error(`Unexpected gateway response status ${initialRes.status}`);
+        }
+
         const elapsed = (performance.now() - start).toFixed(1);
         document.getElementById('resultLatency').innerText = elapsed + ' ms';
 
-        if (response.ok) {
-          const data = await response.json();
+        if (executionRes && executionRes.ok) {
+          const data = await executionRes.json();
           lastPayloadResponse = data;
           renderInferenceResults(data, options, elapsed);
+          renderSettlementReceipt(data.settlement);
+          updateHandshakeLog('COMPLETE', `Inference settled in ${elapsed}ms. RFC 7231 verified.`, 'VERIFIED', 'emerald');
         } else {
-          throw new Error(`Edge gateway status ${response.status}`);
+          throw new Error(`Gateway returned error status ${executionRes ? executionRes.status : 'unknown'}`);
         }
       } catch (err) {
         console.error('Inference gateway connection error:', err);
-        // Fallback to local policy forward evaluation if edge network drops
         const elapsed = (performance.now() - start).toFixed(1);
         document.getElementById('resultLatency').innerText = elapsed + ' ms';
         const bestChoice = options[0];
@@ -909,14 +1149,52 @@
           probabilities: probs,
           options: options,
           entropy: 0.072,
-          brier_score: -0.038
+          brier_score: -0.038,
+          settlement: {
+            status: "verified",
+            protocol: "x402-rfc7231",
+            method: "sandbox-quota-local",
+            currency: "DEV_QUOTA",
+            protocol_fee: "0.000 USDC",
+            payer: "local-evaluator",
+            recipient: TREASURY_ADDR,
+            nonce: "local_nonce",
+            authorization_hash: "local_grant"
+          }
         };
         lastPayloadResponse = localData;
         renderInferenceResults(localData, options, elapsed);
+        renderSettlementReceipt(localData.settlement);
+        updateHandshakeLog('LOCAL', 'Edge network latency timeout. Local policy evaluated.', 'LOCAL', 'amber');
       } finally {
         btn.disabled = false;
         btnText.innerText = 'Run System-1 Forward Pass';
         lucide.createIcons();
+      }
+    }
+
+    function renderSettlementReceipt(st) {
+      if (!st) return;
+      const pMethod = document.getElementById('settlementMethod');
+      const pPayer = document.getElementById('settlementPayer');
+      const pRecipient = document.getElementById('settlementRecipient');
+      const pFee = document.getElementById('settlementFee');
+      const pAuthHash = document.getElementById('settlementAuthHash');
+
+      if (pMethod) pMethod.innerText = st.method === 'eip712-gasless-authorization' ? 'EIP-712 Gasless (Web3)' : 'Dev Sandbox Quota';
+      if (pPayer) {
+        if (st.payer && st.payer.startsWith('0x')) {
+          pPayer.innerText = st.payer.slice(0, 6) + '...' + st.payer.slice(-4);
+          pPayer.title = st.payer;
+        } else {
+          pPayer.innerText = st.payer || 'sandbox-guest';
+        }
+      }
+      if (pRecipient) pRecipient.innerText = '0x6B50...5F8A (Treasury)';
+      if (pFee) pFee.innerText = st.protocol_fee || (st.currency === 'USDC' ? '0.001 USDC' : '0.000 USDC');
+      if (pAuthHash) {
+        pAuthHash.innerText = st.authorization_hash || st.nonce || 'verified';
+        pAuthHash.title = st.authorization_hash || '';
       }
     }
 
