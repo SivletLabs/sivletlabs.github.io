@@ -423,38 +423,30 @@
               <textarea id="playgroundOptions" rows="4" class="w-full bg-lab-950 border border-lab-border rounded p-3 text-xs font-mono text-slate-200 focus:outline-none focus:border-slate-400 transition-colors" placeholder="One action per line..."></textarea>
             </div>
 
-            <!-- Settlement Authorization Mode -->
-            <div class="mb-4">
-              <label class="block text-xs font-mono text-slate-400 mb-1.5 flex justify-between">
-                <span>x402 Micropayment Protocol:</span>
-                <span class="text-emerald-400 text-[10px]" id="selectedModeTag">DEV SANDBOX</span>
-              </label>
-              <div class="grid grid-cols-2 gap-2">
-                <button type="button" onclick="setSettlementMode('sandbox')" id="mode-btn-sandbox" class="p-2.5 rounded bg-emerald-500/10 border border-emerald-500/60 text-left font-mono text-xs text-white transition-all">
-                  <div class="font-medium flex items-center justify-between">
-                    <span>Dev Sandbox Quota</span>
-                    <span id="sandboxQuotaPill" class="text-[9px] px-1.5 py-0.5 bg-emerald-500/20 text-emerald-300 rounded font-mono">10 / 10 Free Left</span>
-                  </div>
-                  <div class="text-[10px] text-slate-400 mt-0.5">Daily rate-limited sandbox access</div>
-                </button>
-                <button type="button" onclick="setSettlementMode('web3')" id="mode-btn-web3" class="p-2.5 rounded bg-lab-900 border border-lab-border text-left font-mono text-xs text-slate-400 hover:text-white transition-all">
-                  <div class="font-medium flex items-center justify-between">
-                    <span>Web3 Signature</span>
-                    <span class="text-[9px] px-1 py-0.2 bg-slate-800 text-slate-300 rounded font-mono">0 Gas &middot; EIP-712</span>
-                  </div>
-                  <div class="text-[10px] text-slate-500 mt-0.5">MetaMask off-chain authorization</div>
-                </button>
+            <!-- Cryptographic x402 Micropayment Protocol Notice -->
+            <div class="mb-4 p-3 rounded bg-lab-950 border border-lab-border font-mono text-xs">
+              <div class="flex items-center justify-between mb-1.5">
+                <div class="flex items-center gap-1.5 text-slate-300 font-semibold">
+                  <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+                  <span>x402 Protocol Settlement</span>
+                </div>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-semibold">
+                  MANDATORY EIP-712 (0 GAS)
+                </span>
               </div>
+              <p class="text-[11px] text-slate-400 font-sans leading-relaxed">
+                Zero unauthenticated bypass. Every forward pass strictly requires MetaMask off-chain ECDSA signature under RFC 7231 HTTP 402 specifications.
+              </p>
             </div>
 
             <!-- Execute Button -->
             <div class="flex items-center gap-3">
-              <button onclick="executePlaygroundInference()" id="playRunBtn" class="flex-1 py-2.5 px-4 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-colors flex items-center justify-center gap-2">
-                <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
-                <span id="playRunBtnText">Run System-1 Forward Pass</span>
+              <button onclick="executePlaygroundInference()" id="playRunBtn" class="flex-1 py-3 px-4 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-all shadow-lg shadow-emerald-950/40 flex items-center justify-center gap-2">
+                <i data-lucide="key-round" class="w-4 h-4 fill-current"></i>
+                <span id="playRunBtnText">Sign with MetaMask &amp; Run Forward Pass</span>
               </button>
 
-              <button onclick="resetPlaygroundPreset()" class="py-2.5 px-3 rounded bg-lab-900 hover:bg-lab-800 border border-lab-border text-slate-400 hover:text-white text-xs font-mono transition-colors">
+              <button onclick="resetPlaygroundPreset()" class="py-3 px-4 rounded bg-lab-900 hover:bg-lab-800 border border-lab-border text-slate-400 hover:text-white text-xs font-mono transition-colors">
                 Reset
               </button>
             </div>
@@ -548,7 +540,7 @@
                   </div>
                   <div class="flex justify-between items-center">
                     <span class="text-slate-500">Method:</span>
-                    <span class="text-slate-300 font-medium" id="settlementMethod">Awaiting Execution</span>
+                    <span class="text-slate-300 font-medium" id="settlementMethod">Awaiting Authorization</span>
                   </div>
                   <div class="flex justify-between items-center">
                     <span class="text-slate-500">Payer:</span>
@@ -560,11 +552,7 @@
                   </div>
                   <div class="flex justify-between items-center">
                     <span class="text-slate-500">Protocol Fee:</span>
-                    <span class="text-emerald-400 font-medium" id="settlementFee">&mdash;</span>
-                  </div>
-                  <div class="flex justify-between items-center" id="settlementQuotaRow">
-                    <span class="text-slate-500">Free Quota Left:</span>
-                    <span class="text-emerald-400 font-medium font-mono text-[10px]" id="settlementQuotaVal">10 / 10 calls today</span>
+                    <span class="text-emerald-400 font-medium" id="settlementFee">0.001 USDC</span>
                   </div>
                   <div class="flex justify-between items-center">
                     <span class="text-slate-500">Authorization:</span>
@@ -574,7 +562,7 @@
 
                 <!-- Handshake Step Log -->
                 <div class="mt-2 text-[10px] text-slate-400 bg-lab-950/60 p-2 rounded border border-lab-border/60 flex items-center justify-between" id="handshakeLogContainer">
-                  <span class="truncate" id="handshakeLogText">Ready: Click 'Run System-1 Forward Pass' to start.</span>
+                  <span class="truncate" id="handshakeLogText">Ready: Requires MetaMask EIP-712 signature to execute x402 forward pass.</span>
                   <span class="text-[9px] text-slate-600 font-mono shrink-0 ml-1">402 &rarr; 200</span>
                 </div>
               </div>
@@ -873,7 +861,6 @@
       selectScenario('tool_routing');
       fetchLiveOnChainTelemetry();
       setInterval(fetchLiveOnChainTelemetry, 15000);
-      syncDailyQuota();
       document.getElementById('playgroundState').addEventListener('input', updateCharCount);
     });
 
@@ -929,86 +916,8 @@
     }
 
     // -------------------------------------------------------------------------
-    // Settlement Mode, Quota & Protocol State
+    // Protocol Handshake & UI Logger
     // -------------------------------------------------------------------------
-    let currentSettlementMode = 'sandbox'; // 'sandbox' or 'web3'
-    let clientSandboxSession = 'sbx_' + Math.random().toString(36).substring(2, 10);
-    let clientDailyQuota = { limit: 10, remaining: 10, used: 0 };
-
-    async function syncDailyQuota() {
-      try {
-        const res = await fetch('https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/quota');
-        if (res.ok) {
-          const data = await res.json();
-          if (data && data.daily_limit !== undefined) {
-            clientDailyQuota.limit = data.daily_limit;
-            clientDailyQuota.remaining = data.remaining;
-            clientDailyQuota.used = data.used;
-            updateQuotaUI();
-          }
-        }
-      } catch (err) {
-        console.warn('Quota sync notice:', err);
-      }
-    }
-
-    function updateQuotaUI() {
-      const pill = document.getElementById('sandboxQuotaPill');
-      const val = document.getElementById('settlementQuotaVal');
-      if (pill) {
-        if (clientDailyQuota.remaining > 0) {
-          pill.innerText = `${clientDailyQuota.remaining} / ${clientDailyQuota.limit} Free Left`;
-          pill.className = 'text-[9px] px-1.5 py-0.5 bg-emerald-500/20 text-emerald-300 rounded font-mono';
-        } else {
-          pill.innerText = `0 / ${clientDailyQuota.limit} Exhausted`;
-          pill.className = 'text-[9px] px-1.5 py-0.5 bg-rose-500/20 text-rose-300 rounded font-mono';
-        }
-      }
-      if (val) {
-        if (currentSettlementMode === 'web3') {
-          val.innerText = 'Unlimited (Web3 Gasless Signer)';
-          val.className = 'text-emerald-400 font-medium font-mono text-[10px]';
-        } else {
-          val.innerText = `${clientDailyQuota.remaining} / ${clientDailyQuota.limit} calls left today`;
-          val.className = clientDailyQuota.remaining > 0 ? 'text-emerald-400 font-medium font-mono text-[10px]' : 'text-rose-400 font-medium font-mono text-[10px]';
-        }
-      }
-    }
-
-    async function setSettlementMode(mode) {
-      currentSettlementMode = mode;
-      const web3Btn = document.getElementById('mode-btn-web3');
-      const sandboxBtn = document.getElementById('mode-btn-sandbox');
-      const tag = document.getElementById('selectedModeTag');
-
-      if (mode === 'web3') {
-        if (tag) tag.innerText = 'EIP-712 GASLESS';
-        if (web3Btn) {
-          web3Btn.classList.add('bg-emerald-500/10', 'border-emerald-500/60', 'text-white');
-          web3Btn.classList.remove('bg-lab-900', 'border-lab-border', 'text-slate-400');
-        }
-        if (sandboxBtn) {
-          sandboxBtn.classList.remove('bg-emerald-500/10', 'border-emerald-500/60', 'text-white');
-          sandboxBtn.classList.add('bg-lab-900', 'border-lab-border', 'text-slate-400');
-        }
-
-        if (!userAccount && typeof window.ethereum !== 'undefined') {
-          await connectWallet();
-        }
-      } else {
-        if (tag) tag.innerText = 'DEV SANDBOX';
-        if (sandboxBtn) {
-          sandboxBtn.classList.add('bg-emerald-500/10', 'border-emerald-500/60', 'text-white');
-          sandboxBtn.classList.remove('bg-lab-900', 'border-lab-border', 'text-slate-400');
-        }
-        if (web3Btn) {
-          web3Btn.classList.remove('bg-emerald-500/10', 'border-emerald-500/60', 'text-white');
-          web3Btn.classList.add('bg-lab-900', 'border-lab-border', 'text-slate-400');
-        }
-      }
-      updateQuotaUI();
-    }
-
     function updateHandshakeLog(step, message, badgeText = 'IN PROGRESS', badgeColor = 'emerald') {
       const logEl = document.getElementById('handshakeLogText');
       const badgeEl = document.getElementById('settlementStatusBadge');
@@ -1019,6 +928,8 @@
           badgeEl.className = 'text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold uppercase';
         } else if (badgeColor === 'amber') {
           badgeEl.className = 'text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold uppercase';
+        } else if (badgeColor === 'rose') {
+          badgeEl.className = 'text-[9px] px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20 font-semibold uppercase';
         } else {
           badgeEl.className = 'text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-lab-border font-semibold uppercase';
         }
@@ -1026,7 +937,7 @@
     }
 
     // -------------------------------------------------------------------------
-    // Playground Execution (Authentic RFC 7231 x402 Micropayment Handshake)
+    // Playground Execution (Mandatory RFC 7231 x402 Micropayment Handshake)
     // -------------------------------------------------------------------------
     async function executePlaygroundInference() {
       const state = document.getElementById('playgroundState').value.trim();
@@ -1038,23 +949,37 @@
         return;
       }
 
-      if (currentSettlementMode === 'sandbox' && clientDailyQuota.remaining <= 0) {
-        alert('Daily free sandbox quota (10/10) has been exhausted for today. Please switch to Web3 Signature mode (0 Gas).');
-        setSettlementMode('web3');
+      // Check Web3 wallet availability: mandatory for x402 authorization
+      if (typeof window.ethereum === 'undefined') {
+        alert('MetaMask or Web3 wallet extension is required for x402 cryptographic authorization. Direct unauthenticated access is strictly rejected.');
+        updateHandshakeLog('AUTH REQUIRED', 'Web3 wallet not detected. Install MetaMask to sign x402 payload.', 'WALLET REQUIRED', 'rose');
         return;
       }
 
       const btn = document.getElementById('playRunBtn');
       const btnText = document.getElementById('playRunBtnText');
       btn.disabled = true;
-      btnText.innerText = '1/3 Issuing Request...';
+
+      // Connect wallet if not already connected
+      if (!userAccount) {
+        btnText.innerText = 'Connecting MetaMask...';
+        updateHandshakeLog('CONNECT', 'Requesting Web3 wallet connection...', 'CONNECTING', 'amber');
+        await connectWallet();
+        if (!userAccount) {
+          btn.disabled = false;
+          btnText.innerText = 'Sign with MetaMask & Run Forward Pass';
+          updateHandshakeLog('ABORTED', 'Wallet connection declined. 402 Payment Required.', 'ABORTED', 'amber');
+          return;
+        }
+      }
 
       const start = performance.now();
+      btnText.innerText = '1/2 Requesting 402 Challenge...';
 
       try {
-        // Step 1: Initial call without payment credentials to trigger RFC 7231 HTTP 402 challenge
-        updateHandshakeLog('1/3', 'POST /v1/systemone without payment header -> Catching 402 challenge...');
-        
+        // Step 1: Initial call without payment credentials to receive official RFC 7231 challenge
+        updateHandshakeLog('1/2', 'POST /v1/systemone without payment header -> Requesting HTTP 402 challenge...', '402 CHALLENGE', 'amber');
+
         const initialRes = await fetch('https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/systemone', {
           method: 'POST',
           headers: {
@@ -1063,178 +988,104 @@
           body: JSON.stringify({ state, options })
         });
 
-        let executionRes;
-
-        if (initialRes.status === 402) {
-          const challengePayload = await initialRes.json();
-          if (challengePayload.error === "Quota Exceeded") {
-            clientDailyQuota.remaining = 0;
-            updateQuotaUI();
-            alert('Daily free sandbox quota (10/10) has been exhausted for today. Please switch to Web3 Signature mode (0 Gas).');
-            setSettlementMode('web3');
-            btn.disabled = false;
-            btnText.innerText = 'Run System-1 Forward Pass';
-            return;
-          }
-          if (challengePayload.quota && challengePayload.quota.remaining !== undefined) {
-            clientDailyQuota.remaining = challengePayload.quota.remaining;
-            updateQuotaUI();
-          }
-          const ch = challengePayload.challenge || {};
-          const nonce = ch.nonce || '0xnonce';
-          const requiredUsdc = ch.amountUsdc || '0.001';
-
-          if (currentSettlementMode === 'web3' && typeof window.ethereum !== 'undefined') {
-            if (!userAccount) {
-              btnText.innerText = 'Connecting Wallet...';
-              await connectWallet();
-            }
-
-            if (userAccount) {
-              btnText.innerText = '2/3 Awaiting EIP-712 Signature (0 Gas)...';
-              updateHandshakeLog('2/3', `HTTP 402 challenge captured! Prompting EIP-712 off-chain signature (0 Gas)...`, 'SIGNING', 'amber');
-
-              try {
-                const eip712Domain = ch.eip712?.domain || {
-                  name: 'SivletLabs x402 Gateway',
-                  version: '1',
-                  chainId: 4663,
-                  verifyingContract: TREASURY_ADDR
-                };
-                const eip712Types = ch.eip712?.types || {
-                  EIP712Domain: [
-                    { name: 'name', type: 'string' },
-                    { name: 'version', type: 'string' },
-                    { name: 'chainId', type: 'uint256' },
-                    { name: 'verifyingContract', type: 'address' }
-                  ],
-                  MicropaymentAuthorization: [
-                    { name: 'payer', type: 'address' },
-                    { name: 'recipient', type: 'address' },
-                    { name: 'amountUsdc', type: 'string' },
-                    { name: 'nonce', type: 'string' },
-                    { name: 'deadline', type: 'uint256' }
-                  ]
-                };
-                const eip712Message = {
-                  payer: userAccount,
-                  recipient: TREASURY_ADDR,
-                  amountUsdc: requiredUsdc,
-                  nonce: nonce,
-                  deadline: ch.deadline || Math.floor(Date.now() / 1000) + 300
-                };
-
-                const signature = await window.ethereum.request({
-                  method: 'eth_signTypedData_v4',
-                  params: [userAccount, JSON.stringify({
-                    types: eip712Types,
-                    domain: eip712Domain,
-                    primaryType: 'MicropaymentAuthorization',
-                    message: eip712Message
-                  })]
-                });
-
-                btnText.innerText = '3/3 Settling & Inferencing...';
-                updateHandshakeLog('3/3', 'Signature verified! Submitting with X-Payment-Authorization...');
-
-                executionRes = await fetch('https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/systemone', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'X-Payment-Authorization': signature,
-                    'X-Payment-Payer': userAccount,
-                    'X-Payment-Nonce': nonce,
-                    'X-Payment-Currency': 'USDC'
-                  },
-                  body: JSON.stringify({ state, options })
-                });
-              } catch (signErr) {
-                console.warn('Web3 signature dismissed, falling back to sandbox quota:', signErr);
-                updateHandshakeLog('FALLBACK', 'Signature dismissed. Falling back to Dev Sandbox Quota...', 'FALLBACK', 'amber');
-                executionRes = await fetch('https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/systemone', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'X-Sandbox-Session': clientSandboxSession
-                  },
-                  body: JSON.stringify({ state, options })
-                });
-              }
-            } else {
-              executionRes = await fetch('https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/systemone', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'X-Sandbox-Session': clientSandboxSession
-                },
-                body: JSON.stringify({ state, options })
-              });
-            }
-          } else {
-            // Dev Sandbox Mode
-            btnText.innerText = '2/3 Applying Sandbox Quota...';
-            updateHandshakeLog('2/3', `HTTP 402 challenge captured. Resolving via X-Sandbox-Session...`);
-
-            executionRes = await fetch('https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/systemone', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'X-Sandbox-Session': clientSandboxSession
-              },
-              body: JSON.stringify({ state, options })
-            });
-          }
-        } else if (initialRes.ok) {
-          executionRes = initialRes;
-        } else {
-          throw new Error(`Unexpected gateway response status ${initialRes.status}`);
+        if (initialRes.status !== 402) {
+          throw new Error(`Expected HTTP 402 Payment Required challenge, received status ${initialRes.status}`);
         }
+
+        const challengePayload = await initialRes.json();
+        const ch = challengePayload.challenge || {};
+        const nonce = ch.nonce;
+        const requiredUsdc = ch.amountUsdc || '0.001';
+
+        btnText.innerText = 'Prompting MetaMask Signature...';
+        updateHandshakeLog('SIGNING', 'HTTP 402 challenge captured. Prompting EIP-712 off-chain signature (0 Gas)...', 'SIGNING', 'amber');
+
+        // Step 2: Prompt MetaMask for EIP-712 off-chain typed data signature
+        const eip712Domain = ch.eip712?.domain || {
+          name: 'SivletLabs x402 Gateway',
+          version: '1',
+          chainId: 4663,
+          verifyingContract: TREASURY_ADDR
+        };
+        const eip712Types = ch.eip712?.types || {
+          EIP712Domain: [
+            { name: 'name', type: 'string' },
+            { name: 'version', type: 'string' },
+            { name: 'chainId', type: 'uint256' },
+            { name: 'verifyingContract', type: 'address' }
+          ],
+          MicropaymentAuthorization: [
+            { name: 'payer', type: 'address' },
+            { name: 'recipient', type: 'address' },
+            { name: 'amountUsdc', type: 'string' },
+            { name: 'nonce', type: 'string' },
+            { name: 'deadline', type: 'uint256' }
+          ]
+        };
+        const eip712Message = {
+          payer: userAccount,
+          recipient: TREASURY_ADDR,
+          amountUsdc: requiredUsdc,
+          nonce: nonce,
+          deadline: ch.deadline || Math.floor(Date.now() / 1000) + 300
+        };
+
+        let signature;
+        try {
+          signature = await window.ethereum.request({
+            method: 'eth_signTypedData_v4',
+            params: [userAccount, JSON.stringify({
+              types: eip712Types,
+              domain: eip712Domain,
+              primaryType: 'MicropaymentAuthorization',
+              message: eip712Message
+            })]
+          });
+        } catch (signErr) {
+          console.warn('MetaMask signature declined by user:', signErr);
+          updateHandshakeLog('DECLINED', 'MetaMask signature declined by user. HTTP 402 Payment Required.', 'REJECTED', 'rose');
+          alert('Inference Aborted: Cryptographic authorization signature is strictly required to execute System-1 forward pass.');
+          return; // Strictly abort. Zero fallback. Zero mock.
+        }
+
+        // Step 3: Signature acquired. Submit authorized request with X-Payment-Authorization header
+        btnText.innerText = '2/2 Settling & Running Model...';
+        updateHandshakeLog('2/2', 'Signature verified! Submitting with X-Payment-Authorization header...', 'SETTLING', 'emerald');
+
+        const executionRes = await fetch('https://sivlet-x402-gateway.sivletlabs.workers.dev/v1/systemone', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Payment-Authorization': signature,
+            'X-Payment-Payer': userAccount,
+            'X-Payment-Nonce': nonce,
+            'X-Payment-Currency': 'USDC'
+          },
+          body: JSON.stringify({ state, options })
+        });
 
         const elapsed = (performance.now() - start).toFixed(1);
         document.getElementById('resultLatency').innerText = elapsed + ' ms';
 
-        if (executionRes && executionRes.ok) {
-          const data = await executionRes.json();
-          lastPayloadResponse = data;
-          renderInferenceResults(data, options, elapsed);
-          renderSettlementReceipt(data.settlement);
-          updateHandshakeLog('COMPLETE', `Inference settled in ${elapsed}ms. RFC 7231 verified.`, 'VERIFIED', 'emerald');
-        } else {
-          throw new Error(`Gateway returned error status ${executionRes ? executionRes.status : 'unknown'}`);
+        if (!executionRes.ok) {
+          const errData = await executionRes.json().catch(() => ({}));
+          throw new Error(errData.message || `Gateway returned error status ${executionRes.status}`);
         }
+
+        const data = await executionRes.json();
+        lastPayloadResponse = data;
+        renderInferenceResults(data, options, elapsed);
+        renderSettlementReceipt(data.settlement);
+        updateHandshakeLog('COMPLETE', `Inference settled in ${elapsed}ms. RFC 7231 verified.`, 'VERIFIED', 'emerald');
       } catch (err) {
         console.error('Inference gateway connection error:', err);
         const elapsed = (performance.now() - start).toFixed(1);
         document.getElementById('resultLatency').innerText = elapsed + ' ms';
-        const bestChoice = options[0];
-        const probs = options.map((opt, i) => i === 0 ? 0.94 : (0.06 / (options.length - 1)));
-        const localData = {
-          model: "sivlet-decision-1",
-          choice: bestChoice,
-          confidence: 0.94,
-          probabilities: probs,
-          options: options,
-          entropy: 0.072,
-          brier_score: -0.038,
-          settlement: {
-            status: "verified",
-            protocol: "x402-rfc7231",
-            method: "sandbox-quota-local",
-            currency: "DEV_QUOTA",
-            protocol_fee: "0.000 USDC",
-            payer: "local-evaluator",
-            recipient: TREASURY_ADDR,
-            nonce: "local_nonce",
-            authorization_hash: "local_grant"
-          }
-        };
-        lastPayloadResponse = localData;
-        renderInferenceResults(localData, options, elapsed);
-        renderSettlementReceipt(localData.settlement);
-        updateHandshakeLog('LOCAL', 'Edge network latency timeout. Local policy evaluated.', 'LOCAL', 'amber');
+        updateHandshakeLog('FAILED', err.message || 'Execution error.', 'FAILED', 'rose');
+        alert('Inference failed: ' + (err.message || 'Network error'));
       } finally {
         btn.disabled = false;
-        btnText.innerText = 'Run System-1 Forward Pass';
+        btnText.innerText = 'Sign with MetaMask & Run Forward Pass';
         lucide.createIcons();
       }
     }
@@ -1247,28 +1098,21 @@
       const pFee = document.getElementById('settlementFee');
       const pAuthHash = document.getElementById('settlementAuthHash');
 
-      if (pMethod) pMethod.innerText = st.method === 'eip712-gasless-authorization' ? 'EIP-712 Gasless (Web3)' : 'Dev Sandbox Quota';
+      if (pMethod) pMethod.innerText = 'EIP-712 Gasless (Web3)';
       if (pPayer) {
         if (st.payer && st.payer.startsWith('0x')) {
           pPayer.innerText = st.payer.slice(0, 6) + '...' + st.payer.slice(-4);
           pPayer.title = st.payer;
         } else {
-          pPayer.innerText = st.payer || 'sandbox-guest';
+          pPayer.innerText = st.payer || '—';
         }
       }
       if (pRecipient) pRecipient.innerText = '0x6B50...5F8A (Treasury)';
-      if (pFee) pFee.innerText = st.protocol_fee || (st.currency === 'USDC' ? '0.001 USDC' : '0.000 USDC');
+      if (pFee) pFee.innerText = st.protocol_fee || '0.001 USDC';
       if (pAuthHash) {
         pAuthHash.innerText = st.authorization_hash || st.nonce || 'verified';
         pAuthHash.title = st.authorization_hash || '';
       }
-
-      if (st.quota && st.quota.remaining !== undefined) {
-        clientDailyQuota.remaining = st.quota.remaining;
-        clientDailyQuota.limit = st.quota.daily_limit || 10;
-        clientDailyQuota.used = st.quota.used || 0;
-      }
-      updateQuotaUI();
     }
 
     function renderInferenceResults(data, options, latency) {
