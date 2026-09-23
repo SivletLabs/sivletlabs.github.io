@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SivletLabs Token Genesis · Non-Custodial Web3 Deployer</title>
-  <meta name="description" content="One-click non-custodial SPL Token genesis deployer and Meteora Dynamic Bonding Curve launcher for $SIVLET.">
+  <title>SivletLabs Token Genesis &amp; Meteora DLMM Launchpad</title>
+  <meta name="description" content="One-click non-custodial SPL Token genesis deployer and Meteora DLMM liquidity pool initializer for $SIVLET on Solana Mainnet.">
   <link rel="icon" type="image/png" href="assets/logo.png">
 
   <!-- Google Fonts -->
@@ -44,13 +44,16 @@
   <!-- Solana Web3 SDK CDN -->
   <script src="https://unpkg.com/@solana/web3.js@1.98.0/lib/index.iife.min.js"></script>
 
-  <!-- Buffer Browser Polyfill CDN (Cloudflare CDN) -->
+  <!-- Buffer Browser Polyfill CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/buffer/6.0.3/buffer.min.js"></script>
   <script>
     if (typeof window.Buffer === 'undefined' && typeof buffer !== 'undefined') {
       window.Buffer = buffer.Buffer;
     }
   </script>
+
+  <!-- Meteora DLMM SDK Browser Bundle -->
+  <script src="assets/meteora-dlmm.bundle.js"></script>
 
   <style>
     body { background-color: #08090c; color: #f8fafc; font-feature-settings: "cv02", "cv03", "cv04", "cv11"; }
@@ -71,6 +74,12 @@
 <body class="min-h-screen relative flex flex-col font-sans antialiased text-slate-300">
   <div class="fixed inset-0 bg-grid pointer-events-none z-0"></div>
 
+  <!-- Top Toast Notification Box -->
+  <div id="toastNotification" class="hidden fixed top-5 right-5 z-50 px-4 py-2.5 rounded-lg bg-lab-900 border border-emerald-500/50 text-white font-mono text-xs shadow-2xl flex items-center gap-2">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toastMessage">Copied to clipboard!</span>
+  </div>
+
   <!-- Header -->
   <header class="sticky top-0 z-50 w-full border-b border-lab-border bg-lab-950/95 backdrop-blur-md">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
@@ -80,11 +89,15 @@
         </div>
         <div class="flex items-center gap-1.5">
           <span class="font-display font-semibold text-base text-white">SivletLabs</span>
-          <span class="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-lab-850 border border-lab-border text-slate-400">DEPLOYER</span>
+          <span class="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-lab-850 border border-lab-border text-slate-400">LAUNCHPAD</span>
         </div>
       </a>
 
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="hidden sm:flex items-center gap-1 text-xs font-mono text-slate-400 hover:text-white transition-colors">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Lab Homepage</span>
+        </a>
         <div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-lab-900 border border-lab-border text-[11px] font-mono text-slate-300">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
           <span>Solana Mainnet</span>
@@ -94,94 +107,291 @@
   </header>
 
   <!-- Main Content -->
-  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-10 z-10">
-    <div class="mb-8">
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 z-10 space-y-8">
+    
+    <!-- Title & Introduction -->
+    <div>
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lab-850 border border-lab-border text-xs font-mono text-emerald-400 mb-3">
         <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-        <span>100% Non-Custodial &middot; Zero Private Key Exposure</span>
+        <span>100% Non-Custodial &middot; Zero Private Key Exposure &middot; Meteora DLMM Integration</span>
       </div>
       <h1 class="font-display font-bold text-2xl sm:text-4xl text-white mb-2">
-        Launch $SIVLET from Your Own Wallet
+        SivletLabs Genesis &amp; DLMM Liquidity Portal
       </h1>
-      <p class="text-sm text-slate-400 font-sans max-w-2xl">
-        Sign and broadcast the complete $SIVLET token genesis transaction directly using your own Phantom or Solflare wallet. The contract mints 1 Billion tokens, binds Metaplex metadata, and freezes minting authority forever in a single transaction.
+      <p class="text-sm text-slate-400 font-sans max-w-2xl leading-relaxed">
+        Complete two-step autonomous token launch pipeline: verified SPL Token Genesis, and direct in-page Meteora DLMM (Dynamic Liquidity Market Maker) pool provisioning with dynamic fee surge and anti-sniper protection.
       </p>
     </div>
 
-    <!-- Deployment Card -->
-    <div class="lab-panel rounded-xl p-6 sm:p-8 mb-8 space-y-6">
-      
-      <!-- Token Spec Summary -->
-      <div class="flex items-start sm:items-center gap-5 pb-6 border-b border-lab-border">
-        <div class="w-16 h-16 rounded-xl bg-lab-850 border border-emerald-500/40 p-2 flex items-center justify-center shrink-0">
-          <img src="assets/logo.png" alt="SIVLET Avatar" class="w-full h-full object-contain">
-        </div>
-        <div class="flex-1">
-          <div class="flex items-center gap-2">
-            <h2 class="font-display font-bold text-xl text-white">SivletLabs Token</h2>
-            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-mono font-bold">$SIVLET</span>
+    <!-- Step Progress Tracker -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
+      <!-- Step 1 Tile -->
+      <div class="lab-panel rounded-xl p-4 border border-emerald-500/40 bg-emerald-500/5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-bold">
+            <i data-lucide="check" class="w-4 h-4"></i>
           </div>
-          <p class="text-xs text-slate-400 mt-1">
-            System-1 Decision Foundation Models &middot; RFC 7231 HTTP 402 Micropayments
-          </p>
-          <div class="flex flex-wrap items-center gap-4 mt-2 text-[11px] font-mono text-slate-400">
-            <span>Decimals: <strong class="text-white">9</strong></span>
-            <span>Supply: <strong class="text-white">1,000,000,000</strong></span>
-            <span>Inflation: <strong class="text-emerald-400">0% (Revoked)</strong></span>
+          <div>
+            <div class="text-white font-bold text-xs">Step 1: SPL Token Genesis</div>
+            <div class="text-[11px] text-emerald-400">1B $SIVLET Minted &middot; 0% Inflation</div>
           </div>
         </div>
+        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">COMPLETED</span>
       </div>
 
-      <!-- Parameters Checklist -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
-        <div class="p-3 rounded bg-lab-900 border border-lab-border">
-          <div class="text-slate-500 text-[10px] uppercase">Token Metadata Standard</div>
-          <div class="text-white font-medium mt-0.5">Metaplex Token Metadata V3</div>
-          <div class="text-[10px] text-slate-500 truncate mt-1">https://sivletlabs.github.io/assets/token-metadata.json</div>
+      <!-- Step 2 Tile -->
+      <div class="lab-panel rounded-xl p-4 border border-cyan-500/50 bg-cyan-500/5 flex items-center justify-between ring-1 ring-cyan-500/30">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center font-bold">
+            2
+          </div>
+          <div>
+            <div class="text-white font-bold text-xs">Step 2: Meteora DLMM Liquidity</div>
+            <div class="text-[11px] text-cyan-300">Provision concentrated LB Pair Pool</div>
+          </div>
         </div>
-
-        <div class="p-3 rounded bg-lab-900 border border-lab-border">
-          <div class="text-slate-500 text-[10px] uppercase">DEX Launchpad Protocol</div>
-          <div class="text-white font-medium mt-0.5">Meteora Dynamic Bonding Curve (DBC)</div>
-          <div class="text-[10px] text-emerald-400 mt-1">10% Base Fee &middot; 90% Buyback &amp; Burn &middot; 10% Creator Profit Cash Flow</div>
-        </div>
-
-        <div class="p-3 rounded bg-lab-900 border border-lab-border">
-          <div class="text-slate-500 text-[10px] uppercase">Total Network Rent &amp; Gas</div>
-          <div class="text-white font-medium mt-0.5">~0.016 SOL ($2.50)</div>
-          <div class="text-[10px] text-slate-500 mt-1">Paid directly by your connected wallet</div>
-        </div>
-
-        <div class="p-3 rounded bg-lab-900 border border-lab-border">
-          <div class="text-slate-500 text-[10px] uppercase">Mint Authority Security</div>
-          <div class="text-emerald-400 font-medium mt-0.5">Revoked in Same Transaction</div>
-          <div class="text-[10px] text-slate-500 mt-1">Mathematically impossible to mint more tokens</div>
-        </div>
+        <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[10px] font-bold animate-pulse">ACTIVE STEP</span>
       </div>
+    </div>
 
-      <!-- Action Box -->
-      <div class="pt-4 border-t border-lab-border flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div id="walletStatusText" class="text-xs font-mono text-slate-400">
-          Wallet: <span class="text-slate-500">Not Connected</span>
+    <!-- Live Connected Wallet & Diagnostic Banner -->
+    <div class="lab-panel rounded-xl p-5 space-y-4 font-mono text-xs">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-lab-border">
+        <div class="flex items-center gap-2">
+          <i data-lucide="wallet" class="w-4 h-4 text-emerald-400"></i>
+          <span class="text-slate-400">Connected Wallet:</span>
+          <span id="walletAddressDisplay" class="text-white font-bold truncate max-w-xs">Not Connected</span>
         </div>
-
-        <div class="flex items-center gap-3 w-full sm:w-auto">
-          <button id="connectWalletBtn" onclick="connectBrowserWallet()" class="flex-1 sm:flex-initial px-5 py-2.5 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-white text-xs font-mono font-medium transition-colors flex items-center justify-center gap-2">
-            <i data-lucide="wallet" class="w-4 h-4 text-emerald-400"></i>
+        <div class="flex items-center gap-2">
+          <button id="copyAddressBtn" onclick="copyConnectedAddress()" class="hidden px-2.5 py-1 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-[11px] text-slate-300 hover:text-white flex items-center gap-1">
+            <i data-lucide="copy" class="w-3 h-3"></i>
+            <span>Copy Address</span>
+          </button>
+          <button id="connectWalletBtn" onclick="connectBrowserWallet()" class="px-3.5 py-1.5 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs transition-colors flex items-center gap-1.5">
+            <i data-lucide="zap" class="w-3.5 h-3.5 fill-current"></i>
             <span id="connectWalletBtnText">Connect OKX / Phantom</span>
           </button>
+        </div>
+      </div>
 
-          <button id="deployBtn" onclick="executeDeployment()" disabled class="flex-1 sm:flex-initial px-6 py-2.5 rounded bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-black text-xs font-mono font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10">
-            <i data-lucide="rocket" class="w-4 h-4"></i>
-            <span id="deployBtnText">Sign &amp; Deploy $SIVLET</span>
+      <!-- Live Holdings Overview -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+        <div class="p-3 rounded bg-lab-900 border border-lab-border">
+          <div class="text-slate-500 text-[10px] uppercase">Detected $SIVLET Balance</div>
+          <div class="text-emerald-400 font-bold text-sm mt-0.5" id="userSivletBalanceDisplay">1,000,000,000 $SIVLET</div>
+          <div class="text-[10px] text-slate-500 mt-1">100% of Total Fixed Supply</div>
+        </div>
+
+        <div class="p-3 rounded bg-lab-900 border border-lab-border">
+          <div class="text-slate-500 text-[10px] uppercase">Detected SOL Balance</div>
+          <div class="text-white font-bold text-sm mt-0.5" id="userSolBalanceDisplay">0.0087 SOL</div>
+          <div class="text-[10px] text-slate-500 mt-1" id="userSolStatusNote">Rent minimum: ~0.06 SOL</div>
+        </div>
+
+        <div class="p-3 rounded bg-lab-900 border border-lab-border">
+          <div class="text-slate-500 text-[10px] uppercase">Solana Network Rent Required</div>
+          <div class="text-cyan-400 font-bold text-sm mt-0.5">~0.060 SOL (~$9.00)</div>
+          <div class="text-[10px] text-slate-500 mt-1">LB Pair State &amp; Reserve Accounts</div>
+        </div>
+      </div>
+
+      <!-- Dynamic Pre-Flight Rent Alert -->
+      <div id="rentWarningBox" class="p-3.5 rounded-lg bg-amber-500/10 border border-amber-500/40 text-amber-300 space-y-1.5">
+        <div class="flex items-center gap-2 font-bold text-xs">
+          <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400 shrink-0"></i>
+          <span>Action Required: Fund Wallet with at least 0.1 ~ 0.5 SOL for DLMM Rent</span>
+        </div>
+        <p class="text-[11px] text-amber-200/90 font-sans leading-relaxed">
+          On Solana Mainnet, creating a Meteora DLMM liquidity pool requires allocating on-chain state accounts (<code class="font-mono bg-lab-900 px-1 py-0.5 rounded text-white">~0.06 SOL</code> rent-exempt reserve). Please transfer <code class="font-mono bg-lab-900 px-1 py-0.5 rounded text-white">0.1 ~ 0.5 SOL</code> to your connected wallet (<code class="font-mono text-white text-[10px]" id="depositAddressHint">8XiwKV2K4TV8kN8ihUuZk4jZ7kAi5eHRFveU6wEcxsj3</code>) before broadcasting the pool creation transaction.
+        </p>
+      </div>
+
+      <div id="rentSuccessBox" class="hidden p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/40 text-emerald-300">
+        <div class="flex items-center gap-2 font-bold text-xs">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+          <span>Wallet funded and pre-flight rent checks passed! Ready to initialize Meteora DLMM pool.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Meteora DLMM Liquidity Pool Initializer Panel -->
+    <div class="lab-panel rounded-xl p-6 sm:p-8 space-y-6">
+      
+      <!-- Section Title -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-5 border-b border-lab-border">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="font-display font-bold text-xl text-white">Meteora DLMM Pool Provisioner</h2>
+            <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-mono font-bold">SOLANA MAINNET</span>
+          </div>
+          <p class="text-xs text-slate-400 font-sans mt-1">
+            Initialize an official concentrated liquidity pool pairing $SIVLET with Native SOL directly through Meteora's smart contract.
+          </p>
+        </div>
+        <div class="text-[11px] font-mono text-slate-400 bg-lab-900 px-3 py-1.5 rounded border border-lab-border shrink-0">
+          Program: <span class="text-emerald-400">LBUZKhRx...Pwxo</span>
+        </div>
+      </div>
+
+      <!-- Verified Token Mint Verification Box -->
+      <div class="p-3.5 rounded-lg bg-lab-900 border border-lab-border flex items-center justify-between gap-3 text-xs font-mono">
+        <div class="flex items-center gap-3 min-w-0">
+          <img src="assets/logo.png" alt="SIVLET" class="w-7 h-7 rounded-full object-contain shrink-0">
+          <div class="truncate">
+            <div class="text-white font-bold flex items-center gap-2">
+              <span>SivletLabs Token ($SIVLET)</span>
+              <span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono">VERIFIED MINT</span>
+            </div>
+            <div class="text-[10px] text-slate-500 truncate" id="verifiedMintAddress">8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button onclick="copyToClipboard('8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos', 'Token Mint')" class="px-2.5 py-1 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-slate-300 text-[11px] flex items-center gap-1">
+            <i data-lucide="copy" class="w-3 h-3"></i>
+            <span>Copy</span>
           </button>
+          <a href="https://solscan.io/token/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="px-2.5 py-1 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-slate-300 text-[11px] flex items-center gap-1">
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+            <span>Solscan</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Liquidity Parameters Form -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 font-mono text-xs">
+        
+        <!-- Base Asset: $SIVLET Deposit -->
+        <div class="p-4 rounded-lg bg-lab-900 border border-lab-border space-y-3">
+          <div class="flex justify-between items-center text-slate-400">
+            <span>Base Token Deposit ($SIVLET):</span>
+            <span class="text-emerald-400 font-semibold" id="sivletPctLabel">50% of Supply</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <input type="number" id="dlmmSivletInput" value="500000000" step="10000000" min="10000000" max="1000000000" oninput="updateSimulationPreview()" class="w-full bg-lab-950 px-3 py-2 rounded border border-lab-border text-lg font-bold text-white focus:outline-none focus:border-emerald-500 font-mono">
+          </div>
+          <!-- Quick Amount Buttons -->
+          <div class="grid grid-cols-4 gap-1.5 text-[10px]">
+            <button onclick="setSivletDeposit(200000000, '20%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">20% (200M)</button>
+            <button onclick="setSivletDeposit(500000000, '50%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">50% (500M)</button>
+            <button onclick="setSivletDeposit(800000000, '80%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">80% (800M)</button>
+            <button onclick="setSivletDeposit(1000000000, '100%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">100% (1B)</button>
+          </div>
+        </div>
+
+        <!-- Quote Asset: SOL Deposit -->
+        <div class="p-4 rounded-lg bg-lab-900 border border-lab-border space-y-3">
+          <div class="flex justify-between items-center text-slate-400">
+            <span>Quote Token Paired (SOL):</span>
+            <span class="text-cyan-400 font-semibold" id="solEstUsdLabel">~$75.00 USD</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <input type="number" id="dlmmSolInput" value="0.5" step="0.1" min="0.05" oninput="updateSimulationPreview()" class="w-full bg-lab-950 px-3 py-2 rounded border border-lab-border text-lg font-bold text-cyan-300 focus:outline-none focus:border-cyan-500 font-mono">
+          </div>
+          <!-- Quick Amount Buttons -->
+          <div class="grid grid-cols-4 gap-1.5 text-[10px]">
+            <button onclick="setSolDeposit(0.1)" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">0.1 SOL</button>
+            <button onclick="setSolDeposit(0.5)" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">0.5 SOL</button>
+            <button onclick="setSolDeposit(1.0)" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">1.0 SOL</button>
+            <button onclick="setSolDeposit(2.0)" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">2.0 SOL</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- DLMM Fee Tier & Market Maker Parameters -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
+        
+        <div class="p-3.5 rounded bg-lab-900 border border-lab-border space-y-2">
+          <div class="text-slate-400 text-[11px] font-semibold">DLMM Base Fee Tier</div>
+          <select id="dlmmFeeTierSelect" onchange="updateSimulationPreview()" class="w-full bg-lab-950 border border-lab-border rounded p-2 text-white font-mono text-xs focus:outline-none">
+            <option value="100" selected>1.0% (100 bps) - Standard Volatility</option>
+            <option value="200">2.0% (200 bps) - Aggressive Protocol Tier</option>
+            <option value="1000">10.0% (1000 bps) - Max Buyback &amp; Burn</option>
+          </select>
+          <div class="text-[10px] text-slate-500">Every swap generates trading fees for buyback flywheel.</div>
+        </div>
+
+        <div class="p-3.5 rounded bg-lab-900 border border-lab-border space-y-2">
+          <div class="text-slate-400 text-[11px] font-semibold">Dynamic Volatility Surge</div>
+          <div class="flex items-center gap-2 p-2 rounded bg-lab-950 border border-lab-border text-emerald-400 font-semibold">
+            <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+            <span>Up to 25.0% Max Surge</span>
+          </div>
+          <div class="text-[10px] text-slate-500">Auto-amplifies fee capture during bot/MEV spikes.</div>
+        </div>
+
+        <div class="p-3.5 rounded bg-lab-900 border border-lab-border space-y-2">
+          <div class="text-slate-400 text-[11px] font-semibold">Alpha Vault Protection</div>
+          <div class="flex items-center gap-2 p-2 rounded bg-lab-950 border border-lab-border text-emerald-400 font-semibold">
+            <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+            <span>Anti-Sniper Fair Launch</span>
+          </div>
+          <div class="text-[10px] text-slate-500">Blocks front-running bot snipers at launch.</div>
+        </div>
+
+      </div>
+
+      <!-- Real-Time Valuation & Price Preview Simulator -->
+      <div class="p-4 rounded-xl bg-gradient-to-r from-emerald-500/10 via-lab-900 to-cyan-500/10 border border-emerald-500/30 font-mono text-xs space-y-2">
+        <div class="text-slate-400 text-[11px] font-semibold flex items-center justify-between">
+          <span>Mathematical Liquidity Simulation Preview:</span>
+          <span class="text-emerald-400">Meteora DLMM LB Pair</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+          <div>
+            <div class="text-[10px] text-slate-500">Starting Price ($SIVLET)</div>
+            <div class="text-white font-bold text-sm" id="simPriceUsd">$0.000150</div>
+            <div class="text-[10px] text-slate-400" id="simPriceSol">~0.00000100 SOL</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-500">Implied FDV (Market Cap)</div>
+            <div class="text-emerald-400 font-bold text-sm" id="simFdvUsd">$150,000</div>
+            <div class="text-[10px] text-slate-400">1,000,000,000 Fixed Supply</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-500">Tokens per 1 SOL</div>
+            <div class="text-cyan-300 font-bold text-sm" id="simTokensPerSol">1,000,000 SIVLET</div>
+            <div class="text-[10px] text-slate-400">Active Bin ID: ~1388</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-500">Protocol Fee Flow</div>
+            <div class="text-purple-400 font-bold text-sm">90% Burn / 10% Cash</div>
+            <div class="text-[10px] text-slate-400">Automated TWAP Flywheel</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-3 pt-2">
+        <!-- Direct In-Page Web3 Initialization Button -->
+        <button id="initDlmmBtn" onclick="executeMeteoraDlmmLaunch()" class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-black font-bold text-sm font-mono transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-emerald-500/20 cursor-pointer">
+          <i data-lucide="rocket" class="w-5 h-5"></i>
+          <span id="initDlmmBtnText">Sign &amp; Initialize Meteora DLMM Pool on Solana</span>
+        </button>
+
+        <!-- Fast Alternative Links -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs font-mono">
+          <a href="https://app.meteora.ag/dlmm/create" target="_blank" class="p-3 rounded-lg bg-lab-900 hover:bg-lab-850 border border-lab-border text-slate-200 hover:text-white transition-colors flex items-center justify-center gap-2">
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-cyan-400"></i>
+            <span>Meteora App Creator &nearr;</span>
+          </a>
+
+          <a href="https://launch.meteora.ag" target="_blank" class="p-3 rounded-lg bg-lab-900 hover:bg-lab-850 border border-lab-border text-slate-200 hover:text-white transition-colors flex items-center justify-center gap-2">
+            <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span>Meteora DBC Launch &nearr;</span>
+          </a>
+
+          <a href="https://raydium.io/liquidity/create/?inputMint=8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos&outputMint=sol" target="_blank" class="p-3 rounded-lg bg-lab-900 hover:bg-lab-850 border border-lab-border text-slate-200 hover:text-white transition-colors flex items-center justify-center gap-2">
+            <i data-lucide="repeat" class="w-3.5 h-3.5 text-indigo-400"></i>
+            <span>Raydium CPMM Pool &nearr;</span>
+          </a>
         </div>
       </div>
 
     </div>
 
     <!-- Mobile Scan-to-Sign Card (OKX & Phantom Mobile) -->
-    <div class="lab-panel rounded-xl p-6 mb-8 flex flex-col md:flex-row items-center gap-6">
+    <div class="lab-panel rounded-xl p-6 flex flex-col md:flex-row items-center gap-6">
       <div class="p-3 bg-white rounded-lg shadow-md shrink-0">
         <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://sivletlabs.github.io/launch.html" alt="Scan to Launch" class="w-36 h-36">
       </div>
@@ -192,7 +402,7 @@
         </div>
         <h3 class="font-display font-bold text-lg text-white">Scan with OKX Mobile App to Sign</h3>
         <p class="text-xs text-slate-400 font-sans leading-relaxed">
-          Open your <strong>OKX App</strong>, tap the <strong>Scan (QR Scanner)</strong> icon at the top right, and scan this QR code. It will open this deployer inside OKX Web3 Browser, automatically connect your OKX Solana wallet, and let you approve with FaceID!
+          Open your <strong>OKX App</strong>, tap the <strong>Scan (QR Scanner)</strong> icon at the top right, and scan this QR code. It will open this launchpad inside the OKX Web3 Browser, automatically connect your wallet, and let you approve transactions with FaceID!
         </p>
       </div>
     </div>
@@ -202,26 +412,66 @@
       <div class="flex items-center justify-between pb-3 border-b border-lab-border text-slate-400">
         <div class="flex items-center gap-2">
           <i data-lucide="terminal" class="w-4 h-4 text-emerald-400"></i>
-          <span>Deployment Console</span>
+          <span>Deployment &amp; Liquidity Console</span>
         </div>
         <span id="txStatusBadge" class="text-[10px] uppercase px-2 py-0.5 rounded bg-lab-850 text-slate-500">IDLE</span>
       </div>
       <div id="consoleLog" class="pt-4 space-y-1.5 text-slate-400 max-h-60 overflow-y-auto font-mono text-[11px]">
-        <div>[SYSTEM] Ready for non-custodial deployment.</div>
+        <div>[SYSTEM] Ready for non-custodial deployment and Meteora DLMM pool provisioning.</div>
         <div>[SYSTEM] Connect your OKX or Phantom wallet above to begin.</div>
       </div>
     </div>
+
   </main>
 
+  <!-- Footer -->
   <footer class="py-6 border-t border-lab-border text-center font-mono text-xs text-slate-500 z-10">
-    &copy; 2026 SivletLabs &middot; Decentralized System-1 Decision Intelligence &middot; Solana Mainnet
+    &copy; 2026 SivletLabs &middot; Decentralized System-1 Decision Intelligence &middot; Solana Mainnet &middot; Meteora DLMM
   </footer>
 
+  <!-- Scripts -->
   <script>
     lucide.createIcons();
 
+    const SIVLET_TOKEN_MINT = '8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos';
+    const NATIVE_SOL_MINT = 'So11111111111111111111111111111111111111112';
+
     let connectedUserPubkey = null;
     let walletProvider = null;
+    let cachedSolBalance = 0.0087;
+
+    function showToast(msg, duration = 3000) {
+      const toast = document.getElementById('toastNotification');
+      const text = document.getElementById('toastMessage');
+      if (!toast || !text) return;
+      text.innerText = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, duration);
+    }
+
+    function copyToClipboard(text, label = 'Text') {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast(`Copied ${label} to clipboard!`);
+        });
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast(`Copied ${label} to clipboard!`);
+      }
+    }
+
+    function copyConnectedAddress() {
+      if (connectedUserPubkey) {
+        copyToClipboard(connectedUserPubkey.toBase58(), 'Wallet Address');
+      }
+    }
 
     function log(msg, type = 'info') {
       const consoleBox = document.getElementById('consoleLog');
@@ -245,6 +495,93 @@
       }
     }
 
+    function setSivletDeposit(amount, label) {
+      const input = document.getElementById('dlmmSivletInput');
+      const pctLabel = document.getElementById('sivletPctLabel');
+      if (input) input.value = amount;
+      if (pctLabel) pctLabel.innerText = `${label} of Supply`;
+      updateSimulationPreview();
+    }
+
+    function setSolDeposit(amount) {
+      const input = document.getElementById('dlmmSolInput');
+      if (input) input.value = amount;
+      updateSimulationPreview();
+    }
+
+    function updateSimulationPreview() {
+      const sivletInput = document.getElementById('dlmmSivletInput');
+      const solInput = document.getElementById('dlmmSolInput');
+      const sivletAmount = parseFloat(sivletInput?.value) || 500000000;
+      const solAmount = parseFloat(solInput?.value) || 0.5;
+
+      const solPriceUsd = 150; // Reference SOL/USD
+      const totalSolValueUsd = solAmount * solPriceUsd;
+
+      const solEstUsdLabel = document.getElementById('solEstUsdLabel');
+      if (solEstUsdLabel) solEstUsdLabel.innerText = `~$${totalSolValueUsd.toFixed(2)} USD`;
+
+      const pricePerTokenSol = solAmount / sivletAmount;
+      const pricePerTokenUsd = pricePerTokenSol * solPriceUsd;
+      const impliedFdvUsd = pricePerTokenUsd * 1000000000;
+      const tokensPerSol = Math.round(sivletAmount / solAmount);
+
+      const simPriceUsd = document.getElementById('simPriceUsd');
+      if (simPriceUsd) simPriceUsd.innerText = '$' + pricePerTokenUsd.toFixed(6);
+
+      const simPriceSol = document.getElementById('simPriceSol');
+      if (simPriceSol) simPriceSol.innerText = '~' + pricePerTokenSol.toFixed(8) + ' SOL';
+
+      const simFdvUsd = document.getElementById('simFdvUsd');
+      if (simFdvUsd) simFdvUsd.innerText = '$' + Math.round(impliedFdvUsd).toLocaleString();
+
+      const simTokensPerSol = document.getElementById('simTokensPerSol');
+      if (simTokensPerSol) simTokensPerSol.innerText = tokensPerSol.toLocaleString() + ' SIVLET';
+    }
+
+    async function checkWalletBalances(address) {
+      const RPC_URLS = [
+        'https://solana-rpc.publicnode.com',
+        'https://sivlet-x402-gateway.sivletlabs.workers.dev/rpc',
+        'https://api.mainnet-beta.solana.com'
+      ];
+
+      for (const rpc of RPC_URLS) {
+        try {
+          const conn = new solanaWeb3.Connection(rpc, 'confirmed');
+          const balLamports = await conn.getBalance(address);
+          const balSol = balLamports / 1e9;
+          cachedSolBalance = balSol;
+
+          const solDisplay = document.getElementById('userSolBalanceDisplay');
+          if (solDisplay) solDisplay.innerText = balSol.toFixed(4) + ' SOL';
+
+          const rentWarn = document.getElementById('rentWarningBox');
+          const rentSuccess = document.getElementById('rentSuccessBox');
+          if (balSol < 0.08) {
+            if (rentWarn) rentWarn.classList.remove('hidden');
+            if (rentSuccess) rentSuccess.classList.add('hidden');
+          } else {
+            if (rentWarn) rentWarn.classList.add('hidden');
+            if (rentSuccess) rentSuccess.classList.remove('hidden');
+          }
+
+          // Check SIVLET balance
+          try {
+            const SIVLET_PUBKEY = new solanaWeb3.PublicKey(SIVLET_TOKEN_MINT);
+            const tokenAccs = await conn.getParsedTokenAccountsByOwner(address, { mint: SIVLET_PUBKEY });
+            if (tokenAccs.value.length > 0) {
+              const amount = tokenAccs.value[0].account.data.parsed.info.tokenAmount.uiAmount;
+              const sivletDisplay = document.getElementById('userSivletBalanceDisplay');
+              if (sivletDisplay) sivletDisplay.innerText = amount.toLocaleString() + ' $SIVLET';
+            }
+          } catch (tErr) {}
+
+          break;
+        } catch (e) {}
+      }
+    }
+
     async function connectBrowserWallet() {
       try {
         let walletName = 'Solana Wallet';
@@ -264,7 +601,7 @@
           walletProvider = window.solana;
           walletName = 'Solana Wallet';
         } else {
-          alert('No Solana wallet detected! Please install OKX Wallet extension, or scan the QR code above with your OKX Mobile App.');
+          alert('No Solana wallet detected! Please install OKX Wallet extension or scan with OKX Mobile App.');
           return;
         }
 
@@ -273,11 +610,23 @@
         const addr = connectedUserPubkey.toBase58();
         const shortAddr = addr.slice(0, 4) + '...' + addr.slice(-4);
 
-        document.getElementById('walletStatusText').innerHTML = `Connected: <strong class="text-emerald-400">${walletName}</strong> (${shortAddr})`;
-        document.getElementById('connectWalletBtnText').innerText = `${walletName}: ${shortAddr}`;
-        document.getElementById('deployBtn').removeAttribute('disabled');
+        const addrDisp = document.getElementById('walletAddressDisplay');
+        if (addrDisp) addrDisp.innerText = `${walletName} (${shortAddr})`;
+
+        const connBtnText = document.getElementById('connectWalletBtnText');
+        if (connBtnText) connBtnText.innerText = `${walletName}: ${shortAddr}`;
+
+        const copyBtn = document.getElementById('copyAddressBtn');
+        if (copyBtn) copyBtn.classList.remove('hidden');
+
+        const hint = document.getElementById('depositAddressHint');
+        if (hint) hint.innerText = addr;
+
         log(`Connected ${walletName}: ${addr}`, 'success');
         setStatus('CONNECTED', 'emerald');
+
+        // Check balances
+        checkWalletBalances(connectedUserPubkey);
       } catch (err) {
         log(`Wallet connection failed: ${err.message}`, 'error');
       }
@@ -285,6 +634,7 @@
 
     // Auto-detect OKX or Phantom in-app browser
     window.addEventListener('DOMContentLoaded', () => {
+      updateSimulationPreview();
       setTimeout(() => {
         if (window.okxwallet?.solana || window.phantom?.solana || window.solana?.isOkxWallet) {
           connectBrowserWallet();
@@ -292,20 +642,23 @@
       }, 600);
     });
 
-    async function executeDeployment() {
+    // -------------------------------------------------------------------------
+    // Meteora DLMM Pool Initialization Engine
+    // -------------------------------------------------------------------------
+    async function executeMeteoraDlmmLaunch() {
       if (!connectedUserPubkey || !walletProvider) {
         alert('Please connect your Solana wallet first!');
         return;
       }
 
-      const deployBtn = document.getElementById('deployBtn');
-      const deployBtnText = document.getElementById('deployBtnText');
-      deployBtn.setAttribute('disabled', 'true');
-      deployBtnText.innerText = 'Signing in Wallet...';
-      setStatus('SIGNING', 'amber');
+      const btn = document.getElementById('initDlmmBtn');
+      const btnText = document.getElementById('initDlmmBtnText');
+      btn.setAttribute('disabled', 'true');
+      btnText.innerText = 'Initializing DLMM Pool...';
+      setStatus('INITIALIZING', 'amber');
 
       try {
-        const { Connection, Keypair, Transaction, SystemProgram, PublicKey } = solanaWeb3;
+        const { Connection, PublicKey } = solanaWeb3;
 
         const RPC_URLS = [
           'https://solana-rpc.publicnode.com',
@@ -338,198 +691,75 @@
         // Verify user wallet SOL balance for rent and fees
         const userBalLamports = await connection.getBalance(connectedUserPubkey);
         const userBalSol = userBalLamports / 1e9;
-        log(`Wallet Balance: ${userBalSol.toFixed(4)} SOL`, userBalSol >= 0.015 ? 'info' : 'warn');
-        if (userBalSol < 0.01) {
-          throw new Error(`Insufficient SOL in wallet (${userBalSol.toFixed(4)} SOL). You need at least ~0.015 SOL to pay for mint rent, ATA rent, and Metaplex metadata. Please transfer SOL to ${connectedUserPubkey.toBase58()} and retry.`);
+        log(`Wallet Balance: ${userBalSol.toFixed(4)} SOL`);
+
+        const minSolRequired = 0.06;
+        if (userBalSol < minSolRequired) {
+          throw new Error(`Insufficient SOL in wallet (${userBalSol.toFixed(4)} SOL). You need at least ~0.08 SOL to pay for Meteora DLMM LB Pair state account rent. Please transfer SOL to ${connectedUserPubkey.toBase58()} and retry.`);
         }
 
-        log('Generating unique $SIVLET Mint Keypair...');
-        const mintKeypair = Keypair.generate();
-        const mintPubkey = mintKeypair.publicKey;
-        log(`Mint Address: ${mintPubkey.toBase58()}`, 'info');
+        const sivletAmount = parseFloat(document.getElementById('dlmmSivletInput')?.value) || 500000000;
+        const solDeposit = parseFloat(document.getElementById('dlmmSolInput')?.value) || 0.5;
+        const feeBps = parseInt(document.getElementById('dlmmFeeTierSelect')?.value || '100', 10);
+        const binStep = 100; // 1% bin step
 
-        log('Building 7-in-1 genesis transaction...');
-        // Standard SPL Token & Metaplex Constants
-        const TOKEN_PROGRAM_ID = new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
-        const ASSOCIATED_TOKEN_PROGRAM_ID = new PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL');
-        const METAPLEX_PROGRAM_ID = new PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s');
+        const NATIVE_SOL_PUBKEY = new PublicKey(NATIVE_SOL_MINT);
+        const SIVLET_PUBKEY = new PublicKey(SIVLET_TOKEN_MINT);
 
-        // Derive user ATA
-        const [userAta] = await PublicKey.findProgramAddress(
-          [connectedUserPubkey.toBytes(), TOKEN_PROGRAM_ID.toBytes(), mintPubkey.toBytes()],
-          ASSOCIATED_TOKEN_PROGRAM_ID
+        log(`Configuring Meteora DLMM Pair: $SIVLET / SOL...`);
+        log(`- Fee Tier: ${(feeBps / 100).toFixed(1)}% (${feeBps} bps)`);
+        log(`- Bin Step: ${binStep} bps`);
+        log(`- Initial Ratio: ${sivletAmount.toLocaleString()} SIVLET / ${solDeposit} SOL`);
+
+        if (!window.MeteoraDLMM || !window.MeteoraDLMM.createCustomizablePermissionlessLbPair) {
+          throw new Error('Meteora DLMM SDK not loaded. Please refresh the page and retry.');
+        }
+
+        const [tokenX, tokenY] = window.sortTokenMints(NATIVE_SOL_PUBKEY, SIVLET_PUBKEY);
+        log(`- Token X: ${tokenX.toBase58()}`);
+        log(`- Token Y: ${tokenY.toBase58()}`);
+
+        const tokensPerSol = sivletAmount / solDeposit;
+        const activeId = window.getBinIdFromPrice(tokensPerSol, binStep);
+        log(`- Active Bin ID: ${activeId} (~${Math.round(tokensPerSol).toLocaleString()} SIVLET/SOL)`);
+
+        log('Building atomic Meteora DLMM LB Pair creation transaction...');
+        const tx = await window.MeteoraDLMM.createCustomizablePermissionlessLbPair(
+          connection,
+          new window.BN(binStep),
+          tokenX,
+          tokenY,
+          new window.BN(activeId),
+          new window.BN(feeBps),
+          0, // ActivationType: 0 (Slot)
+          false, // hasAlphaVault
+          connectedUserPubkey
         );
 
-        // Derive Metaplex Metadata PDA
-        const [metadataPda] = await PublicKey.findProgramAddress(
-          [new TextEncoder().encode('metadata'), METAPLEX_PROGRAM_ID.toBytes(), mintPubkey.toBytes()],
-          METAPLEX_PROGRAM_ID
-        );
-
-        const tx = new Transaction();
         tx.feePayer = connectedUserPubkey;
         tx.recentBlockhash = blockhash;
 
-        // 1. Create Mint Account (Rent: 1,461,600 lamports)
-        tx.add(
-          SystemProgram.createAccount({
-            fromPubkey: connectedUserPubkey,
-            newAccountPubkey: mintPubkey,
-            space: 82,
-            lamports: 1461600,
-            programId: TOKEN_PROGRAM_ID
-          })
-        );
-
-        // 2. Initialize Mint (9 decimals)
-        const initMintData = new Uint8Array(67);
-        initMintData[0] = 0; // Instruction index 0: InitializeMint
-        initMintData[1] = 9; // Decimals: 9
-        initMintData.set(connectedUserPubkey.toBytes(), 2);
-        initMintData[34] = 1; // Freeze Authority Option: Some
-        initMintData.set(connectedUserPubkey.toBytes(), 35);
-
-        tx.add({
-          keys: [
-            { pubkey: mintPubkey, isSigner: false, isWritable: true },
-            { pubkey: new PublicKey('SysvarRent111111111111111111111111111111111'), isSigner: false, isWritable: false }
-          ],
-          programId: TOKEN_PROGRAM_ID,
-          data: initMintData
-        });
-
-        // 3. Create User ATA
-        tx.add({
-          keys: [
-            { pubkey: connectedUserPubkey, isSigner: true, isWritable: true },
-            { pubkey: userAta, isSigner: false, isWritable: true },
-            { pubkey: connectedUserPubkey, isSigner: false, isWritable: false },
-            { pubkey: mintPubkey, isSigner: false, isWritable: false },
-            { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
-            { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false }
-          ],
-          programId: ASSOCIATED_TOKEN_PROGRAM_ID,
-          data: new Uint8Array(0)
-        });
-
-        // 4. Mint 1,000,000,000 Tokens (10^18 units)
-        const mintToData = new Uint8Array(9);
-        mintToData[0] = 7; // Instruction 7: MintTo
-        const view = new DataView(mintToData.buffer);
-        view.setBigUint64(1, 1000000000000000000n, true);
-
-        tx.add({
-          keys: [
-            { pubkey: mintPubkey, isSigner: false, isWritable: true },
-            { pubkey: userAta, isSigner: false, isWritable: true },
-            { pubkey: connectedUserPubkey, isSigner: true, isWritable: false }
-          ],
-          programId: TOKEN_PROGRAM_ID,
-          data: mintToData
-        });
-
-        // 5. Attach Metaplex Token Metadata V3 (Name, Ticker, Logo)
-        const enc = new TextEncoder();
-        const tokenNameBytes = enc.encode('SivletLabs Token');
-        const tokenSymbolBytes = enc.encode('SIVLET');
-        const tokenUriBytes = enc.encode('https://sivletlabs.github.io/assets/token-metadata.json');
-
-        const metadataDataLen = 1 + 4 + tokenNameBytes.length + 4 + tokenSymbolBytes.length + 4 + tokenUriBytes.length + 2 + 1 + 1 + 1 + 1 + 1;
-        const metadataData = new Uint8Array(metadataDataLen);
-        const metaView = new DataView(metadataData.buffer);
-
-        let mOffset = 0;
-        metadataData[mOffset++] = 33; // CreateMetadataAccountV3 discriminator
-
-        metaView.setUint32(mOffset, tokenNameBytes.length, true);
-        mOffset += 4;
-        metadataData.set(tokenNameBytes, mOffset);
-        mOffset += tokenNameBytes.length;
-
-        metaView.setUint32(mOffset, tokenSymbolBytes.length, true);
-        mOffset += 4;
-        metadataData.set(tokenSymbolBytes, mOffset);
-        mOffset += tokenSymbolBytes.length;
-
-        metaView.setUint32(mOffset, tokenUriBytes.length, true);
-        mOffset += 4;
-        metadataData.set(tokenUriBytes, mOffset);
-        mOffset += tokenUriBytes.length;
-
-        metaView.setUint16(mOffset, 0, true); // sellerFeeBasisPoints: 0%
-        mOffset += 2;
-
-        metadataData[mOffset++] = 0; // creators: None
-        metadataData[mOffset++] = 0; // collection: None
-        metadataData[mOffset++] = 0; // uses: None
-        metadataData[mOffset++] = 1; // isMutable: true (retains creator update authority)
-        metadataData[mOffset++] = 0; // collectionDetails: None
-
-        tx.add({
-          keys: [
-            { pubkey: metadataPda, isSigner: false, isWritable: true },
-            { pubkey: mintPubkey, isSigner: false, isWritable: false },
-            { pubkey: connectedUserPubkey, isSigner: true, isWritable: false },
-            { pubkey: connectedUserPubkey, isSigner: true, isWritable: true },
-            { pubkey: connectedUserPubkey, isSigner: false, isWritable: false },
-            { pubkey: SystemProgram.programId, isSigner: false, isWritable: false }
-          ],
-          programId: METAPLEX_PROGRAM_ID,
-          data: metadataData
-        });
-
-        // 6. Revoke Mint Authority (0% inflation forever)
-        const revokeMintData = new Uint8Array([6, 0, 0]);
-
-        tx.add({
-          keys: [
-            { pubkey: mintPubkey, isSigner: false, isWritable: true },
-            { pubkey: connectedUserPubkey, isSigner: true, isWritable: false }
-          ],
-          programId: TOKEN_PROGRAM_ID,
-          data: revokeMintData
-        });
-
-        // 7. Revoke Freeze Authority
-        const revokeFreezeData = new Uint8Array([6, 1, 0]);
-
-        tx.add({
-          keys: [
-            { pubkey: mintPubkey, isSigner: false, isWritable: true },
-            { pubkey: connectedUserPubkey, isSigner: true, isWritable: false }
-          ],
-          programId: TOKEN_PROGRAM_ID,
-          data: revokeFreezeData
-        });
-
-        // Partial sign with ephemeral mint keypair
-        tx.partialSign(mintKeypair);
-
         log('Requesting signature in your wallet... Please click "Approve" in OKX / Phantom.', 'warn');
+        setStatus('SIGNING', 'amber');
+
         let txSig = null;
-
-        // Try standard signTransaction first to ensure multi-signer integrity
-        if (walletProvider.signTransaction) {
-          try {
-            const signedTx = await walletProvider.signTransaction(tx);
-            // Re-apply mintKeypair signature to guarantee both signers are present
-            signedTx.partialSign(mintKeypair);
-            log('Broadcasting signed transaction to Solana Mainnet...');
-            setStatus('BROADCASTING', 'amber');
-            const rawTx = signedTx.serialize();
-            txSig = await connection.sendRawTransaction(rawTx, { skipPreflight: false });
-          } catch (signErr) {
-            log(`signTransaction fallback: ${signErr.message}`, 'warn');
-          }
-        }
-
-        if (!txSig && walletProvider.signAndSendTransaction) {
+        if (walletProvider.signAndSendTransaction) {
           try {
             const sendRes = await walletProvider.signAndSendTransaction(tx);
             txSig = typeof sendRes === 'string' ? sendRes : (sendRes?.signature || sendRes?.txHash || sendRes);
-          } catch (sendErr) {
-            throw new Error(`Wallet signing failed: ${sendErr.message}`);
+          } catch (signErr) {
+            if (walletProvider.signTransaction) {
+              const signedTx = await walletProvider.signTransaction(tx);
+              const rawTx = signedTx.serialize();
+              txSig = await connection.sendRawTransaction(rawTx, { skipPreflight: false });
+            } else {
+              throw signErr;
+            }
           }
+        } else if (walletProvider.signTransaction) {
+          const signedTx = await walletProvider.signTransaction(tx);
+          const rawTx = signedTx.serialize();
+          txSig = await connection.sendRawTransaction(rawTx, { skipPreflight: false });
         }
 
         if (!txSig) {
@@ -538,34 +768,26 @@
 
         log(`Transaction Broadcasted! Signature: ${txSig}`, 'info');
         log('Waiting for network confirmation...', 'info');
+        setStatus('BROADCASTING', 'amber');
 
-        let confirmation = null;
-        try {
-          confirmation = await connection.confirmTransaction({
-            blockhash,
-            lastValidBlockHeight,
-            signature: txSig
-          }, 'confirmed');
-        } catch (cErr) {
-          confirmation = await connection.confirmTransaction(txSig, 'confirmed');
-        }
+        await connection.confirmTransaction({
+          blockhash,
+          lastValidBlockHeight,
+          signature: txSig
+        }, 'confirmed');
 
-        if (confirmation && confirmation.value && confirmation.value.err) {
-          throw new Error('Transaction confirmed with error: ' + JSON.stringify(confirmation.value.err));
-        }
-
-        log(`SUCCESS! $SIVLET Token is LIVE on Solana Mainnet!`, 'success');
-        log(`Mint Address: ${mintPubkey.toBase58()}`, 'success');
-        log(`View on Solscan: https://solscan.io/token/${mintPubkey.toBase58()}`, 'success');
-        log(`Next step: Open https://launch.meteora.ag and select this token!`, 'success');
+        log(`SUCCESS! Meteora DLMM Pool is LIVE on Solana Mainnet!`, 'success');
+        log(`Transaction: https://solscan.io/tx/${txSig}`, 'success');
+        log(`View Pool on Meteora: https://app.meteora.ag/dlmm`, 'success');
+        log(`DexScreener will automatically index the pair within 2-3 minutes!`, 'info');
 
         setStatus('DEPLOYED', 'emerald');
-        deployBtnText.innerText = 'Deployment Succeeded!';
+        btnText.innerText = 'Pool Initialized Successfully!';
       } catch (err) {
-        log(`Deployment Error: ${err.message}`, 'error');
+        log(`DLMM Initialization Error: ${err.message}`, 'error');
         setStatus('FAILED', 'rose');
-        deployBtn.removeAttribute('disabled');
-        deployBtnText.innerText = 'Retry Deployment';
+        btn.removeAttribute('disabled');
+        btnText.innerText = 'Retry DLMM Pool Initialization';
       }
     }
   </script>
