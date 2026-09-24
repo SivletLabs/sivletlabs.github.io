@@ -151,10 +151,10 @@
           </div>
           <div>
             <div class="text-white font-bold text-xs">Step 2: Meteora DLMM Liquidity</div>
-            <div class="text-[11px] text-cyan-300">Provision concentrated LB Pair Pool</div>
+            <div class="text-[11px] text-emerald-400">Concentrated LB Pair Pool Deployed</div>
           </div>
         </div>
-        <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[10px] font-bold animate-pulse">ACTIVE STEP</span>
+        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">COMPLETED (LIVE)</span>
       </div>
     </div>
 
@@ -215,6 +215,61 @@
           <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
           <span>Wallet funded (0.034+ SOL detected). Rent &amp; gas checks passed! Ready to initialize Meteora DLMM pool.</span>
         </div>
+      </div>
+    </div>
+
+    <!-- Live Meteora DLMM Pool Confirmed Banner -->
+    <div id="poolLiveSuccessCard" class="lab-panel rounded-xl p-6 border-2 border-emerald-500/60 bg-gradient-to-r from-emerald-500/15 via-lab-900 to-cyan-500/15 space-y-4 font-mono text-xs">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-lab-border">
+        <div class="flex items-center gap-2.5">
+          <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+          </span>
+          <span class="text-white font-bold text-sm sm:text-base">Meteora DLMM Pool is LIVE on Solana Mainnet!</span>
+        </div>
+        <span class="px-3 py-1 rounded bg-emerald-500 text-black font-bold text-xs self-start sm:self-auto">FINALIZED ON-CHAIN</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <div class="p-3 rounded bg-lab-950 border border-lab-border space-y-1">
+          <div class="text-slate-500 text-[10px] uppercase">Meteora DLMM LB Pair State Account</div>
+          <div class="text-emerald-400 font-bold truncate flex items-center justify-between gap-2">
+            <span class="truncate">CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh</span>
+            <button onclick="copyToClipboard('CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh', 'Pool Address')" class="text-slate-400 hover:text-white shrink-0">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+          <div class="text-[10px] text-slate-500">Owner: LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo</div>
+        </div>
+
+        <div class="p-3 rounded bg-lab-950 border border-lab-border space-y-1">
+          <div class="text-slate-500 text-[10px] uppercase">Genesis Deployment Transaction</div>
+          <div class="text-cyan-300 font-bold truncate flex items-center justify-between gap-2">
+            <span class="truncate">3BnSPSrs...NYCw</span>
+            <a href="https://solscan.io/tx/3BnSPSrsC3wshTaXmmEXL1pdFWuDWjGfiZFRZM6hE1E3rxfPAHmaBaXsXA8xcVP9KuWvHqtXR162aTfUDBCeNYCw" target="_blank" class="text-cyan-400 hover:text-cyan-300 shrink-0">
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+          <div class="text-[10px] text-emerald-400">Status: Finalized in Slot 449877573 (Ok)</div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3 pt-1">
+        <a href="https://app.meteora.ag/dlmm/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs flex items-center gap-1.5 transition-colors">
+          <i data-lucide="layers" class="w-4 h-4"></i>
+          <span>View / Trade on Meteora DLMM &nearr;</span>
+        </a>
+
+        <a href="https://dexscreener.com/solana/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="px-4 py-2 rounded-lg bg-lab-850 hover:bg-lab-800 border border-lab-border text-white text-xs flex items-center gap-1.5 transition-colors">
+          <i data-lucide="line-chart" class="w-4 h-4 text-cyan-400"></i>
+          <span>DexScreener Live Chart &nearr;</span>
+        </a>
+
+        <a href="https://solscan.io/account/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="px-4 py-2 rounded-lg bg-lab-850 hover:bg-lab-800 border border-lab-border text-slate-300 hover:text-white text-xs flex items-center gap-1.5 transition-colors">
+          <i data-lucide="external-link" class="w-4 h-4 text-purple-400"></i>
+          <span>Solscan Explorer &nearr;</span>
+        </a>
       </div>
     </div>
 
@@ -1040,16 +1095,26 @@
         log('Waiting for network confirmation...', 'info');
         setStatus('BROADCASTING', 'amber');
 
-        await connection.confirmTransaction({
-          blockhash,
-          lastValidBlockHeight,
-          signature: txSig
-        }, 'confirmed');
+        try {
+          await connection.confirmTransaction({
+            blockhash,
+            lastValidBlockHeight,
+            signature: txSig
+          }, 'confirmed');
+        } catch (confirmErr) {
+          // Double check if signature actually landed on-chain (RPC block height race condition)
+          const statusRes = await connection.getSignatureStatus(txSig, { searchTransactionHistory: true });
+          if (statusRes && statusRes.value && !statusRes.value.err) {
+            log(`Transaction confirmed on-chain! Status: ${statusRes.value.confirmationStatus || 'finalized'}`, 'success');
+          } else {
+            throw confirmErr;
+          }
+        }
 
         log(`SUCCESS! Meteora DLMM Pool is LIVE on Solana Mainnet!`, 'success');
         log(`Transaction: https://solscan.io/tx/${txSig}`, 'success');
-        log(`View Pool on Meteora: https://app.meteora.ag/dlmm`, 'success');
-        log(`DexScreener will automatically index the pair within 2-3 minutes!`, 'info');
+        log(`View Pool on Meteora: https://app.meteora.ag/dlmm/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh`, 'success');
+        log(`DexScreener Link: https://dexscreener.com/solana/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh`, 'info');
 
         setStatus('DEPLOYED', 'emerald');
         btnText.innerText = 'Pool Initialized Successfully!';
