@@ -990,6 +990,13 @@
           connectedUserPubkey
         );
 
+        if (solanaWeb3.ComputeBudgetProgram) {
+          tx.instructions.unshift(
+            solanaWeb3.ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 50000 }),
+            solanaWeb3.ComputeBudgetProgram.setComputeUnitLimit({ units: 250000 })
+          );
+        }
+
         tx.feePayer = connectedUserPubkey;
         tx.recentBlockhash = blockhash;
 
@@ -1001,13 +1008,22 @@
           try {
             const sendRes = await walletProvider.signAndSendTransaction(tx);
             txSig = typeof sendRes === 'string' ? sendRes : (sendRes?.signature || sendRes?.txHash || sendRes);
-          } catch (signErr) {
+          } catch (sendErr) {
+            const isUserCancel = sendErr && (
+              sendErr.code === 4001 ||
+              String(sendErr.message || '').includes('User rejected') ||
+              String(sendErr.error || '').includes('User rejected')
+            );
+            if (isUserCancel) {
+              throw new Error('Transaction request was declined in your wallet.');
+            }
             if (walletProvider.signTransaction) {
+              log('Retrying with sign & broadcast fallback...', 'warn');
               const signedTx = await walletProvider.signTransaction(tx);
               const rawTx = signedTx.serialize();
               txSig = await connection.sendRawTransaction(rawTx, { skipPreflight: false });
             } else {
-              throw signErr;
+              throw sendErr;
             }
           }
         } else if (walletProvider.signTransaction) {
@@ -1038,8 +1054,19 @@
         setStatus('DEPLOYED', 'emerald');
         btnText.innerText = 'Pool Initialized Successfully!';
       } catch (err) {
-        log(`DLMM Initialization Error: ${err.message}`, 'error');
-        log('💡 Network Tip: If your local ISP throttles public Solana RPCs, use Method B above ("Open Meteora App Creator ↗") to initialize the pool in 30 seconds with 0 network errors!', 'warn');
+        console.error('DLMM launch error:', err);
+        let errMsg = 'Unknown transaction error';
+        if (typeof err === 'string') {
+          errMsg = err;
+        } else if (err) {
+          if (err.code === 4001 || String(err.message || '').includes('User rejected') || String(err.error || '').includes('User rejected')) {
+            errMsg = 'Transaction was cancelled/declined in wallet.';
+          } else {
+            errMsg = err.message || err.error || err.description || (err.toString && err.toString() !== '[object Object]' ? err.toString() : JSON.stringify(err));
+          }
+        }
+        log(`DLMM Initialization Error: ${errMsg}`, 'error');
+        log('💡 Tip: For 100% reliable 1-click launch without RPC limits, click "Open Meteora App Creator ↗" under Method B above!', 'warn');
         setStatus('FAILED', 'rose');
         btn.removeAttribute('disabled');
         btnText.innerText = 'Retry DLMM Pool Initialization';
