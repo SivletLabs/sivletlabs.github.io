@@ -369,31 +369,126 @@
         </div>
       </div>
 
-      <!-- Action Buttons -->
-      <div class="space-y-3 pt-2">
-        <!-- Direct In-Page Web3 Initialization Button -->
-        <button id="initDlmmBtn" onclick="executeMeteoraDlmmLaunch()" class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-black font-bold text-sm font-mono transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-emerald-500/20 cursor-pointer">
-          <i data-lucide="rocket" class="w-5 h-5"></i>
-          <span id="initDlmmBtnText">Sign &amp; Initialize Meteora DLMM Pool on Solana</span>
-        </button>
-
-        <!-- Fast Alternative Links -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs font-mono">
-          <a href="https://app.meteora.ag/dlmm/create" target="_blank" class="p-3 rounded-lg bg-lab-900 hover:bg-lab-850 border border-lab-border text-slate-200 hover:text-white transition-colors flex items-center justify-center gap-2">
-            <i data-lucide="layers" class="w-3.5 h-3.5 text-cyan-400"></i>
-            <span>Meteora App Creator &nearr;</span>
-          </a>
-
-          <a href="https://launch.meteora.ag" target="_blank" class="p-3 rounded-lg bg-lab-900 hover:bg-lab-850 border border-lab-border text-slate-200 hover:text-white transition-colors flex items-center justify-center gap-2">
-            <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i>
-            <span>Meteora DBC Launch &nearr;</span>
-          </a>
-
-          <a href="https://raydium.io/liquidity/create/?inputMint=8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos&outputMint=sol" target="_blank" class="p-3 rounded-lg bg-lab-900 hover:bg-lab-850 border border-lab-border text-slate-200 hover:text-white transition-colors flex items-center justify-center gap-2">
-            <i data-lucide="repeat" class="w-3.5 h-3.5 text-indigo-400"></i>
-            <span>Raydium CPMM Pool &nearr;</span>
-          </a>
+      <!-- Solana RPC Network Gateway & Custom Endpoint Bar -->
+      <div class="p-4 rounded-xl bg-lab-900 border border-lab-border space-y-3 font-mono text-xs">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <i data-lucide="radio" class="w-4 h-4 text-cyan-400"></i>
+            <span class="text-white font-bold">Solana RPC Network Gateway</span>
+            <span id="rpcPingStatus" class="text-[10px] px-2 py-0.5 rounded bg-lab-950 border border-lab-border text-slate-400">Auto: Multi-Node Pool</span>
+          </div>
+          <button type="button" onclick="testRpcConnection()" class="px-2.5 py-1 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-slate-300 hover:text-white text-[11px] flex items-center gap-1 self-start sm:self-auto transition-colors cursor-pointer">
+            <i data-lucide="activity" class="w-3 h-3 text-emerald-400"></i>
+            <span>Ping / Test Node</span>
+          </button>
         </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <div class="sm:col-span-1">
+            <select id="rpcEndpointSelector" onchange="onRpcSelectorChange()" class="w-full bg-lab-950 border border-lab-border rounded p-2 text-white font-mono text-xs focus:outline-none focus:border-cyan-500">
+              <option value="auto" selected>Auto: Fastest Public Node</option>
+              <option value="https://solana-rpc.publicnode.com">Publicnode Primary (solana-rpc)</option>
+              <option value="https://solana.publicnode.com">Publicnode Global (solana.publicnode)</option>
+              <option value="https://sivlet-x402-gateway.sivletlabs.workers.dev/rpc">Cloudflare Gateway Proxy</option>
+              <option value="custom">Custom RPC Endpoint...</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2">
+            <input type="text" id="customRpcInput" placeholder="Paste custom RPC (e.g. https://mainnet.helius-rpc.com/?api-key=... or http://127.0.0.1:8899)" class="w-full bg-lab-950 px-3 py-2 rounded border border-lab-border text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono" onchange="saveCustomRpc()">
+          </div>
+        </div>
+
+        <div class="text-[11px] text-slate-400 font-sans flex items-start gap-1.5 pt-1 border-t border-lab-border/40">
+          <i data-lucide="info" class="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5"></i>
+          <span>
+            <strong>Connection Tip</strong>: If your ISP or firewall blocks public Solana RPCs, select <em>Custom RPC</em> to paste your private Helius/QuickNode URL, enable VPN Global Mode, or use <strong>Method B (Meteora App)</strong> below for 100% reliable execution.
+          </span>
+        </div>
+      </div>
+
+      <!-- Dual Execution Strategy: Method A & Method B -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-1 font-mono text-xs">
+        
+        <!-- Method A: In-Page Direct Web3 Initializer -->
+        <div class="p-5 rounded-xl bg-lab-900 border border-emerald-500/30 flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-white font-bold flex items-center gap-1.5">
+                <i data-lucide="zap" class="w-4 h-4 text-emerald-400"></i>
+                <span>Method A: Built-in 1-Click Initializer</span>
+              </span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">AUTOMATED</span>
+            </div>
+            <p class="text-[11px] text-slate-400 font-sans leading-relaxed">
+              Constructs an atomic DLMM LB Pair creation transaction in browser memory and sends it to your connected OKX / Phantom wallet for signature.
+            </p>
+          </div>
+
+          <div class="space-y-2 pt-2">
+            <button id="initDlmmBtn" onclick="executeMeteoraDlmmLaunch()" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-black font-bold text-xs sm:text-sm font-mono transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 cursor-pointer">
+              <i data-lucide="rocket" class="w-4 h-4"></i>
+              <span id="initDlmmBtnText">Sign &amp; Initialize DLMM Pool</span>
+            </button>
+            <div class="text-[10px] text-slate-500 text-center font-sans">
+              Requires live RPC blockhash &amp; ~0.020 SOL rent reserve
+            </div>
+          </div>
+        </div>
+
+        <!-- Method B: Official Meteora App Portal (Bypasses Local RPC Restrictions) -->
+        <div class="p-5 rounded-xl bg-lab-900 border border-cyan-500/30 flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-white font-bold flex items-center gap-1.5">
+                <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
+                <span>Method B: Official Meteora App Portal</span>
+              </span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">ZERO RPC ERRORS</span>
+            </div>
+            <p class="text-[11px] text-slate-400 font-sans leading-relaxed">
+              Meteora's official UI connects through enterprise Triton / Helius clusters behind Cloudflare Enterprise CDN. 100% immune to local RPC blocks!
+            </p>
+            <!-- Pre-Filled Setup Guide -->
+            <div class="p-2.5 rounded bg-lab-950 border border-lab-border text-[11px] space-y-1 text-slate-300 font-mono">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-500">Base Token (A):</span>
+                <span class="text-emerald-400 truncate max-w-[140px]" title="8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos">8XtGP...eNos</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-500">Quote Token (B):</span>
+                <span class="text-white">SOL</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-500">Fee Tier / Bin Step:</span>
+                <span class="text-white">1% (100 bps) / 100</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-2 pt-2">
+            <a href="https://app.meteora.ag/dlmm/create" target="_blank" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-black font-bold text-xs sm:text-sm font-mono transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20">
+              <i data-lucide="external-link" class="w-4 h-4"></i>
+              <span>Open Meteora App Creator &nearr;</span>
+            </a>
+            <div class="text-[10px] text-slate-500 text-center font-sans">
+              Connect wallet on Meteora, paste $SIVLET mint &amp; confirm
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Additional Ecosystem Launch Protocols -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs font-mono pt-1">
+        <a href="https://launch.meteora.ag" target="_blank" class="p-2.5 rounded-lg bg-lab-900 hover:bg-lab-850 border border-lab-border text-slate-300 hover:text-white transition-colors flex items-center justify-center gap-2">
+          <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>Meteora Dynamic Bonding Curve (DBC) &nearr;</span>
+        </a>
+
+        <a href="https://raydium.io/liquidity/create/?inputMint=8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos&outputMint=sol" target="_blank" class="p-2.5 rounded-lg bg-lab-900 hover:bg-lab-850 border border-lab-border text-slate-300 hover:text-white transition-colors flex items-center justify-center gap-2">
+          <i data-lucide="repeat" class="w-3.5 h-3.5 text-indigo-400"></i>
+          <span>Raydium CPMM Pool Initializer &nearr;</span>
+        </a>
       </div>
 
     </div>
@@ -558,55 +653,190 @@
       }
     }
 
-    async function checkWalletBalances(address) {
-      const RPC_URLS = [
-        'https://solana-rpc.publicnode.com',
-        'https://sivlet-x402-gateway.sivletlabs.workers.dev/rpc',
-        'https://api.mainnet-beta.solana.com'
-      ];
+    // -------------------------------------------------------------------------
+    // Resilient Solana RPC Pool & Custom Gateway Manager
+    // -------------------------------------------------------------------------
+    const RPC_CANDIDATES = [
+      { name: 'Publicnode Primary', url: 'https://solana-rpc.publicnode.com' },
+      { name: 'Publicnode Global', url: 'https://solana.publicnode.com' },
+      { name: 'Cloudflare Gateway', url: 'https://sivlet-x402-gateway.sivletlabs.workers.dev/rpc' },
+      { name: 'Ankr Public', url: 'https://rpc.ankr.com/solana' }
+    ];
 
-      for (const rpc of RPC_URLS) {
+    function saveCustomRpc() {
+      const input = document.getElementById('customRpcInput');
+      if (input && input.value.trim()) {
         try {
-          const conn = new solanaWeb3.Connection(rpc, 'confirmed');
-          const balLamports = await conn.getBalance(address);
-          const balSol = balLamports / 1e9;
-          cachedSolBalance = balSol;
-
-          const solDisplay = document.getElementById('userSolBalanceDisplay');
-          if (solDisplay) solDisplay.innerText = balSol.toFixed(4) + ' SOL';
-
-          const rentWarn = document.getElementById('rentWarningBox');
-          const rentSuccess = document.getElementById('rentSuccessBox');
-          const solNote = document.getElementById('userSolStatusNote');
-          if (balSol < 0.020) {
-            if (rentWarn) rentWarn.classList.remove('hidden');
-            if (rentSuccess) rentSuccess.classList.add('hidden');
-            if (solNote) {
-              solNote.innerText = 'Rent minimum: ~0.020 SOL';
-              solNote.className = 'text-[10px] text-amber-400 mt-1';
-            }
-          } else {
-            if (rentWarn) rentWarn.classList.add('hidden');
-            if (rentSuccess) rentSuccess.classList.remove('hidden');
-            if (solNote) {
-              solNote.innerText = 'Rent check passed (>=0.020 SOL)';
-              solNote.className = 'text-[10px] text-emerald-400 mt-1';
-            }
-          }
-
-          // Check SIVLET balance
-          try {
-            const SIVLET_PUBKEY = new solanaWeb3.PublicKey(SIVLET_TOKEN_MINT);
-            const tokenAccs = await conn.getParsedTokenAccountsByOwner(address, { mint: SIVLET_PUBKEY });
-            if (tokenAccs.value.length > 0) {
-              const amount = tokenAccs.value[0].account.data.parsed.info.tokenAmount.uiAmount;
-              const sivletDisplay = document.getElementById('userSivletBalanceDisplay');
-              if (sivletDisplay) sivletDisplay.innerText = amount.toLocaleString() + ' $SIVLET';
-            }
-          } catch (tErr) {}
-
-          break;
+          localStorage.setItem('sivlet_custom_rpc', input.value.trim());
         } catch (e) {}
+      }
+    }
+
+    function loadCustomRpc() {
+      try {
+        const saved = localStorage.getItem('sivlet_custom_rpc');
+        const input = document.getElementById('customRpcInput');
+        if (saved && input) {
+          input.value = saved;
+          const selector = document.getElementById('rpcEndpointSelector');
+          if (selector) selector.value = 'custom';
+        }
+      } catch (e) {}
+    }
+
+    function onRpcSelectorChange() {
+      const selector = document.getElementById('rpcEndpointSelector');
+      const customInput = document.getElementById('customRpcInput');
+      if (selector && customInput) {
+        if (selector.value === 'custom') {
+          customInput.focus();
+        }
+      }
+    }
+
+    async function fetchWithTimeout(url, options, timeoutMs = 3500) {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const res = await fetch(url, { ...options, signal: controller.signal });
+        clearTimeout(id);
+        return res;
+      } catch (err) {
+        clearTimeout(id);
+        throw err;
+      }
+    }
+
+    async function testSingleRpc(rpcUrl, timeoutMs = 3500) {
+      const conn = new solanaWeb3.Connection(rpcUrl, {
+        commitment: 'confirmed',
+        fetch: (url, opts) => fetchWithTimeout(url, opts, timeoutMs)
+      });
+      const t0 = performance.now();
+      const res = await conn.getLatestBlockhash('confirmed');
+      const latency = Math.round(performance.now() - t0);
+      return { conn, blockhash: res.blockhash, lastValidBlockHeight: res.lastValidBlockHeight, latency };
+    }
+
+    async function getActiveConnection() {
+      const selector = document.getElementById('rpcEndpointSelector');
+      const customInput = document.getElementById('customRpcInput');
+      const selected = selector ? selector.value : 'auto';
+
+      let candidates = [];
+
+      if (selected === 'custom' || (customInput && customInput.value.trim())) {
+        const customUrl = customInput ? customInput.value.trim() : '';
+        if (customUrl) {
+          candidates.push({ name: 'Custom Node', url: customUrl });
+        }
+      }
+
+      if (selected && selected !== 'auto' && selected !== 'custom') {
+        const found = RPC_CANDIDATES.find(c => c.url === selected);
+        candidates.push(found || { name: 'Selected Node', url: selected });
+      }
+
+      RPC_CANDIDATES.forEach(c => {
+        if (!candidates.some(existing => existing.url === c.url)) {
+          candidates.push(c);
+        }
+      });
+
+      for (const cand of candidates) {
+        try {
+          const displayHost = cand.url.replace('https://', '').replace('http://', '').split('/')[0];
+          log(`Checking RPC node [${cand.name}] (${displayHost})...`);
+          const testRes = await testSingleRpc(cand.url, 3500);
+          updateRpcStatusBadge(true, cand.name, testRes.latency);
+          return {
+            conn: testRes.conn,
+            blockhash: testRes.blockhash,
+            lastValidBlockHeight: testRes.lastValidBlockHeight,
+            latency: testRes.latency,
+            url: cand.url,
+            name: cand.name
+          };
+        } catch (candErr) {
+          log(`[RPC note] ${cand.name} unreachable: ${candErr.message}`, 'warn');
+        }
+      }
+
+      updateRpcStatusBadge(false);
+      throw new Error('All Solana RPC endpoints timed out or failed to connect from your local network. Please turn on VPN / proxy, paste a working custom RPC key, or use Method B (Meteora App Creator) below!');
+    }
+
+    function updateRpcStatusBadge(ok, name = '', latency = 0) {
+      const statusPill = document.getElementById('rpcPingStatus');
+      if (!statusPill) return;
+      if (ok) {
+        statusPill.innerText = `⚡ ${latency}ms (${name})`;
+        statusPill.className = 'text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 font-mono font-bold';
+      } else {
+        statusPill.innerText = '❌ Unreachable';
+        statusPill.className = 'text-[10px] px-2 py-0.5 rounded bg-rose-500/20 border border-rose-500/30 text-rose-300 font-mono font-bold';
+      }
+    }
+
+    async function testRpcConnection() {
+      const statusPill = document.getElementById('rpcPingStatus');
+      if (statusPill) {
+        statusPill.innerText = 'Pinging...';
+        statusPill.className = 'text-[10px] px-2 py-0.5 rounded bg-lab-950 border border-lab-border text-amber-400 font-mono';
+      }
+      try {
+        const { blockhash, latency, url, name } = await getActiveConnection();
+        log(`✓ RPC Active: ${url} (Latency: ${latency}ms, Blockhash: ${blockhash.slice(0, 8)}...)`, 'success');
+        if (connectedUserPubkey) {
+          checkWalletBalances(connectedUserPubkey);
+        }
+      } catch (err) {
+        log(`RPC Connection Test Failed: ${err.message}`, 'error');
+        log('💡 Tip: Try choosing another RPC in the dropdown, paste your private Helius/QuickNode key, or click "Open Meteora App Creator" below!', 'warn');
+      }
+    }
+
+    async function checkWalletBalances(address) {
+      try {
+        const { conn } = await getActiveConnection();
+        const balLamports = await conn.getBalance(address);
+        const balSol = balLamports / 1e9;
+        cachedSolBalance = balSol;
+
+        const solDisplay = document.getElementById('userSolBalanceDisplay');
+        if (solDisplay) solDisplay.innerText = balSol.toFixed(4) + ' SOL';
+
+        const rentWarn = document.getElementById('rentWarningBox');
+        const rentSuccess = document.getElementById('rentSuccessBox');
+        const solNote = document.getElementById('userSolStatusNote');
+        if (balSol < 0.020) {
+          if (rentWarn) rentWarn.classList.remove('hidden');
+          if (rentSuccess) rentSuccess.classList.add('hidden');
+          if (solNote) {
+            solNote.innerText = 'Rent minimum: ~0.020 SOL';
+            solNote.className = 'text-[10px] text-amber-400 mt-1';
+          }
+        } else {
+          if (rentWarn) rentWarn.classList.add('hidden');
+          if (rentSuccess) rentSuccess.classList.remove('hidden');
+          if (solNote) {
+            solNote.innerText = 'Rent check passed (>=0.020 SOL)';
+            solNote.className = 'text-[10px] text-emerald-400 mt-1';
+          }
+        }
+
+        // Check SIVLET balance
+        try {
+          const SIVLET_PUBKEY = new solanaWeb3.PublicKey(SIVLET_TOKEN_MINT);
+          const tokenAccs = await conn.getParsedTokenAccountsByOwner(address, { mint: SIVLET_PUBKEY });
+          if (tokenAccs.value.length > 0) {
+            const amount = tokenAccs.value[0].account.data.parsed.info.tokenAmount.uiAmount;
+            const sivletDisplay = document.getElementById('userSivletBalanceDisplay');
+            if (sivletDisplay) sivletDisplay.innerText = amount.toLocaleString() + ' $SIVLET';
+          }
+        } catch (tErr) {}
+      } catch (e) {
+        log(`Balance check note: ${e.message}`, 'warn');
       }
     }
 
@@ -662,6 +892,7 @@
 
     // Auto-detect OKX or Phantom in-app browser
     window.addEventListener('DOMContentLoaded', () => {
+      loadCustomRpc();
       updateSimulationPreview();
       setTimeout(() => {
         if (window.okxwallet?.solana || window.phantom?.solana || window.solana?.isOkxWallet) {
@@ -686,35 +917,11 @@
       setStatus('INITIALIZING', 'amber');
 
       try {
-        const { Connection, PublicKey } = solanaWeb3;
+        const { PublicKey } = solanaWeb3;
 
-        const RPC_URLS = [
-          'https://solana-rpc.publicnode.com',
-          'https://sivlet-x402-gateway.sivletlabs.workers.dev/rpc',
-          'https://api.mainnet-beta.solana.com'
-        ];
-
-        let connection = null;
-        let blockhash = null;
-        let lastValidBlockHeight = null;
-        for (const rpc of RPC_URLS) {
-          try {
-            log(`Connecting to Solana RPC (${rpc.replace('https://', '').split('/')[0]})...`);
-            const conn = new Connection(rpc, 'confirmed');
-            const res = await conn.getLatestBlockhash('confirmed');
-            blockhash = res.blockhash;
-            lastValidBlockHeight = res.lastValidBlockHeight;
-            connection = conn;
-            log(`Connected! Recent Blockhash: ${blockhash.slice(0, 10)}...`, 'success');
-            break;
-          } catch (rpcErr) {
-            log(`RPC note: ${rpcErr.message}`, 'warn');
-          }
-        }
-
-        if (!connection || !blockhash) {
-          throw new Error('Could not fetch latest blockhash from Solana network. Please retry.');
-        }
+        log('Connecting to Solana RPC network...');
+        const { conn: connection, blockhash, lastValidBlockHeight, url: activeRpcUrl } = await getActiveConnection();
+        log(`Connected! Using RPC: ${activeRpcUrl} (Blockhash: ${blockhash.slice(0, 10)}...)`, 'success');
 
         // Verify user wallet SOL balance for rent and fees
         const userBalLamports = await connection.getBalance(connectedUserPubkey);
@@ -832,6 +1039,7 @@
         btnText.innerText = 'Pool Initialized Successfully!';
       } catch (err) {
         log(`DLMM Initialization Error: ${err.message}`, 'error');
+        log('💡 Network Tip: If your local ISP throttles public Solana RPCs, use Method B above ("Open Meteora App Creator ↗") to initialize the pool in 30 seconds with 0 network errors!', 'warn');
         setStatus('FAILED', 'rose');
         btn.removeAttribute('disabled');
         btnText.innerText = 'Retry DLMM Pool Initialization';
