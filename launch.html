@@ -359,17 +359,21 @@
         <div class="p-4 rounded-lg bg-lab-900 border border-emerald-500/30 space-y-3">
           <div class="flex justify-between items-center text-slate-400">
             <span>Tokens to Deposit ($SIVLET):</span>
-            <span class="text-emerald-400 font-semibold" id="depositSivletPctLabel">50% of Supply</span>
+            <span class="text-emerald-400 font-semibold" id="depositSivletPctLabel">94% of Supply (6% Retained)</span>
           </div>
           <div class="flex items-center gap-3">
-            <input type="number" id="depositSivletInput" value="500000000" step="10000000" min="10000000" max="1000000000" oninput="updateDepositPreview()" class="w-full bg-lab-950 px-3 py-2 rounded border border-lab-border text-lg font-bold text-white focus:outline-none focus:border-emerald-500 font-mono">
+            <input type="number" id="depositSivletInput" value="940000000" step="10000000" min="10000000" max="1000000000" oninput="updateDepositPreview()" class="w-full bg-lab-950 px-3 py-2 rounded border border-lab-border text-lg font-bold text-white focus:outline-none focus:border-emerald-500 font-mono">
           </div>
           <!-- Quick Amount Buttons -->
           <div class="grid grid-cols-4 gap-1.5 text-[10px]">
-            <button type="button" onclick="setDepositSivletAmount(200000000, '20%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">20% (200M)</button>
-            <button type="button" onclick="setDepositSivletAmount(500000000, '50%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-emerald-400 font-bold text-center">50% (500M)</button>
-            <button type="button" onclick="setDepositSivletAmount(800000000, '80%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">80% (800M)</button>
+            <button type="button" onclick="setDepositSivletAmount(940000000, '94%')" class="py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30 text-center font-bold">94% (940M)</button>
+            <button type="button" onclick="setDepositSivletAmount(900000000, '90%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">90% (900M)</button>
+            <button type="button" onclick="setDepositSivletAmount(950000000, '95%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">95% (950M)</button>
             <button type="button" onclick="setDepositSivletAmount(1000000000, '100%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">100% (1B)</button>
+          </div>
+          <div class="text-[10px] text-slate-400 pt-1 border-t border-lab-border flex items-center gap-1.5" id="retainedTokensNote">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i>
+            <span>60,000,000 $SIVLET (6.0%) safely retained in your wallet for ecosystem &amp; contract reserves.</span>
           </div>
         </div>
 
@@ -404,7 +408,7 @@
       <div class="space-y-2 pt-2">
         <button id="depositLiquidityBtn" onclick="executeDepositLiquidity()" class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black font-extrabold text-sm sm:text-base font-mono transition-all flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/20 cursor-pointer">
           <i data-lucide="zap" class="w-5 h-5 fill-current"></i>
-          <span id="depositLiquidityBtnText">1-Click Sign &amp; Deposit 500,000,000 $SIVLET into Pool</span>
+          <span id="depositLiquidityBtnText">1-Click Sign &amp; Deposit 940,000,000 $SIVLET (94% Fair Launch)</span>
         </button>
         <div class="text-[11px] text-slate-400 text-center font-sans">
           Click above &middot; Approve in your OKX Wallet or Phantom &middot; 100% Non-Custodial
@@ -820,19 +824,25 @@
 
     function setDepositSivletAmount(amount, label) {
       const input = document.getElementById('depositSivletInput');
-      const pctLabel = document.getElementById('depositSivletPctLabel');
-      const btnText = document.getElementById('depositLiquidityBtnText');
       if (input) input.value = amount;
-      if (pctLabel) pctLabel.innerText = `${label} of Supply`;
-      if (btnText) btnText.innerText = `1-Click Sign & Deposit ${amount.toLocaleString()} $SIVLET into Pool`;
       updateDepositPreview();
     }
 
     function updateDepositPreview() {
       const input = document.getElementById('depositSivletInput');
       const btnText = document.getElementById('depositLiquidityBtnText');
-      const amount = parseFloat(input?.value) || 500000000;
-      if (btnText) btnText.innerText = `1-Click Sign & Deposit ${amount.toLocaleString()} $SIVLET into Pool`;
+      const pctLabel = document.getElementById('depositSivletPctLabel');
+      const retainedNote = document.getElementById('retainedTokensNote');
+      const amount = parseFloat(input?.value) || 940000000;
+      const pct = ((amount / 1000000000) * 100).toFixed(0);
+      const retained = Math.max(0, 1000000000 - amount);
+      const retainedPct = ((retained / 1000000000) * 100).toFixed(0);
+      if (pctLabel) pctLabel.innerText = `${pct}% of Supply (${retainedPct}% Retained)`;
+      if (btnText) btnText.innerText = `1-Click Sign & Deposit ${amount.toLocaleString()} $SIVLET (${pct}% Fair Launch)`;
+      if (retainedNote) {
+        retainedNote.innerHTML = `<i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i><span><strong>${retained.toLocaleString()} $SIVLET (${retainedPct}%)</strong> safely retained in your wallet for ecosystem &amp; contract reserves.</span>`;
+        if (window.lucide) window.lucide.createIcons();
+      }
     }
 
     function setSivletDeposit(amount, label) {
@@ -1172,7 +1182,7 @@
           throw new Error(`Insufficient SOL in wallet (${userBalSol.toFixed(4)} SOL). You need ~0.042 SOL to pay for the one-time refundable Solana account rent (position & bin array accounts). Please transfer at least ~${shortfall} SOL (~$6 USD) to ${connectedUserPubkey.toBase58()} and try again.`);
         }
 
-        const sivletAmount = parseFloat(document.getElementById('depositSivletInput')?.value) || 500000000;
+        const sivletAmount = parseFloat(document.getElementById('depositSivletInput')?.value) || 940000000;
         const POOL_PUBKEY = new PublicKey('CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh');
 
         log(`Loading DLMM Pool state for ${POOL_PUBKEY.toBase58()}...`);
