@@ -420,13 +420,17 @@
       </div>
 
       <!-- Action Button -->
-      <div class="space-y-2 pt-2">
+      <div class="space-y-3 pt-2">
         <button id="depositLiquidityBtn" onclick="executeDepositLiquidity()" class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black font-extrabold text-sm sm:text-base font-mono transition-all flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/20 cursor-pointer">
           <i data-lucide="zap" class="w-5 h-5 fill-current"></i>
           <span id="depositLiquidityBtnText">1-Click Sign &amp; Deposit 940,000,000 $SIVLET (94% Fair Launch)</span>
         </button>
-        <div class="text-[11px] text-slate-400 text-center font-sans">
-          Click above &middot; Approve in your OKX Wallet or Phantom &middot; 100% Non-Custodial
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-400 font-sans">
+          <span>Non-custodial direct deposit &middot; Approve in your OKX Wallet or Phantom</span>
+          <a href="https://app.meteora.ag/dlmm/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="text-cyan-300 hover:underline flex items-center gap-1 font-mono">
+            <span>Or deposit directly via Meteora App</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
         </div>
       </div>
 
@@ -996,14 +1000,22 @@
         });
 
         if (solanaWeb3.ComputeBudgetProgram) {
-          tx.instructions.unshift(
-            solanaWeb3.ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 50000 }),
-            solanaWeb3.ComputeBudgetProgram.setComputeUnitLimit({ units: 250000 })
+          // Avoid duplicate setComputeUnitLimit instructions (Meteora SDK already provisions ~351,000 units)
+          const hasUnitPrice = tx.instructions.some(ix =>
+            ix.programId.equals(solanaWeb3.ComputeBudgetProgram.programId) && ix.data && ix.data[0] === 3
           );
+          if (!hasUnitPrice) {
+            tx.instructions.unshift(
+              solanaWeb3.ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 50000 })
+            );
+          }
         }
 
+        // Fetch fresh blockhash immediately before signing to prevent simulation/blockhash errors
+        log('Fetching fresh blockhash from Solana network...');
+        const latestBlock = await connection.getLatestBlockhash('confirmed');
+        tx.recentBlockhash = latestBlock.blockhash;
         tx.feePayer = connectedUserPubkey;
-        tx.recentBlockhash = blockhash;
 
         // Partial sign the newly generated position keypair
         tx.partialSign(newPosition);
