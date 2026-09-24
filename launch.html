@@ -920,11 +920,26 @@
       }
     }
 
+    async function checkLiveOnChainPoolState() {
+      try {
+        const dexRes = await fetch('https://api.dexscreener.com/latest/dex/pairs/solana/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh');
+        if (dexRes.ok) {
+          const dexJson = await dexRes.json();
+          const p = dexJson?.pair || (dexJson?.pairs && dexJson.pairs[0]);
+          if (p && p.liquidity?.base) {
+            log(`[ON-CHAIN] Verified Live DLMM Reserves: ${p.liquidity.base.toLocaleString()} $SIVLET · ${p.liquidity.quote} SOL`, 'success');
+            log(`[ON-CHAIN] Current Price: $${p.priceUsd} (~${p.priceNative} SOL) · FDV: $${p.fdv ? p.fdv.toLocaleString() : 'N/A'}`, 'info');
+          }
+        }
+      } catch (e) {}
+    }
+
     // Auto-detect OKX or Phantom in-app browser
     window.addEventListener('DOMContentLoaded', () => {
       loadCustomRpc();
       updateSimulationPreview();
       updateDepositPreview();
+      checkLiveOnChainPoolState();
       setTimeout(() => {
         if (window.okxwallet?.solana || window.phantom?.solana || window.solana?.isOkxWallet) {
           connectBrowserWallet();
