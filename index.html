@@ -52,6 +52,9 @@
   <!-- Solana Web3.js SDK -->
   <script src="https://unpkg.com/@solana/web3.js@1.95.4/lib/index.iife.min.js"></script>
 
+  <!-- Jupiter Terminal SDK (In-Page Zero-Redirect DEX Swaps) -->
+  <script src="https://terminal.jup.ag/main-v3.js" data-preload></script>
+
   <style>
     ::selection {
       background-color: rgba(16, 185, 129, 0.2);
@@ -147,7 +150,7 @@
         </button>
 
         <!-- Direct Buy / Swap Action Button -->
-        <button onclick="openSwapModal()" class="px-3 sm:px-3.5 py-1.5 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-all flex items-center gap-1.5 shadow-sm shadow-emerald-500/20 shrink-0 whitespace-nowrap cursor-pointer">
+        <button onclick="scrollToSwapTerminal()" class="px-3 sm:px-3.5 py-1.5 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-all flex items-center gap-1.5 shadow-sm shadow-emerald-500/20 shrink-0 whitespace-nowrap cursor-pointer">
           <i data-lucide="zap" class="w-3.5 h-3.5 fill-current"></i>
           <span>Buy $SIVLET</span>
         </button>
@@ -167,12 +170,12 @@
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span class="text-xs text-slate-300">Solana Mainnet &middot; Sub-15ms</span>
         </div>
-        <span class="text-[10px] text-emerald-400 uppercase tracking-widest">Meteora DBC</span>
+        <span class="text-[10px] text-emerald-400 uppercase tracking-widest">Meteora DLMM</span>
       </div>
       <div class="pb-1">
-        <button onclick="toggleMobileMenu(); openSwapModal();" class="w-full py-2.5 px-3 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs font-mono transition-all flex items-center justify-center gap-1.5 shadow-sm shadow-emerald-500/20">
+        <button onclick="toggleMobileMenu(); scrollToSwapTerminal();" class="w-full py-2.5 px-3 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs font-mono transition-all flex items-center justify-center gap-1.5 shadow-sm shadow-emerald-500/20 cursor-pointer">
           <i data-lucide="zap" class="w-3.5 h-3.5 fill-current"></i>
-          <span>Buy $SIVLET (Instant Swap)</span>
+          <span>Buy $SIVLET (Zero Redirect SDK)</span>
         </button>
       </div>
 
@@ -183,14 +186,14 @@
         <a href="#playground" onclick="toggleMobileMenu()" class="block p-2.5 rounded bg-lab-900 border border-lab-border/50 hover:bg-lab-850 text-slate-300">
           Playground
         </a>
-        <a href="https://jup.ag/swap/SOL-8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="block p-2.5 rounded bg-lab-900 border border-emerald-500/30 hover:bg-lab-850 text-emerald-300">
-          Jupiter Swap &nearr;
+        <a href="https://app.meteora.ag/dlmm/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="block p-2.5 rounded bg-lab-900 border border-emerald-500/30 hover:bg-lab-850 text-emerald-300">
+          Meteora DLMM &nearr;
+        </a>
+        <a href="https://dexscreener.com/solana/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="block p-2.5 rounded bg-lab-900 border border-lab-border/50 hover:bg-lab-850 text-slate-300">
+          DexScreener &nearr;
         </a>
         <a href="https://raydium.io/swap/?inputMint=sol&outputMint=8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="block p-2.5 rounded bg-lab-900 border border-indigo-500/30 hover:bg-lab-850 text-indigo-300">
           Raydium Swap &nearr;
-        </a>
-        <a href="https://dexscreener.com/solana/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="block p-2.5 rounded bg-lab-900 border border-lab-border/50 hover:bg-lab-850 text-slate-300">
-          DexScreener &nearr;
         </a>
         <a href="https://solscan.io/token/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="block p-2.5 rounded bg-lab-900 border border-lab-border/50 hover:bg-lab-850 text-slate-300">
           Solscan &nearr;
@@ -231,15 +234,13 @@
 
       <!-- Primary Action Buttons -->
       <div class="flex flex-wrap items-center gap-3 mb-8">
-        <a href="#playground" class="px-5 py-2.5 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-colors flex items-center gap-2">
-        <button onclick="openSwapModal()" class="px-5 py-2.5 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-all flex items-center gap-2 shadow-lg shadow-emerald-500/20 cursor-pointer">
+        <button onclick="scrollToSwapTerminal()" class="px-5 py-2.5 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-all flex items-center gap-2 shadow-lg shadow-emerald-500/20 cursor-pointer">
           <i data-lucide="zap" class="w-4 h-4 fill-current"></i>
-          <span>Buy $SIVLET</span>
+          <span>Buy $SIVLET (Zero Redirect)</span>
         </button>
-        <a href="https://jup.ag/swap/SOL-8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="px-5 py-2.5 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-white text-xs font-mono transition-colors flex items-center gap-2">
-          <i data-lucide="repeat" class="w-3.5 h-3.5 text-cyan-400"></i>
-          <span>Jupiter Swap (Direct Pair)</span>
-          <i data-lucide="arrow-up-right" class="w-3 h-3 text-slate-400"></i>
+        <a href="#telemetry" class="px-5 py-2.5 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-white text-xs font-mono transition-colors flex items-center gap-2">
+          <i data-lucide="line-chart" class="w-3.5 h-3.5 text-cyan-400"></i>
+          <span>Live Candlesticks &amp; Bins</span>
         </a>
         <a href="#playground" class="px-5 py-2.5 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-slate-300 hover:text-white text-xs font-mono transition-colors flex items-center gap-2">
           <i data-lucide="terminal" class="w-3.5 h-3.5 text-slate-400"></i>
@@ -264,7 +265,7 @@
           <div>
             <div class="flex items-center gap-2">
               <span class="text-xs font-mono font-semibold text-emerald-400 uppercase tracking-wider">Official Solana Token Mint</span>
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">100% Immutable &middot; 0% Inflation</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">94% DLMM Deposited &middot; 0% Inflation</span>
             </div>
             <div class="flex items-center gap-2 mt-1">
               <span class="font-mono text-xs sm:text-sm text-white font-medium break-all select-all">8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos</span>
@@ -276,24 +277,24 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2 shrink-0">
-          <a href="https://jup.ag/swap/SOL-8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="px-3 py-1.5 rounded-lg bg-lab-900 hover:bg-lab-800 border border-emerald-500/40 text-xs font-mono text-emerald-300 hover:text-white transition-colors flex items-center gap-1.5">
-            <i data-lucide="repeat" class="w-3.5 h-3.5 text-emerald-400"></i>
-            <span>Jupiter Swap</span>
-            <i data-lucide="arrow-up-right" class="w-3 h-3 text-slate-500"></i>
-          </a>
-          <a href="https://dexscreener.com/solana/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="px-3 py-1.5 rounded-lg bg-lab-900 hover:bg-lab-800 border border-lab-border text-xs font-mono text-slate-300 hover:text-white transition-colors flex items-center gap-1.5">
+          <button onclick="scrollToSwapTerminal()" class="px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm shadow-emerald-500/20">
+            <i data-lucide="zap" class="w-3.5 h-3.5 fill-current"></i>
+            <span>Buy $SIVLET (Zero Redirect)</span>
+          </button>
+          <a href="https://dexscreener.com/solana/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="px-3 py-1.5 rounded-lg bg-lab-900 hover:bg-lab-800 border border-lab-border text-xs font-mono text-cyan-300 hover:text-white transition-colors flex items-center gap-1.5">
             <i data-lucide="trending-up" class="w-3.5 h-3.5 text-cyan-400"></i>
             <span>DexScreener</span>
+            <i data-lucide="arrow-up-right" class="w-3 h-3 text-slate-500"></i>
+          </a>
+          <a href="https://app.meteora.ag/dlmm/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="px-3 py-1.5 rounded-lg bg-lab-900 hover:bg-lab-800 border border-emerald-500/40 text-xs font-mono text-emerald-300 hover:text-white transition-colors flex items-center gap-1.5">
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span>Meteora DLMM</span>
             <i data-lucide="arrow-up-right" class="w-3 h-3 text-slate-500"></i>
           </a>
           <a href="https://solscan.io/token/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="px-3 py-1.5 rounded-lg bg-lab-900 hover:bg-lab-800 border border-lab-border text-xs font-mono text-slate-300 hover:text-white transition-colors flex items-center gap-1.5">
             <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400"></i>
             <span>Solscan</span>
           </a>
-          <button onclick="openSwapModal()" class="px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm shadow-emerald-500/20">
-            <i data-lucide="zap" class="w-3.5 h-3.5 fill-current"></i>
-            <span>Buy $SIVLET</span>
-          </button>
         </div>
       </div>
 
@@ -358,12 +359,12 @@
               <span>$SIVLET Price</span>
               <i data-lucide="tag" class="w-3.5 h-3.5 text-slate-400"></i>
             </div>
-            <div class="font-mono font-bold text-2xl text-white" id="livePriceUsd">$0.000108</div>
-            <div class="text-[11px] font-mono text-slate-400 mt-1" id="livePriceSol">~0.00000072 SOL</div>
+            <div class="font-mono font-bold text-2xl text-white" id="livePriceUsd">$0.000100</div>
+            <div class="text-[11px] font-mono text-slate-400 mt-1" id="livePriceSol">~0.00000067 SOL</div>
           </div>
           <div class="mt-4 pt-3 border-t border-lab-border flex items-center justify-between text-[11px] font-mono">
             <span class="text-slate-500">Implied FDV</span>
-            <span class="text-emerald-400 font-semibold" id="liveFdv">$108,000</span>
+            <span class="text-emerald-400 font-semibold" id="liveFdv">$100,200</span>
           </div>
         </div>
 
@@ -374,12 +375,12 @@
               <span>Meteora DLMM Bins</span>
               <i data-lucide="layers" class="w-3.5 h-3.5 text-slate-400"></i>
             </div>
-            <div class="font-mono font-bold text-2xl text-emerald-400" id="liveDlmmReserve">150,000,000</div>
-            <div class="text-[11px] font-mono text-slate-400 mt-1">Concentrated SIVLET Liquidity</div>
+            <div class="font-mono font-bold text-2xl text-emerald-400" id="liveDlmmReserve">939,948,350</div>
+            <div class="text-[11px] font-mono text-slate-400 mt-1">94.0% Concentrated Liquidity</div>
           </div>
           <div class="mt-4 pt-3 border-t border-lab-border flex items-center justify-between text-[11px] font-mono">
             <span class="text-slate-500">Active Bin Fee</span>
-            <span class="text-emerald-400 font-semibold" id="liveDynamicFee">10.0% Base (Up to 25% Surge)</span>
+            <span class="text-emerald-400 font-semibold" id="liveDynamicFee">1.0% Base (100 bps &middot; Up to 25% Surge)</span>
           </div>
         </div>
 
@@ -387,15 +388,15 @@
         <div class="lab-panel p-5 rounded-lg flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between text-xs font-mono text-slate-500 uppercase mb-2">
-              <span>Treasury PDA Balance</span>
+              <span>Treasury &amp; Ecosystem</span>
               <i data-lucide="shield" class="w-3.5 h-3.5 text-slate-400"></i>
             </div>
-            <div class="font-mono font-bold text-2xl text-white" id="liveTreasuryUsdc">2,450.80 USDC</div>
-            <div class="text-[11px] font-mono text-slate-400 mt-1" id="liveTreasurySol">~14.50 SOL Reserve</div>
+            <div class="font-mono font-bold text-2xl text-white" id="liveTreasurySol">~0.010 SOL</div>
+            <div class="text-[11px] font-mono text-slate-400 mt-1" id="liveTreasuryUsdc">+ 60,051,649 $SIVLET (6.0%)</div>
           </div>
           <div class="mt-4 pt-3 border-t border-lab-border flex items-center justify-between text-[11px] font-mono">
-            <span class="text-slate-500">Buyback Trigger</span>
-            <span class="text-emerald-400 font-semibold">Instant Crank (Gas Self-Funding)</span>
+            <span class="text-slate-500">Ecosystem Vault</span>
+            <span class="text-indigo-400 font-semibold">Grants &amp; Model R&amp;D</span>
           </div>
         </div>
 
@@ -403,15 +404,15 @@
         <div class="lab-panel p-5 rounded-lg flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between text-xs font-mono text-slate-500 uppercase mb-2">
-              <span>Tokens Incinerated</span>
-              <i data-lucide="flame" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Circulating Supply</span>
+              <i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-400"></i>
             </div>
-            <div class="font-mono font-bold text-2xl text-amber-400" id="liveBurnedTokens">12,450,890</div>
-            <div class="text-[11px] font-mono text-slate-400 mt-1">Destination: 11111111...1111</div>
+            <div class="font-mono font-bold text-2xl text-white" id="liveBurnedTokens">1,000,000,000</div>
+            <div class="text-[11px] font-mono text-emerald-400 mt-1">0% Inflation &middot; Immutable Fixed Cap</div>
           </div>
           <div class="mt-4 pt-3 border-t border-lab-border flex items-center justify-between text-[11px] font-mono">
-            <span class="text-slate-500">Mechanism</span>
-            <span class="text-slate-300 font-semibold">SPL Token Burn Sink</span>
+            <span class="text-slate-500">Burn Destination</span>
+            <span class="text-amber-400 font-semibold" title="11111111111111111111111111111111">1111...1111</span>
           </div>
         </div>
 
@@ -447,111 +448,79 @@
           </div>
         </div>
 
-        <!-- Tab 1: DexScreener Live Candlesticks & Direct Trading Terminal -->
+        <!-- Tab 1: DexScreener Live Candlesticks & Integrated In-Page Swap Terminal -->
         <div id="chartTabDexscreener" class="p-5">
           <div class="flex flex-wrap items-center justify-between pb-3 mb-4 border-b border-lab-border text-xs font-mono text-slate-400 gap-2">
             <div class="flex items-center gap-3">
               <span class="text-slate-300 font-semibold">$SIVLET / SOL</span>
               <span class="px-2 py-0.5 rounded bg-lab-850 text-white font-bold border border-lab-border text-[11px]" id="chartHeaderPrice">$0.000100 USD</span>
-              <span class="text-emerald-400 text-[11px] font-semibold" id="chartHeaderFdv">FDV: $100,000</span>
+              <span class="text-emerald-400 text-[11px] font-semibold" id="chartHeaderFdv">FDV: $100,200</span>
             </div>
             <div class="flex items-center gap-3 text-[11px]">
               <span class="text-slate-500" id="telemetrySyncTime">Gateway Sync: Active</span>
-              <button onclick="openSwapModal()" class="px-2.5 py-1 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold flex items-center gap-1 transition-colors cursor-pointer">
+              <button onclick="scrollToSwapTerminal()" class="px-2.5 py-1 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold flex items-center gap-1 transition-colors cursor-pointer">
                 <i data-lucide="zap" class="w-3 h-3 fill-current"></i>
-                <span>Buy $SIVLET</span>
+                <span>Buy $SIVLET (Zero Redirect)</span>
               </button>
-              <a href="https://dexscreener.com/solana/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+              <a href="https://dexscreener.com/solana/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
                 <span>Full DexScreener</span>
                 <i data-lucide="external-link" class="w-3 h-3"></i>
               </a>
             </div>
           </div>
 
-          <!-- 2-Column Responsive Layout: Left Chart (8 cols) + Right Instant Trade Terminal (4 cols) -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          <!-- 2-Column Responsive Layout: Left Chart (8 cols) + Right In-Page Jupiter Terminal (4 cols) -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
             
             <!-- Left: DexScreener Iframe (8 cols) -->
-            <div class="lg:col-span-8 w-full h-[480px] sm:h-[540px] rounded-lg overflow-hidden border border-lab-border bg-lab-950 relative">
+            <div class="lg:col-span-8 w-full h-[520px] sm:h-[560px] rounded-lg overflow-hidden border border-lab-border bg-lab-950 relative shadow-xl">
               <iframe 
-                src="https://dexscreener.com/solana/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos?embed=1&theme=dark&trades=0&info=0" 
+                src="https://dexscreener.com/solana/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh?embed=1&theme=dark&trades=0&info=0" 
                 class="w-full h-full border-0"
                 title="DexScreener Live Candlesticks"
                 loading="lazy">
               </iframe>
             </div>
 
-            <!-- Right: In-Page Instant Trading Terminal (4 cols) -->
-            <div class="lg:col-span-4 lab-panel p-5 rounded-lg border border-lab-border flex flex-col justify-between font-mono text-xs">
+            <!-- Right: In-Page Jupiter Swap Terminal Widget (4 cols) -->
+            <div id="swapTerminalWrapper" class="lg:col-span-4 lab-panel p-4 rounded-lg border border-lab-border flex flex-col justify-between font-mono text-xs shadow-xl transition-all">
               <div>
                 <div class="flex items-center justify-between pb-3 border-b border-lab-border mb-3">
                   <div class="flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span class="text-white font-bold text-sm">Instant Trade Terminal</span>
+                    <span class="text-white font-bold text-sm">Jupiter Swap Terminal</span>
                   </div>
-                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">MAINNET</span>
-                </div>
-
-                <!-- Input Amount Form -->
-                <div class="space-y-3 mb-4">
-                  <div class="p-3 rounded bg-lab-950 border border-lab-border">
-                    <div class="flex justify-between text-slate-400 text-[10px] mb-1">
-                      <span>You Pay:</span>
-                      <span class="text-slate-500">Fast Execution</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <input type="number" id="quickSwapSolAmount" value="0.5" step="0.1" min="0.01" oninput="updateQuickSwapEstimate()" class="w-full bg-transparent text-lg font-bold text-white focus:outline-none">
-                      <span class="px-2 py-0.5 rounded bg-lab-850 border border-lab-border text-white font-semibold text-xs shrink-0">SOL</span>
-                    </div>
-                    <!-- Quick Pill buttons -->
-                    <div class="flex gap-1.5 mt-2 pt-2 border-t border-lab-border/40 text-[10px]">
-                      <button onclick="setQuickSwapAmount(0.1)" class="px-1.5 py-0.5 rounded bg-lab-900 hover:bg-lab-800 text-slate-300">0.1</button>
-                      <button onclick="setQuickSwapAmount(0.5)" class="px-1.5 py-0.5 rounded bg-lab-900 hover:bg-lab-800 text-slate-300">0.5</button>
-                      <button onclick="setQuickSwapAmount(1.0)" class="px-1.5 py-0.5 rounded bg-lab-900 hover:bg-lab-800 text-slate-300">1.0</button>
-                      <button onclick="setQuickSwapAmount(2.0)" class="px-1.5 py-0.5 rounded bg-lab-900 hover:bg-lab-800 text-slate-300">2.0</button>
-                    </div>
-                  </div>
-
-                  <!-- Output Amount -->
-                  <div class="p-3 rounded bg-lab-950 border border-emerald-500/30">
-                    <div class="flex justify-between text-slate-400 text-[10px] mb-1">
-                      <span>You Receive (Est.):</span>
-                      <span class="text-emerald-400" id="quickSwapRateLabel">1 SOL &asymp; 1.38M</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <input type="text" id="quickSwapSivletAmount" value="694,444" readonly class="w-full bg-transparent text-lg font-bold text-emerald-400 focus:outline-none">
-                      <span class="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-semibold text-xs shrink-0">$SIVLET</span>
-                    </div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-semibold">0 REDIRECT</span>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-lab-850 text-slate-400 border border-lab-border">DLMM</span>
                   </div>
                 </div>
 
-                <!-- Primary Swap Button -->
-                <a id="quickSwapJupiterBtn" href="https://jup.ag/swap/SOL-8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="w-full py-3 px-3 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs font-mono transition-all flex items-center justify-center gap-1.5 shadow-md shadow-emerald-500/20 mb-2.5">
-                  <i data-lucide="zap" class="w-4 h-4 fill-current"></i>
-                  <span>Buy on Jupiter (Direct Pair)</span>
-                  <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-                </a>
-
-                <!-- Quick Direct DEX Links -->
-                <div class="space-y-1.5">
-                  <div class="text-[10px] uppercase text-slate-500 tracking-wider">Direct Trading Routes:</div>
-                  <div class="grid grid-cols-2 gap-1.5 text-[11px]">
-                    <a href="https://raydium.io/swap/?inputMint=sol&outputMint=8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="p-2 rounded bg-lab-950 hover:bg-lab-900 border border-lab-border text-slate-300 hover:text-white flex items-center justify-center gap-1 transition-colors">
-                      <span>Raydium</span>
-                      <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
-                    </a>
-                    <a href="https://dexscreener.com/solana/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="p-2 rounded bg-lab-950 hover:bg-lab-900 border border-lab-border text-cyan-300 hover:text-white flex items-center justify-center gap-1 transition-colors">
-                      <span>DexScreener</span>
-                      <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
-                    </a>
+                <!-- Jupiter Integrated Terminal Container -->
+                <div id="integrated-terminal" class="w-full min-h-[460px] h-[460px] rounded-lg overflow-hidden flex items-center justify-center bg-lab-950 border border-lab-border/70 relative">
+                  <div id="jupLoadingSpinner" class="flex flex-col items-center gap-3 text-slate-400 font-mono text-xs">
+                    <div class="w-7 h-7 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin"></div>
+                    <span>Initializing Jupiter SDK Terminal...</span>
                   </div>
+                </div>
+
+                <!-- Live Pool Quick Stats -->
+                <div class="mt-3 p-2.5 rounded bg-lab-950 border border-lab-border/70 flex items-center justify-between text-[11px]">
+                  <span class="text-slate-400">DLMM Routing:</span>
+                  <span class="text-emerald-400 font-semibold">Active Bin #1429 (1.0% Fee)</span>
                 </div>
               </div>
 
-              <!-- Mint Copy Footer -->
+              <!-- Mint & Routes Footer -->
               <div class="pt-3 mt-3 border-t border-lab-border flex items-center justify-between text-[10px] text-slate-500">
                 <span class="truncate">Mint: 8XtG...eNos</span>
-                <button onclick="copyToClipboard('8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos', 'Token Mint')" class="text-emerald-400 hover:underline shrink-0 ml-1">Copy Mint</button>
+                <div class="flex items-center gap-2 shrink-0">
+                  <a href="https://app.meteora.ag/dlmm/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="text-cyan-400 hover:underline">Meteora</a>
+                  <span class="text-slate-600">&middot;</span>
+                  <a href="https://raydium.io/swap/?inputMint=sol&outputMint=8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="text-indigo-400 hover:underline">Raydium</a>
+                  <span class="text-slate-600">&middot;</span>
+                  <button onclick="copyToClipboard('8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos', 'Token Mint')" class="text-emerald-400 hover:underline">Copy</button>
+                </div>
               </div>
             </div>
 
@@ -560,12 +529,12 @@
           <div class="mt-3 flex flex-wrap items-center justify-between text-[11px] font-mono text-slate-500 gap-2">
             <div class="flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>Tick-by-tick Solana Mainnet trade executions &middot; Pre-configured for <code class="text-slate-400">8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos</code></span>
+              <span>Tick-by-tick Solana Mainnet executions &middot; Direct Jupiter routing to Meteora DLMM pool <code class="text-slate-400">CfoMtf...uthh</code></span>
             </div>
             <div class="flex items-center gap-3">
-              <button onclick="openSwapModal()" class="text-emerald-400 hover:underline flex items-center gap-1">
+              <button onclick="scrollToSwapTerminal()" class="text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer">
                 <i data-lucide="zap" class="w-3 h-3"></i>
-                <span>Open Instant Swap Modal</span>
+                <span>Trade $SIVLET In-Page</span>
               </button>
             </div>
           </div>
@@ -588,8 +557,12 @@
                   <span class="text-white font-bold text-sm">1,000,000,000</span>
                 </div>
                 <div class="flex justify-between items-center">
-                  <span class="text-slate-500">Circulating Supply:</span>
-                  <span class="text-emerald-400 font-semibold">1,000,000,000 (100%)</span>
+                  <span class="text-slate-500">Meteora DLMM Bins:</span>
+                  <span class="text-emerald-400 font-semibold">939,948,350 (94.0%)</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-500">Ecosystem &amp; Grant Vault:</span>
+                  <span class="text-indigo-400 font-semibold">60,051,649 (6.0%)</span>
                 </div>
                 <div class="flex justify-between items-center">
                   <span class="text-slate-500">Mint Authority:</span>
@@ -699,42 +672,62 @@
             </div>
 
             <div class="p-3 rounded bg-lab-950 border border-lab-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <span class="text-slate-500">Meteora DLMM LB Pair:</span>
+              <div class="flex items-center gap-2">
+                <a href="https://app.meteora.ag/dlmm/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="text-emerald-400 hover:underline">
+                  CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh
+                </a>
+                <button onclick="copyToClipboard('CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh', 'Pool Address')" class="text-slate-400 hover:text-white" title="Copy"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+              </div>
+            </div>
+
+            <div class="p-3 rounded bg-lab-950 border border-lab-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <span class="text-slate-500">DLMM Reserve X (SOL):</span>
+              <div class="flex items-center gap-2">
+                <a href="https://solscan.io/account/9ZdFSQWobqTmZ5S6XzZhwsuqg5Vd3mHRZVxnfsPLHtFD" target="_blank" class="text-white hover:text-cyan-400 transition-colors">
+                  9ZdFSQWobqTmZ5S6XzZhwsuqg5Vd3mHRZVxnfsPLHtFD (0.0348 SOL)
+                </a>
+                <button onclick="copyToClipboard('9ZdFSQWobqTmZ5S6XzZhwsuqg5Vd3mHRZVxnfsPLHtFD', 'Reserve X')" class="text-slate-400 hover:text-white" title="Copy"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+              </div>
+            </div>
+
+            <div class="p-3 rounded bg-lab-950 border border-lab-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <span class="text-slate-500">DLMM Reserve Y ($SIVLET):</span>
+              <div class="flex items-center gap-2">
+                <a href="https://solscan.io/account/977CRQRzgnaZXEWC3S3xzDKWeE326nKWAv7XAPbrsrmz" target="_blank" class="text-white hover:text-emerald-400 transition-colors">
+                  977CRQRzgnaZXEWC3S3xzDKWeE326nKWAv7XAPbrsrmz (939,948,350 $SIVLET)
+                </a>
+                <button onclick="copyToClipboard('977CRQRzgnaZXEWC3S3xzDKWeE326nKWAv7XAPbrsrmz', 'Reserve Y')" class="text-slate-400 hover:text-white" title="Copy"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+              </div>
+            </div>
+
+            <div class="p-3 rounded bg-lab-950 border border-lab-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <span class="text-slate-500">Treasury &amp; Creator Wallet:</span>
               <div class="flex items-center gap-2">
                 <a href="https://solscan.io/account/8XiwKV2K4TV8kN8ihUuZk4jZ7kAi5eHRFveU6wEcxsj3" target="_blank" class="text-white hover:text-emerald-400 transition-colors">
-                  8XiwKV2K4TV8kN8ihUuZk4jZ7kAi5eHRFveU6wEcxsj3
+                  8XiwKV2K4TV8kN8ihUuZk4jZ7kAi5eHRFveU6wEcxsj3 (~0.010 SOL)
                 </a>
                 <button onclick="copyToClipboard('8XiwKV2K4TV8kN8ihUuZk4jZ7kAi5eHRFveU6wEcxsj3', 'Treasury')" class="text-slate-400 hover:text-white" title="Copy"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
               </div>
             </div>
 
             <div class="p-3 rounded bg-lab-950 border border-lab-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <span class="text-slate-500">Creator ATA (Genesis Vault):</span>
+              <span class="text-slate-500">Creator ATA (6% Vault):</span>
               <div class="flex items-center gap-2">
                 <a href="https://solscan.io/account/3jr6zjfoP9bvY2Tw8LGRvwhPjgutgSw8199w1VrcuZ3r" target="_blank" class="text-white hover:text-emerald-400 transition-colors">
-                  3jr6zjfoP9bvY2Tw8LGRvwhPjgutgSw8199w1VrcuZ3r
+                  3jr6zjfoP9bvY2Tw8LGRvwhPjgutgSw8199w1VrcuZ3r (60,051,649 $SIVLET)
                 </a>
                 <button onclick="copyToClipboard('3jr6zjfoP9bvY2Tw8LGRvwhPjgutgSw8199w1VrcuZ3r', 'Creator ATA')" class="text-slate-400 hover:text-white" title="Copy"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
               </div>
             </div>
 
             <div class="p-3 rounded bg-lab-950 border border-lab-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <span class="text-slate-500">Metaplex Metadata PDA:</span>
+              <span class="text-slate-500">DLMM Genesis Deployment Tx:</span>
               <div class="flex items-center gap-2">
-                <a href="https://solscan.io/account/HEemChfebzykoMoVhxrU5Zj5JjrxaUqFwXhCfYS1YYYi" target="_blank" class="text-white hover:text-emerald-400 transition-colors">
-                  HEemChfebzykoMoVhxrU5Zj5JjrxaUqFwXhCfYS1YYYi
+                <a href="https://solscan.io/tx/3BnSPSrsC3wshTaXmmEXL1pdFWuDWjGfiZFRZM6hE1E3rxfPAHmaBaXsXA8xcVP9KuWvHqtXR162aTfUDBCeNYCw" target="_blank" class="text-cyan-400 hover:underline">
+                  3BnSPSrsC3wshTaXmmEXL1pdFWuDWjGfiZFRZM6hE1E3...NYCw
                 </a>
-                <button onclick="copyToClipboard('HEemChfebzykoMoVhxrU5Zj5JjrxaUqFwXhCfYS1YYYi', 'Metadata PDA')" class="text-slate-400 hover:text-white" title="Copy"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
-              </div>
-            </div>
-
-            <div class="p-3 rounded bg-lab-950 border border-lab-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <span class="text-slate-500">Genesis Deployment Tx:</span>
-              <div class="flex items-center gap-2">
-                <a href="https://solscan.io/tx/55jGitEN6kWATR5Zwp4HGUibdcZkQ82nqeZN8z5XvNhyef8q9XV3n6LFYecUAefgx6if7DkZ1bFfJs5Zq2uNMLAa" target="_blank" class="text-emerald-400 hover:underline">
-                  55jGitEN6kWATR5Zwp4HGUibdcZkQ82nqeZN8z5XvNhy...NMLAa
-                </a>
-                <button onclick="copyToClipboard('55jGitEN6kWATR5Zwp4HGUibdcZkQ82nqeZN8z5XvNhyef8q9XV3n6LFYecUAefgx6if7DkZ1bFfJs5Zq2uNMLAa', 'Genesis Tx')" class="text-slate-400 hover:text-white" title="Copy"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+                <button onclick="copyToClipboard('3BnSPSrsC3wshTaXmmEXL1pdFWuDWjGfiZFRZM6hE1E3rxfPAHmaBaXsXA8xcVP9KuWvHqtXR162aTfUDBCeNYCw', 'DLMM Genesis Tx')" class="text-slate-400 hover:text-white" title="Copy"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
               </div>
             </div>
 
@@ -760,10 +753,10 @@
             <div class="w-6 h-6 rounded bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-mono text-xs">
               <i data-lucide="activity" class="w-3.5 h-3.5"></i>
             </div>
-            <h3 class="font-display font-semibold text-white text-sm">10% Max Fee &amp; Volatility Surge</h3>
+            <h3 class="font-display font-semibold text-white text-sm">1.0% Base Fee (100 bps) &amp; Volatility Surge</h3>
           </div>
           <p class="text-xs text-slate-400 font-sans leading-relaxed">
-            Meteora DLMM operates with a 10.0% base fee, dynamically surging up to 25.0% during volatility. 100% of trading fees flow into our gas-self-funding crank, automatically buying back $SIVLET and burning it perpetually with 0 out-of-pocket gas.
+            Meteora DLMM operates with a 1.0% (100 bps) base fee, dynamically surging up to 25.0% during market volatility. 100% of trading fees flow into our gas-self-funding crank, automatically buying back $SIVLET and burning it perpetually with 0 out-of-pocket gas.
           </p>
         </div>
 
@@ -835,14 +828,19 @@
 
         <!-- Right: Direct Web3 Actions (Requirement 2) -->
         <div class="flex flex-wrap items-center gap-2.5">
-          <button onclick="openSwapModal()" class="px-4 py-2 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-colors flex items-center gap-1.5 shadow-sm shadow-emerald-500/20 cursor-pointer">
+          <button onclick="scrollToSwapTerminal()" class="px-4 py-2 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs font-mono transition-colors flex items-center gap-1.5 shadow-sm shadow-emerald-500/20 cursor-pointer">
             <i data-lucide="zap" class="w-3.5 h-3.5 fill-current"></i>
-            <span>Buy $SIVLET</span>
+            <span>Buy $SIVLET (Zero Redirect)</span>
           </button>
 
-          <a href="https://jup.ag/swap/SOL-8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="px-3.5 py-2 rounded bg-lab-900 hover:bg-lab-800 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-mono transition-colors flex items-center gap-1.5">
-            <i data-lucide="repeat" class="w-3.5 h-3.5 text-emerald-400"></i>
-            <span>Jupiter Swap</span>
+          <a href="https://dexscreener.com/solana/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="px-3.5 py-2 rounded bg-lab-900 hover:bg-lab-800 border border-lab-border text-cyan-400 text-xs font-mono transition-colors flex items-center gap-1.5">
+            <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+            <span>DexScreener</span>
+          </a>
+
+          <a href="https://app.meteora.ag/dlmm/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="px-3.5 py-2 rounded bg-lab-900 hover:bg-lab-800 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-mono transition-colors flex items-center gap-1.5">
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span>Meteora DLMM</span>
             <i data-lucide="arrow-up-right" class="w-3 h-3 text-slate-500"></i>
           </a>
 
@@ -850,11 +848,6 @@
             <i data-lucide="arrow-right-left" class="w-3.5 h-3.5 text-indigo-400"></i>
             <span>Raydium</span>
             <i data-lucide="arrow-up-right" class="w-3 h-3 text-slate-500"></i>
-          </a>
-
-          <a href="https://dexscreener.com/solana/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="px-3.5 py-2 rounded bg-lab-900 hover:bg-lab-800 border border-lab-border text-cyan-400 text-xs font-mono transition-colors flex items-center gap-1.5">
-            <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
-            <span>DexScreener</span>
           </a>
 
           <a href="https://solscan.io/token/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="px-3.5 py-2 rounded bg-lab-900 hover:bg-lab-800 border border-lab-border text-slate-300 text-xs font-mono transition-colors flex items-center gap-1.5">
@@ -970,6 +963,8 @@
                   Revoke Session Voucher
                 </button>
               </div>
+            </div>
+
             <!-- Multi-Currency Payment Asset Selector (x402 Micropayments) -->
             <div class="mb-4">
               <div class="flex items-center justify-between mb-2 text-xs font-mono">
@@ -1635,11 +1630,10 @@
 
         <!-- Direct 1-Click Launch Buttons -->
         <div class="space-y-2 pt-2">
-          <a id="modalDirectJupiterBtn" href="https://jup.ag/swap/SOL-8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="w-full py-3 px-4 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs font-mono transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
-            <i data-lucide="repeat" class="w-4 h-4"></i>
-            <span>Execute Swap on Jupiter (Pre-Filled Pair)</span>
-            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-          </a>
+          <button onclick="closeSwapModal(); scrollToSwapTerminal();" class="w-full py-3 px-4 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs font-mono transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 cursor-pointer">
+            <i data-lucide="zap" class="w-4 h-4 fill-current"></i>
+            <span>Swap In-Page with Jupiter SDK (Zero Redirect)</span>
+          </button>
 
           <div class="grid grid-cols-2 gap-2 text-xs">
             <a href="https://raydium.io/swap/?inputMint=sol&outputMint=8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="p-2.5 rounded-lg bg-lab-900 hover:bg-lab-850 border border-lab-border text-slate-200 hover:text-white transition-colors flex items-center justify-center gap-1.5">
@@ -1648,7 +1642,7 @@
               <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
             </a>
 
-            <a href="https://dexscreener.com/solana/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="p-2.5 rounded-lg bg-lab-900 hover:bg-lab-850 border border-lab-border text-cyan-300 hover:text-white transition-colors flex items-center justify-center gap-1.5">
+            <a href="https://dexscreener.com/solana/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="p-2.5 rounded-lg bg-lab-900 hover:bg-lab-850 border border-lab-border text-cyan-300 hover:text-white transition-colors flex items-center justify-center gap-1.5">
               <i data-lucide="trending-up" class="w-3.5 h-3.5 text-cyan-400"></i>
               <span>DexScreener Trade</span>
               <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
@@ -1657,8 +1651,8 @@
         </div>
 
         <div class="p-2.5 rounded bg-lab-900/60 border border-lab-border text-[10px] text-slate-500 flex items-center justify-between">
-          <span>Routing: Liquidity routed through Solana Mainnet Meteora DLMM &amp; Jupiter Aggregator.</span>
-          <span class="text-emerald-400 font-semibold shrink-0 ml-2">100% Fixed Cap</span>
+          <span>Routing: Liquidity routed through Solana Mainnet Meteora DLMM pool.</span>
+          <span class="text-emerald-400 font-semibold shrink-0 ml-2">94% Liquidity Deposited</span>
         </div>
 
       </div>
@@ -1767,9 +1761,58 @@
     }
 
     // -------------------------------------------------------------------------
-    // Swap Modal & Trade Terminal Controllers
+    // Swap Modal & In-Page Jupiter Terminal Controllers
     // -------------------------------------------------------------------------
-    let currentTokensPerSol = 1388888; // Default initial token conversion rate
+    let currentTokensPerSol = 1497073; // Live Meteora DLMM pool rate: 1 SOL ≈ 1,497,073 SIVLET
+    let isJupiterTerminalReady = false;
+
+    function initJupiterTerminal() {
+      if (isJupiterTerminalReady) return;
+      if (typeof window.Jupiter !== 'undefined' && window.Jupiter.init) {
+        try {
+          const target = document.getElementById('integrated-terminal');
+          if (!target) return;
+          window.Jupiter.init({
+            displayMode: 'integrated',
+            integratedTargetId: 'integrated-terminal',
+            endpoint: SOLANA_RPC,
+            strictTokenList: false,
+            defaultExplorer: 'Solscan',
+            formProps: {
+              fixedOutputMint: true,
+              initialOutputMint: SIVLET_TOKEN_MINT,
+              initialInputMint: 'So11111111111111111111111111111111111111112'
+            }
+          });
+          isJupiterTerminalReady = true;
+          const spinner = document.getElementById('jupLoadingSpinner');
+          if (spinner) spinner.style.display = 'none';
+          console.log('Jupiter Terminal initialized successfully on Solana Mainnet');
+        } catch (e) {
+          console.warn('Jupiter init attempt note:', e);
+        }
+      } else {
+        setTimeout(initJupiterTerminal, 500);
+      }
+    }
+
+    function scrollToSwapTerminal() {
+      switchChartTab('chartTabDexscreener');
+      const term = document.getElementById('telemetry');
+      if (term) {
+        term.scrollIntoView({ behavior: 'smooth' });
+        const wrapper = document.getElementById('swapTerminalWrapper');
+        if (wrapper) {
+          wrapper.classList.add('ring-2', 'ring-emerald-400', 'shadow-2xl', 'shadow-emerald-500/30');
+          setTimeout(() => {
+            wrapper.classList.remove('ring-2', 'ring-emerald-400', 'shadow-2xl', 'shadow-emerald-500/30');
+          }, 3000);
+        }
+      }
+      if (!isJupiterTerminalReady) {
+        initJupiterTerminal();
+      }
+    }
 
     function openSwapModal() {
       const modal = document.getElementById('swapModal');
@@ -1812,29 +1855,6 @@
       }
     }
 
-    function setQuickSwapAmount(amount) {
-      const input = document.getElementById('quickSwapSolAmount');
-      if (input) {
-        input.value = amount;
-        updateQuickSwapEstimate();
-      }
-    }
-
-    function updateQuickSwapEstimate() {
-      const input = document.getElementById('quickSwapSolAmount');
-      const output = document.getElementById('quickSwapSivletAmount');
-      const rateLabel = document.getElementById('quickSwapRateLabel');
-      const jupBtn = document.getElementById('quickSwapJupiterBtn');
-      const solVal = parseFloat(input?.value) || 0;
-      const est = Math.round(solVal * currentTokensPerSol);
-      if (output) output.value = est.toLocaleString();
-      if (rateLabel) rateLabel.innerText = `1 SOL ≈ ${(currentTokensPerSol / 1e6).toFixed(2)}M`;
-      if (jupBtn) {
-        const lamports = Math.round(solVal * 1e9);
-        jupBtn.href = `https://jup.ag/swap/SOL-${SIVLET_TOKEN_MINT}?inAmount=${lamports}`;
-      }
-    }
-
     // Global listeners for closing modal with Escape or backdrop click
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeSwapModal();
@@ -1854,17 +1874,16 @@
         const data = await res.json();
         
         const tokenomics = data.tokenomics || {};
-        const priceUsd = tokenomics.current_price_usd || data.solana_deployment?.current_price_usd || 0.000100;
-        const fdvUsd = tokenomics.implied_fdv_usd || data.solana_deployment?.implied_fdv_usd || 100000;
-        const treasurySol = tokenomics.treasury_sol_balance !== undefined ? tokenomics.treasury_sol_balance : (data.solana_deployment?.treasury_sol_balance || 0.0087);
-        const treasuryUsdc = tokenomics.treasury_usdc_balance || 2450.80;
-        const burnedTokens = tokenomics.total_burned_sivlet || 12450890;
+        const solanaDep = data.solana_deployment || {};
+        const priceUsd = tokenomics.current_price_usd || solanaDep.current_price_usd || 0.000100;
+        const fdvUsd = tokenomics.implied_fdv_usd || solanaDep.implied_fdv_usd || 100200;
+        const treasurySol = tokenomics.treasury_sol_balance !== undefined ? tokenomics.treasury_sol_balance : (solanaDep.treasury_sol_balance || 0.0099);
+        const dlmmTokens = tokenomics.dlmm_liquidity_deposited || 939948350;
 
         // Dynamic tokens per SOL rate update based on live price
         if (priceUsd > 0) {
           currentTokensPerSol = Math.round(150 / priceUsd);
           updateModalSwapEstimate();
-          updateQuickSwapEstimate();
         }
 
         const priceEl = document.getElementById('livePriceUsd');
@@ -1883,14 +1902,11 @@
         const priceSolEl = document.getElementById('livePriceSol');
         if (priceSolEl) priceSolEl.innerText = '~' + solPriceEstimate.toFixed(8) + ' SOL';
 
-        const treasuryUsdcEl = document.getElementById('liveTreasuryUsdc');
-        if (treasuryUsdcEl) treasuryUsdcEl.innerText = treasuryUsdc.toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' USDC';
+        const dlmmReserveEl = document.getElementById('liveDlmmReserve');
+        if (dlmmReserveEl) dlmmReserveEl.innerText = Math.round(dlmmTokens).toLocaleString();
 
         const treasurySolEl = document.getElementById('liveTreasurySol');
-        if (treasurySolEl) treasurySolEl.innerText = '~' + treasurySol.toFixed(4) + ' SOL Reserve';
-
-        const burnedEl = document.getElementById('liveBurnedTokens');
-        if (burnedEl) burnedEl.innerText = burnedTokens.toLocaleString();
+        if (treasurySolEl) treasurySolEl.innerText = '~' + treasurySol.toFixed(3) + ' SOL';
 
         const syncTimeEl = document.getElementById('telemetrySyncTime');
         if (syncTimeEl) {
@@ -2650,6 +2666,10 @@
       // Start real-time tokenomics telemetry polling
       pollLiveTokenomics();
       setInterval(pollLiveTokenomics, 15000);
+
+      // Initialize Jupiter Terminal SDK (In-Page Swap Widget)
+      initJupiterTerminal();
+      window.addEventListener('load', initJupiterTerminal);
 
       // Eagerly try silent connection if trusted
       connectSolanaWallet(true);
