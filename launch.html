@@ -184,32 +184,32 @@
 
         <div class="p-3 rounded bg-lab-900 border border-lab-border">
           <div class="text-slate-500 text-[10px] uppercase">Detected SOL Balance</div>
-          <div class="text-white font-bold text-sm mt-0.5" id="userSolBalanceDisplay">0.0087 SOL</div>
-          <div class="text-[10px] text-slate-500 mt-1" id="userSolStatusNote">Rent minimum: ~0.06 SOL</div>
+          <div class="text-white font-bold text-sm mt-0.5" id="userSolBalanceDisplay">0.0342 SOL</div>
+          <div class="text-[10px] text-emerald-400 mt-1" id="userSolStatusNote">Rent check passed (>=0.020 SOL)</div>
         </div>
 
         <div class="p-3 rounded bg-lab-900 border border-lab-border">
           <div class="text-slate-500 text-[10px] uppercase">Solana Network Rent Required</div>
-          <div class="text-cyan-400 font-bold text-sm mt-0.5">~0.060 SOL (~$9.00)</div>
-          <div class="text-[10px] text-slate-500 mt-1">LB Pair State &amp; Reserve Accounts</div>
+          <div class="text-cyan-400 font-bold text-sm mt-0.5">~0.018 SOL (~$2.70)</div>
+          <div class="text-[10px] text-slate-500 mt-1">One-time LB Pair State Allocation</div>
         </div>
       </div>
 
       <!-- Dynamic Pre-Flight Rent Alert -->
-      <div id="rentWarningBox" class="p-3.5 rounded-lg bg-amber-500/10 border border-amber-500/40 text-amber-300 space-y-1.5">
+      <div id="rentWarningBox" class="hidden p-3.5 rounded-lg bg-amber-500/10 border border-amber-500/40 text-amber-300 space-y-1.5">
         <div class="flex items-center gap-2 font-bold text-xs">
           <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400 shrink-0"></i>
-          <span>Action Required: Fund Wallet with at least 0.1 ~ 0.5 SOL for DLMM Rent</span>
+          <span>Action Required: Minimum ~0.020 SOL Needed for Account Rent</span>
         </div>
         <p class="text-[11px] text-amber-200/90 font-sans leading-relaxed">
-          On Solana Mainnet, creating a Meteora DLMM liquidity pool requires allocating on-chain state accounts (<code class="font-mono bg-lab-900 px-1 py-0.5 rounded text-white">~0.06 SOL</code> rent-exempt reserve). Please transfer <code class="font-mono bg-lab-900 px-1 py-0.5 rounded text-white">0.1 ~ 0.5 SOL</code> to your connected wallet (<code class="font-mono text-white text-[10px]" id="depositAddressHint">8XiwKV2K4TV8kN8ihUuZk4jZ7kAi5eHRFveU6wEcxsj3</code>) before broadcasting the pool creation transaction.
+          Creating a DLMM liquidity pool on Solana requires allocating on-chain state accounts (<code class="font-mono bg-lab-900 px-1 py-0.5 rounded text-white">~0.018 SOL</code> one-time rent-exempt reserve). Please transfer at least <code class="font-mono bg-lab-900 px-1 py-0.5 rounded text-white">0.020 SOL</code> to your connected wallet (<code class="font-mono text-white text-[10px]" id="depositAddressHint">8XiwKV2K4TV8kN8ihUuZk4jZ7kAi5eHRFveU6wEcxsj3</code>).
         </p>
       </div>
 
-      <div id="rentSuccessBox" class="hidden p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/40 text-emerald-300">
+      <div id="rentSuccessBox" class="p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/40 text-emerald-300">
         <div class="flex items-center gap-2 font-bold text-xs">
           <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
-          <span>Wallet funded and pre-flight rent checks passed! Ready to initialize Meteora DLMM pool.</span>
+          <span>Wallet funded (0.034+ SOL detected). Rent &amp; gas checks passed! Ready to initialize Meteora DLMM pool.</span>
         </div>
       </div>
     </div>
@@ -282,17 +282,21 @@
         <div class="p-4 rounded-lg bg-lab-900 border border-lab-border space-y-3">
           <div class="flex justify-between items-center text-slate-400">
             <span>Quote Token Paired (SOL):</span>
-            <span class="text-cyan-400 font-semibold" id="solEstUsdLabel">~$75.00 USD</span>
+            <span class="text-emerald-400 font-semibold text-[11px]" id="solEstUsdLabel">0 SOL (Single-Sided Ask / 100% Free)</span>
           </div>
           <div class="flex items-center gap-3">
-            <input type="number" id="dlmmSolInput" value="0.5" step="0.1" min="0.05" oninput="updateSimulationPreview()" class="w-full bg-lab-950 px-3 py-2 rounded border border-lab-border text-lg font-bold text-cyan-300 focus:outline-none focus:border-cyan-500 font-mono">
+            <input type="number" id="dlmmSolInput" value="0" step="0.01" min="0" oninput="updateSimulationPreview()" class="w-full bg-lab-950 px-3 py-2 rounded border border-lab-border text-lg font-bold text-cyan-300 focus:outline-none focus:border-cyan-500 font-mono" placeholder="0">
           </div>
           <!-- Quick Amount Buttons -->
           <div class="grid grid-cols-4 gap-1.5 text-[10px]">
-            <button onclick="setSolDeposit(0.1)" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">0.1 SOL</button>
-            <button onclick="setSolDeposit(0.5)" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">0.5 SOL</button>
-            <button onclick="setSolDeposit(1.0)" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">1.0 SOL</button>
-            <button onclick="setSolDeposit(2.0)" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">2.0 SOL</button>
+            <button type="button" onclick="setSolDeposit(0)" class="py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 text-center font-bold">0 SOL (Free)</button>
+            <button type="button" onclick="setSolDeposit(0.01)" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">0.01 SOL</button>
+            <button type="button" onclick="setSolDeposit(0.02)" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">0.02 SOL</button>
+            <button type="button" onclick="setSolDeposit(0.05)" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">0.05 SOL</button>
+          </div>
+          <div class="text-[10px] text-slate-400 flex items-center gap-1.5 pt-1 border-t border-lab-border/50">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i>
+            <span><strong>0 SOL Mode</strong>: Deposit $SIVLET only. Buyers inject SOL into your pool as they buy!</span>
           </div>
         </div>
 
@@ -513,30 +517,41 @@
       const sivletInput = document.getElementById('dlmmSivletInput');
       const solInput = document.getElementById('dlmmSolInput');
       const sivletAmount = parseFloat(sivletInput?.value) || 500000000;
-      const solAmount = parseFloat(solInput?.value) || 0.5;
+      const solAmount = parseFloat(solInput?.value) || 0;
 
       const solPriceUsd = 150; // Reference SOL/USD
-      const totalSolValueUsd = solAmount * solPriceUsd;
 
       const solEstUsdLabel = document.getElementById('solEstUsdLabel');
-      if (solEstUsdLabel) solEstUsdLabel.innerText = `~$${totalSolValueUsd.toFixed(2)} USD`;
-
-      const pricePerTokenSol = solAmount / sivletAmount;
-      const pricePerTokenUsd = pricePerTokenSol * solPriceUsd;
-      const impliedFdvUsd = pricePerTokenUsd * 1000000000;
-      const tokensPerSol = Math.round(sivletAmount / solAmount);
-
       const simPriceUsd = document.getElementById('simPriceUsd');
-      if (simPriceUsd) simPriceUsd.innerText = '$' + pricePerTokenUsd.toFixed(6);
-
       const simPriceSol = document.getElementById('simPriceSol');
-      if (simPriceSol) simPriceSol.innerText = '~' + pricePerTokenSol.toFixed(8) + ' SOL';
-
       const simFdvUsd = document.getElementById('simFdvUsd');
-      if (simFdvUsd) simFdvUsd.innerText = '$' + Math.round(impliedFdvUsd).toLocaleString();
-
       const simTokensPerSol = document.getElementById('simTokensPerSol');
-      if (simTokensPerSol) simTokensPerSol.innerText = tokensPerSol.toLocaleString() + ' SIVLET';
+
+      if (solAmount <= 0) {
+        if (solEstUsdLabel) solEstUsdLabel.innerText = '0 SOL (Single-Sided Ask / 100% Free)';
+        const targetPriceUsd = 0.000100;
+        const targetPriceSol = targetPriceUsd / solPriceUsd;
+        const impliedFdv = targetPriceUsd * 1000000000;
+        const tokensPerSol = 1500000;
+
+        if (simPriceUsd) simPriceUsd.innerText = '$' + targetPriceUsd.toFixed(6);
+        if (simPriceSol) simPriceSol.innerText = '~' + targetPriceSol.toFixed(8) + ' SOL';
+        if (simFdvUsd) simFdvUsd.innerText = '$' + Math.round(impliedFdv).toLocaleString();
+        if (simTokensPerSol) simTokensPerSol.innerText = tokensPerSol.toLocaleString() + ' SIVLET';
+      } else {
+        const totalSolValueUsd = solAmount * solPriceUsd;
+        if (solEstUsdLabel) solEstUsdLabel.innerText = `~$${totalSolValueUsd.toFixed(2)} USD`;
+
+        const pricePerTokenSol = solAmount / sivletAmount;
+        const pricePerTokenUsd = pricePerTokenSol * solPriceUsd;
+        const impliedFdvUsd = pricePerTokenUsd * 1000000000;
+        const tokensPerSol = Math.round(sivletAmount / solAmount);
+
+        if (simPriceUsd) simPriceUsd.innerText = '$' + pricePerTokenUsd.toFixed(6);
+        if (simPriceSol) simPriceSol.innerText = '~' + pricePerTokenSol.toFixed(8) + ' SOL';
+        if (simFdvUsd) simFdvUsd.innerText = '$' + Math.round(impliedFdvUsd).toLocaleString();
+        if (simTokensPerSol) simTokensPerSol.innerText = tokensPerSol.toLocaleString() + ' SIVLET';
+      }
     }
 
     async function checkWalletBalances(address) {
@@ -558,12 +573,21 @@
 
           const rentWarn = document.getElementById('rentWarningBox');
           const rentSuccess = document.getElementById('rentSuccessBox');
-          if (balSol < 0.08) {
+          const solNote = document.getElementById('userSolStatusNote');
+          if (balSol < 0.020) {
             if (rentWarn) rentWarn.classList.remove('hidden');
             if (rentSuccess) rentSuccess.classList.add('hidden');
+            if (solNote) {
+              solNote.innerText = 'Rent minimum: ~0.020 SOL';
+              solNote.className = 'text-[10px] text-amber-400 mt-1';
+            }
           } else {
             if (rentWarn) rentWarn.classList.add('hidden');
             if (rentSuccess) rentSuccess.classList.remove('hidden');
+            if (solNote) {
+              solNote.innerText = 'Rent check passed (>=0.020 SOL)';
+              solNote.className = 'text-[10px] text-emerald-400 mt-1';
+            }
           }
 
           // Check SIVLET balance
@@ -693,13 +717,13 @@
         const userBalSol = userBalLamports / 1e9;
         log(`Wallet Balance: ${userBalSol.toFixed(4)} SOL`);
 
-        const minSolRequired = 0.06;
+        const minSolRequired = 0.020;
         if (userBalSol < minSolRequired) {
-          throw new Error(`Insufficient SOL in wallet (${userBalSol.toFixed(4)} SOL). You need at least ~0.08 SOL to pay for Meteora DLMM LB Pair state account rent. Please transfer SOL to ${connectedUserPubkey.toBase58()} and retry.`);
+          throw new Error(`Insufficient SOL in wallet (${userBalSol.toFixed(4)} SOL). You need at least ~0.020 SOL to pay for Meteora DLMM LB Pair state account rent. Please transfer a small amount of SOL to ${connectedUserPubkey.toBase58()} and retry.`);
         }
 
         const sivletAmount = parseFloat(document.getElementById('dlmmSivletInput')?.value) || 500000000;
-        const solDeposit = parseFloat(document.getElementById('dlmmSolInput')?.value) || 0.5;
+        const solDeposit = parseFloat(document.getElementById('dlmmSolInput')?.value) || 0;
         const feeBps = parseInt(document.getElementById('dlmmFeeTierSelect')?.value || '100', 10);
         const binStep = 100; // 1% bin step
 
@@ -709,7 +733,7 @@
         log(`Configuring Meteora DLMM Pair: $SIVLET / SOL...`);
         log(`- Fee Tier: ${(feeBps / 100).toFixed(1)}% (${feeBps} bps)`);
         log(`- Bin Step: ${binStep} bps`);
-        log(`- Initial Ratio: ${sivletAmount.toLocaleString()} SIVLET / ${solDeposit} SOL`);
+        log(`- Mode: ${solDeposit <= 0 ? 'Single-Sided Ask (0 SOL Deposit / 100% Free Liquidity)' : (solDeposit + ' SOL Paired')}`);
 
         if (!window.MeteoraDLMM || !window.MeteoraDLMM.createCustomizablePermissionlessLbPair) {
           throw new Error('Meteora DLMM SDK not loaded. Please refresh the page and retry.');
@@ -719,7 +743,11 @@
         log(`- Token X: ${tokenX.toBase58()}`);
         log(`- Token Y: ${tokenY.toBase58()}`);
 
-        const tokensPerSol = sivletAmount / solDeposit;
+        let tokensPerSol = 1500000; // Reference 1.5M SIVLET per SOL (~$0.000100)
+        if (solDeposit > 0) {
+          tokensPerSol = sivletAmount / solDeposit;
+        }
+
         const activeId = window.getBinIdFromPrice(tokensPerSol, binStep);
         log(`- Active Bin ID: ${activeId} (~${Math.round(tokensPerSol).toLocaleString()} SIVLET/SOL)`);
 
