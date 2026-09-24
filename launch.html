@@ -356,24 +356,39 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 font-mono text-xs">
         
         <!-- Base Asset: $SIVLET to Deposit -->
-        <div class="p-4 rounded-lg bg-lab-900 border border-emerald-500/30 space-y-3">
+        <div class="p-4 rounded-lg bg-lab-900 border-2 border-emerald-500/40 space-y-3 shadow-lg shadow-emerald-500/5">
           <div class="flex justify-between items-center text-slate-400">
-            <span>Tokens to Deposit ($SIVLET):</span>
-            <span class="text-emerald-400 font-semibold" id="depositSivletPctLabel">94% of Supply (6% Retained)</span>
+            <span class="text-white font-semibold flex items-center gap-1.5">
+              <i data-lucide="layers" class="w-3.5 h-3.5 text-emerald-400"></i>
+              <span>Tokens to Deposit ($SIVLET):</span>
+            </span>
+            <span class="text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30" id="depositSivletPctLabel">94% of Supply (6% Retained)</span>
           </div>
           <div class="flex items-center gap-3">
-            <input type="number" id="depositSivletInput" value="940000000" step="10000000" min="10000000" max="1000000000" oninput="updateDepositPreview()" class="w-full bg-lab-950 px-3 py-2 rounded border border-lab-border text-lg font-bold text-white focus:outline-none focus:border-emerald-500 font-mono">
+            <input type="number" id="depositSivletInput" value="940000000" step="10000000" min="10000000" max="1000000000" oninput="updateDepositPreview()" class="w-full bg-lab-950 px-3.5 py-2.5 rounded-lg border border-emerald-500/50 text-xl font-bold text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono tracking-wide">
           </div>
           <!-- Quick Amount Buttons -->
-          <div class="grid grid-cols-4 gap-1.5 text-[10px]">
-            <button type="button" onclick="setDepositSivletAmount(940000000, '94%')" class="py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30 text-center font-bold">94% (940M)</button>
-            <button type="button" onclick="setDepositSivletAmount(900000000, '90%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">90% (900M)</button>
-            <button type="button" onclick="setDepositSivletAmount(950000000, '95%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">95% (950M)</button>
-            <button type="button" onclick="setDepositSivletAmount(1000000000, '100%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">100% (1B)</button>
+          <div class="grid grid-cols-4 gap-2 text-xs" id="depositQuickButtons">
+            <button type="button" id="btnDeposit94" onclick="setDepositSivletAmount(940000000, '94%', 'btnDeposit94')" class="py-2.5 px-1 rounded-lg bg-emerald-500/25 text-emerald-300 border-2 border-emerald-500 font-bold text-center ring-2 ring-emerald-500/40 transition-all cursor-pointer">
+              <div class="font-extrabold text-sm text-white">94% (940M)</div>
+              <div class="text-[9px] text-emerald-400 font-semibold uppercase tracking-wider">Recommended</div>
+            </button>
+            <button type="button" id="btnDeposit90" onclick="setDepositSivletAmount(900000000, '90%', 'btnDeposit90')" class="py-2.5 px-1 rounded-lg bg-lab-850 hover:bg-lab-800 text-slate-300 border border-lab-border text-center transition-all cursor-pointer">
+              <div class="font-bold text-sm">90% (900M)</div>
+              <div class="text-[9px] text-slate-500">10% Retained</div>
+            </button>
+            <button type="button" id="btnDeposit95" onclick="setDepositSivletAmount(950000000, '95%', 'btnDeposit95')" class="py-2.5 px-1 rounded-lg bg-lab-850 hover:bg-lab-800 text-slate-300 border border-lab-border text-center transition-all cursor-pointer">
+              <div class="font-bold text-sm">95% (950M)</div>
+              <div class="text-[9px] text-slate-500">5% Retained</div>
+            </button>
+            <button type="button" id="btnDeposit100" onclick="setDepositSivletAmount(1000000000, '100%', 'btnDeposit100')" class="py-2.5 px-1 rounded-lg bg-lab-850 hover:bg-lab-800 text-slate-300 border border-lab-border text-center transition-all cursor-pointer">
+              <div class="font-bold text-sm">100% (1B)</div>
+              <div class="text-[9px] text-slate-500">0% Retained</div>
+            </button>
           </div>
-          <div class="text-[10px] text-slate-400 pt-1 border-t border-lab-border flex items-center gap-1.5" id="retainedTokensNote">
-            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i>
-            <span>60,000,000 $SIVLET (6.0%) safely retained in your wallet for ecosystem &amp; contract reserves.</span>
+          <div class="text-[11px] text-slate-300 pt-2 border-t border-lab-border flex items-center gap-2" id="retainedTokensNote">
+            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+            <span><strong>60,000,000 $SIVLET (6.0%)</strong> safely retained in your wallet for ecosystem &amp; contract reserves.</span>
           </div>
         </div>
 
@@ -442,285 +457,86 @@
 
     </div>
 
-    <!-- Step 2: Meteora DLMM Liquidity Pool Initializer Panel -->
-    <div class="lab-panel rounded-xl p-6 sm:p-8 space-y-6">
-      
-      <!-- Section Title -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-5 border-b border-lab-border">
-        <div>
-          <div class="flex items-center gap-2">
-            <h2 class="font-display font-bold text-xl text-white">Meteora DLMM Pool Provisioner</h2>
-            <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-mono font-bold">SOLANA MAINNET</span>
-          </div>
-          <p class="text-xs text-slate-400 font-sans mt-1">
-            Initialize an official concentrated liquidity pool pairing $SIVLET with Native SOL directly through Meteora's smart contract.
-          </p>
+    <!-- Archived Pool State & Configuration Details -->
+    <details class="lab-panel rounded-xl p-5 border border-lab-border text-xs font-mono group">
+      <summary class="flex items-center justify-between cursor-pointer list-none select-none">
+        <div class="flex items-center gap-2.5">
+          <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+          <span class="font-bold text-white">Step 2: Meteora DLMM Pool Creation &mdash; <span class="text-emerald-400">Completed On-Chain</span></span>
         </div>
-        <div class="text-[11px] font-mono text-slate-400 bg-lab-900 px-3 py-1.5 rounded border border-lab-border shrink-0">
-          Program: <span class="text-emerald-400">LBUZKhRx...Pwxo</span>
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] text-slate-500 group-open:hidden">Click to view pool parameters &amp; network settings</span>
+          <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"></i>
         </div>
-      </div>
+      </summary>
 
-      <!-- Verified Token Mint Verification Box -->
-      <div class="p-3.5 rounded-lg bg-lab-900 border border-lab-border flex items-center justify-between gap-3 text-xs font-mono">
-        <div class="flex items-center gap-3 min-w-0">
-          <img src="assets/logo.png" alt="SIVLET" class="w-7 h-7 rounded-full object-contain shrink-0">
-          <div class="truncate">
-            <div class="text-white font-bold flex items-center gap-2">
-              <span>SivletLabs Token ($SIVLET)</span>
-              <span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono">VERIFIED MINT</span>
-            </div>
-            <div class="text-[10px] text-slate-500 truncate" id="verifiedMintAddress">8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos</div>
+      <div class="pt-4 mt-3 border-t border-lab-border space-y-4 text-slate-400 font-sans">
+        <p class="text-xs">
+          The official DLMM LB Pair pool has already been deployed and finalized on Solana Mainnet. No further pool initialization is needed.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
+          <div class="p-3 bg-lab-900 rounded border border-lab-border">
+            <div class="text-slate-500 text-[10px] uppercase">Pool Account</div>
+            <div class="text-white font-bold truncate mt-0.5" title="CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh">CfoMtfSw...uthh</div>
+          </div>
+          <div class="p-3 bg-lab-900 rounded border border-lab-border">
+            <div class="text-slate-500 text-[10px] uppercase">Fee Tier &amp; Bin Step</div>
+            <div class="text-emerald-400 font-bold mt-0.5">100 bps (1.0%) &middot; 100 bps</div>
+          </div>
+          <div class="p-3 bg-lab-900 rounded border border-lab-border">
+            <div class="text-slate-500 text-[10px] uppercase">Alpha Vault Protection</div>
+            <div class="text-cyan-300 font-bold mt-0.5">Anti-Sniper Activated</div>
           </div>
         </div>
-        <div class="flex items-center gap-2 shrink-0">
-          <button onclick="copyToClipboard('8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos', 'Token Mint')" class="px-2.5 py-1 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-slate-300 text-[11px] flex items-center gap-1">
-            <i data-lucide="copy" class="w-3 h-3"></i>
-            <span>Copy</span>
-          </button>
-          <a href="https://solscan.io/token/8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="px-2.5 py-1 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-slate-300 text-[11px] flex items-center gap-1">
-            <i data-lucide="external-link" class="w-3 h-3"></i>
-            <span>Solscan</span>
+
+        <!-- Solana RPC Network Gateway & Custom Endpoint Bar -->
+        <div class="p-4 rounded-lg bg-lab-900 border border-lab-border space-y-3 font-mono text-xs">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <i data-lucide="radio" class="w-4 h-4 text-cyan-400"></i>
+              <span class="text-white font-bold">Solana RPC Network Gateway</span>
+              <span id="rpcPingStatus" class="text-[10px] px-2 py-0.5 rounded bg-lab-950 border border-lab-border text-slate-400">Auto: Multi-Node Pool</span>
+            </div>
+            <button type="button" onclick="testRpcConnection()" class="px-2.5 py-1 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-slate-300 hover:text-white text-[11px] flex items-center gap-1 self-start sm:self-auto transition-colors cursor-pointer">
+              <i data-lucide="activity" class="w-3 h-3 text-emerald-400"></i>
+              <span>Ping / Test Node</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div class="sm:col-span-1">
+              <select id="rpcEndpointSelector" onchange="onRpcSelectorChange()" class="w-full bg-lab-950 border border-lab-border rounded p-2 text-white font-mono text-xs focus:outline-none focus:border-cyan-500">
+                <option value="auto" selected>Auto: Fastest Public Node</option>
+                <option value="https://solana-rpc.publicnode.com">Publicnode Primary (solana-rpc)</option>
+                <option value="https://solana.publicnode.com">Publicnode Global (solana.publicnode)</option>
+                <option value="https://sivlet-x402-gateway.sivletlabs.workers.dev/rpc">Cloudflare Gateway Proxy</option>
+                <option value="custom">Custom RPC Endpoint...</option>
+              </select>
+            </div>
+            <div class="sm:col-span-2">
+              <input type="text" id="customRpcInput" placeholder="Paste custom RPC (e.g. https://mainnet.helius-rpc.com/?api-key=...)" class="w-full bg-lab-950 px-3 py-2 rounded border border-lab-border text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono" onchange="saveCustomRpc()">
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3 pt-1 font-mono">
+          <a href="https://app.meteora.ag/dlmm/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="px-3.5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs flex items-center gap-1.5 transition-colors">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            <span>Meteora App &nearr;</span>
+          </a>
+          <a href="https://solscan.io/account/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="px-3.5 py-2 rounded-lg bg-lab-850 hover:bg-lab-800 border border-lab-border text-slate-300 hover:text-white text-xs flex items-center gap-1.5 transition-colors">
+            <i data-lucide="external-link" class="w-3.5 h-3.5 text-cyan-400"></i>
+            <span>Solscan Pool State &nearr;</span>
           </a>
         </div>
       </div>
-
-      <!-- Liquidity Parameters Form -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 font-mono text-xs">
-        
-        <!-- Base Asset: $SIVLET Deposit -->
-        <div class="p-4 rounded-lg bg-lab-900 border border-lab-border space-y-3">
-          <div class="flex justify-between items-center text-slate-400">
-            <span>Base Token Deposit ($SIVLET):</span>
-            <span class="text-emerald-400 font-semibold" id="sivletPctLabel">50% of Supply</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <input type="number" id="dlmmSivletInput" value="500000000" step="10000000" min="10000000" max="1000000000" oninput="updateSimulationPreview()" class="w-full bg-lab-950 px-3 py-2 rounded border border-lab-border text-lg font-bold text-white focus:outline-none focus:border-emerald-500 font-mono">
-          </div>
-          <!-- Quick Amount Buttons -->
-          <div class="grid grid-cols-4 gap-1.5 text-[10px]">
-            <button onclick="setSivletDeposit(200000000, '20%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">20% (200M)</button>
-            <button onclick="setSivletDeposit(500000000, '50%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">50% (500M)</button>
-            <button onclick="setSivletDeposit(800000000, '80%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">80% (800M)</button>
-            <button onclick="setSivletDeposit(1000000000, '100%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">100% (1B)</button>
-          </div>
-        </div>
-
-        <!-- Quote Asset: SOL Deposit -->
-        <div class="p-4 rounded-lg bg-lab-900 border border-lab-border space-y-3">
-          <div class="flex justify-between items-center text-slate-400">
-            <span>Quote Token Paired (SOL):</span>
-            <span class="text-emerald-400 font-semibold text-[11px]" id="solEstUsdLabel">0 SOL (Single-Sided Ask / 100% Free)</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <input type="number" id="dlmmSolInput" value="0" step="0.01" min="0" oninput="updateSimulationPreview()" class="w-full bg-lab-950 px-3 py-2 rounded border border-lab-border text-lg font-bold text-cyan-300 focus:outline-none focus:border-cyan-500 font-mono" placeholder="0">
-          </div>
-          <!-- Quick Amount Buttons -->
-          <div class="grid grid-cols-4 gap-1.5 text-[10px]">
-            <button type="button" onclick="setSolDeposit(0)" class="py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 text-center font-bold">0 SOL (Free)</button>
-            <button type="button" onclick="setSolDeposit(0.01)" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">0.01 SOL</button>
-            <button type="button" onclick="setSolDeposit(0.02)" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">0.02 SOL</button>
-            <button type="button" onclick="setSolDeposit(0.05)" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">0.05 SOL</button>
-          </div>
-          <div class="text-[10px] text-slate-400 flex items-center gap-1.5 pt-1 border-t border-lab-border/50">
-            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i>
-            <span><strong>0 SOL Mode</strong>: Deposit $SIVLET only. Buyers inject SOL into your pool as they buy!</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- DLMM Fee Tier & Market Maker Parameters -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
-        
-        <div class="p-3.5 rounded bg-lab-900 border border-lab-border space-y-2">
-          <div class="text-slate-400 text-[11px] font-semibold">DLMM Base Fee Tier</div>
-          <select id="dlmmFeeTierSelect" onchange="updateSimulationPreview()" class="w-full bg-lab-950 border border-lab-border rounded p-2 text-white font-mono text-xs focus:outline-none">
-            <option value="100" selected>1.0% (100 bps) - Standard Volatility</option>
-            <option value="200">2.0% (200 bps) - Aggressive Protocol Tier</option>
-            <option value="1000">10.0% (1000 bps) - Max Buyback &amp; Burn</option>
-          </select>
-          <div class="text-[10px] text-slate-500">Every swap generates trading fees for buyback flywheel.</div>
-        </div>
-
-        <div class="p-3.5 rounded bg-lab-900 border border-lab-border space-y-2">
-          <div class="text-slate-400 text-[11px] font-semibold">Dynamic Volatility Surge</div>
-          <div class="flex items-center gap-2 p-2 rounded bg-lab-950 border border-lab-border text-emerald-400 font-semibold">
-            <i data-lucide="activity" class="w-3.5 h-3.5"></i>
-            <span>Up to 25.0% Max Surge</span>
-          </div>
-          <div class="text-[10px] text-slate-500">Auto-amplifies fee capture during bot/MEV spikes.</div>
-        </div>
-
-        <div class="p-3.5 rounded bg-lab-900 border border-lab-border space-y-2">
-          <div class="text-slate-400 text-[11px] font-semibold">Alpha Vault Protection</div>
-          <div class="flex items-center gap-2 p-2 rounded bg-lab-950 border border-lab-border text-emerald-400 font-semibold">
-            <i data-lucide="shield" class="w-3.5 h-3.5"></i>
-            <span>Anti-Sniper Fair Launch</span>
-          </div>
-          <div class="text-[10px] text-slate-500">Blocks front-running bot snipers at launch.</div>
-        </div>
-
-      </div>
-
-      <!-- Real-Time Valuation & Price Preview Simulator -->
-      <div class="p-4 rounded-xl bg-gradient-to-r from-emerald-500/10 via-lab-900 to-cyan-500/10 border border-emerald-500/30 font-mono text-xs space-y-2">
-        <div class="text-slate-400 text-[11px] font-semibold flex items-center justify-between">
-          <span>Mathematical Liquidity Simulation Preview:</span>
-          <span class="text-emerald-400">Meteora DLMM LB Pair</span>
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
-          <div>
-            <div class="text-[10px] text-slate-500">Starting Price ($SIVLET)</div>
-            <div class="text-white font-bold text-sm" id="simPriceUsd">$0.000150</div>
-            <div class="text-[10px] text-slate-400" id="simPriceSol">~0.00000100 SOL</div>
-          </div>
-          <div>
-            <div class="text-[10px] text-slate-500">Implied FDV (Market Cap)</div>
-            <div class="text-emerald-400 font-bold text-sm" id="simFdvUsd">$150,000</div>
-            <div class="text-[10px] text-slate-400">1,000,000,000 Fixed Supply</div>
-          </div>
-          <div>
-            <div class="text-[10px] text-slate-500">Tokens per 1 SOL</div>
-            <div class="text-cyan-300 font-bold text-sm" id="simTokensPerSol">1,000,000 SIVLET</div>
-            <div class="text-[10px] text-slate-400">Active Bin ID: ~1388</div>
-          </div>
-          <div>
-            <div class="text-[10px] text-slate-500">Protocol Fee Flow</div>
-            <div class="text-purple-400 font-bold text-sm">90% Burn / 10% Cash</div>
-            <div class="text-[10px] text-slate-400">Automated TWAP Flywheel</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Solana RPC Network Gateway & Custom Endpoint Bar -->
-      <div class="p-4 rounded-xl bg-lab-900 border border-lab-border space-y-3 font-mono text-xs">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div class="flex items-center gap-2">
-            <i data-lucide="radio" class="w-4 h-4 text-cyan-400"></i>
-            <span class="text-white font-bold">Solana RPC Network Gateway</span>
-            <span id="rpcPingStatus" class="text-[10px] px-2 py-0.5 rounded bg-lab-950 border border-lab-border text-slate-400">Auto: Multi-Node Pool</span>
-          </div>
-          <button type="button" onclick="testRpcConnection()" class="px-2.5 py-1 rounded bg-lab-850 hover:bg-lab-800 border border-lab-border text-slate-300 hover:text-white text-[11px] flex items-center gap-1 self-start sm:self-auto transition-colors cursor-pointer">
-            <i data-lucide="activity" class="w-3 h-3 text-emerald-400"></i>
-            <span>Ping / Test Node</span>
-          </button>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-          <div class="sm:col-span-1">
-            <select id="rpcEndpointSelector" onchange="onRpcSelectorChange()" class="w-full bg-lab-950 border border-lab-border rounded p-2 text-white font-mono text-xs focus:outline-none focus:border-cyan-500">
-              <option value="auto" selected>Auto: Fastest Public Node</option>
-              <option value="https://solana-rpc.publicnode.com">Publicnode Primary (solana-rpc)</option>
-              <option value="https://solana.publicnode.com">Publicnode Global (solana.publicnode)</option>
-              <option value="https://sivlet-x402-gateway.sivletlabs.workers.dev/rpc">Cloudflare Gateway Proxy</option>
-              <option value="custom">Custom RPC Endpoint...</option>
-            </select>
-          </div>
-          <div class="sm:col-span-2">
-            <input type="text" id="customRpcInput" placeholder="Paste custom RPC (e.g. https://mainnet.helius-rpc.com/?api-key=... or http://127.0.0.1:8899)" class="w-full bg-lab-950 px-3 py-2 rounded border border-lab-border text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono" onchange="saveCustomRpc()">
-          </div>
-        </div>
-
-        <div class="text-[11px] text-slate-400 font-sans flex items-start gap-1.5 pt-1 border-t border-lab-border/40">
-          <i data-lucide="info" class="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5"></i>
-          <span>
-            <strong>Connection Tip</strong>: If your ISP or firewall blocks public Solana RPCs, select <em>Custom RPC</em> to paste your private Helius/QuickNode URL, enable VPN Global Mode, or use <strong>Method B (Meteora App)</strong> below for 100% reliable execution.
-          </span>
-        </div>
-      </div>
-
-      <!-- Dual Execution Strategy: Method A & Method B -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-1 font-mono text-xs">
-        
-        <!-- Method A: In-Page Direct Web3 Initializer -->
-        <div class="p-5 rounded-xl bg-lab-900 border border-emerald-500/30 flex flex-col justify-between space-y-4">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-white font-bold flex items-center gap-1.5">
-                <i data-lucide="zap" class="w-4 h-4 text-emerald-400"></i>
-                <span>Method A: Built-in 1-Click Initializer</span>
-              </span>
-              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">AUTOMATED</span>
-            </div>
-            <p class="text-[11px] text-slate-400 font-sans leading-relaxed">
-              Constructs an atomic DLMM LB Pair creation transaction in browser memory and sends it to your connected OKX / Phantom wallet for signature.
-            </p>
-          </div>
-
-          <div class="space-y-2 pt-2">
-            <button id="initDlmmBtn" onclick="executeMeteoraDlmmLaunch()" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-black font-bold text-xs sm:text-sm font-mono transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 cursor-pointer">
-              <i data-lucide="rocket" class="w-4 h-4"></i>
-              <span id="initDlmmBtnText">Sign &amp; Initialize DLMM Pool</span>
-            </button>
-            <div class="text-[10px] text-slate-500 text-center font-sans">
-              Requires live RPC blockhash &amp; ~0.020 SOL rent reserve
-            </div>
-          </div>
-        </div>
-
-        <!-- Method B: Official Meteora App Portal (Bypasses Local RPC Restrictions) -->
-        <div class="p-5 rounded-xl bg-lab-900 border border-cyan-500/30 flex flex-col justify-between space-y-4">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-white font-bold flex items-center gap-1.5">
-                <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
-                <span>Method B: Official Meteora App Portal</span>
-              </span>
-              <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">ZERO RPC ERRORS</span>
-            </div>
-            <p class="text-[11px] text-slate-400 font-sans leading-relaxed">
-              Meteora's official UI connects through enterprise Triton / Helius clusters behind Cloudflare Enterprise CDN. 100% immune to local RPC blocks!
-            </p>
-            <!-- Pre-Filled Setup Guide -->
-            <div class="p-2.5 rounded bg-lab-950 border border-lab-border text-[11px] space-y-1 text-slate-300 font-mono">
-              <div class="flex justify-between items-center">
-                <span class="text-slate-500">Base Token (A):</span>
-                <span class="text-emerald-400 truncate max-w-[140px]" title="8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos">8XtGP...eNos</span>
-              </div>
-              <div class="flex justify-between items-center">
-                <span class="text-slate-500">Quote Token (B):</span>
-                <span class="text-white">SOL</span>
-              </div>
-              <div class="flex justify-between items-center">
-                <span class="text-slate-500">Fee Tier / Bin Step:</span>
-                <span class="text-white">1% (100 bps) / 100</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="space-y-2 pt-2">
-            <a href="https://app.meteora.ag/dlmm/create" target="_blank" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-black font-bold text-xs sm:text-sm font-mono transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20">
-              <i data-lucide="external-link" class="w-4 h-4"></i>
-              <span>Open Meteora App Creator &nearr;</span>
-            </a>
-            <div class="text-[10px] text-slate-500 text-center font-sans">
-              Connect wallet on Meteora, paste $SIVLET mint &amp; confirm
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Additional Ecosystem Launch Protocols -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs font-mono pt-1">
-        <a href="https://launch.meteora.ag" target="_blank" class="p-2.5 rounded-lg bg-lab-900 hover:bg-lab-850 border border-lab-border text-slate-300 hover:text-white transition-colors flex items-center justify-center gap-2">
-          <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i>
-          <span>Meteora Dynamic Bonding Curve (DBC) &nearr;</span>
-        </a>
-
-        <a href="https://raydium.io/liquidity/create/?inputMint=8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos&outputMint=sol" target="_blank" class="p-2.5 rounded-lg bg-lab-900 hover:bg-lab-850 border border-lab-border text-slate-300 hover:text-white transition-colors flex items-center justify-center gap-2">
-          <i data-lucide="repeat" class="w-3.5 h-3.5 text-indigo-400"></i>
-          <span>Raydium CPMM Pool Initializer &nearr;</span>
-        </a>
-      </div>
-
-    </div>
+    </details>
 
     <!-- Mobile Scan-to-Sign Card (OKX & Phantom Mobile) -->
     <div class="lab-panel rounded-xl p-6 flex flex-col md:flex-row items-center gap-6">
       <div class="p-3 bg-white rounded-lg shadow-md shrink-0">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://sivletlabs.github.io/launch.html" alt="Scan to Launch" class="w-36 h-36">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://sivletlabs.github.io/launch.html%3Fv%3D94" alt="Scan to Launch" class="w-36 h-36">
       </div>
       <div class="flex-1 space-y-2 text-center md:text-left">
         <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-lab-900 border border-lab-border text-[11px] font-mono text-emerald-400">
@@ -822,9 +638,36 @@
       }
     }
 
-    function setDepositSivletAmount(amount, label) {
+    function setDepositSivletAmount(amount, label, activeBtnId = 'btnDeposit94') {
       const input = document.getElementById('depositSivletInput');
       if (input) input.value = amount;
+
+      const buttons = [
+        { id: 'btnDeposit94', defaultSub: 'Recommended', defaultSubColor: 'text-emerald-400 font-semibold uppercase tracking-wider' },
+        { id: 'btnDeposit90', defaultSub: '10% Retained', defaultSubColor: 'text-slate-500' },
+        { id: 'btnDeposit95', defaultSub: '5% Retained', defaultSubColor: 'text-slate-500' },
+        { id: 'btnDeposit100', defaultSub: '0% Retained', defaultSubColor: 'text-slate-500' }
+      ];
+
+      buttons.forEach(btnInfo => {
+        const btn = document.getElementById(btnInfo.id);
+        if (!btn) return;
+        const isSelected = (btnInfo.id === activeBtnId);
+        if (isSelected) {
+          btn.className = 'py-2.5 px-1 rounded-lg bg-emerald-500/25 text-emerald-300 border-2 border-emerald-500 font-bold text-center ring-2 ring-emerald-500/40 transition-all cursor-pointer';
+          const titleDiv = btn.querySelector('div:first-child');
+          if (titleDiv) titleDiv.className = 'font-extrabold text-sm text-white';
+          const subDiv = btn.querySelector('div:last-child');
+          if (subDiv) subDiv.className = 'text-[9px] text-emerald-400 font-semibold uppercase tracking-wider';
+        } else {
+          btn.className = 'py-2.5 px-1 rounded-lg bg-lab-850 hover:bg-lab-800 text-slate-300 border border-lab-border text-center transition-all cursor-pointer';
+          const titleDiv = btn.querySelector('div:first-child');
+          if (titleDiv) titleDiv.className = 'font-bold text-sm text-slate-300';
+          const subDiv = btn.querySelector('div:last-child');
+          if (subDiv) subDiv.className = `text-[9px] ${btnInfo.defaultSubColor}`;
+        }
+      });
+
       updateDepositPreview();
     }
 
@@ -840,17 +683,13 @@
       if (pctLabel) pctLabel.innerText = `${pct}% of Supply (${retainedPct}% Retained)`;
       if (btnText) btnText.innerText = `1-Click Sign & Deposit ${amount.toLocaleString()} $SIVLET (${pct}% Fair Launch)`;
       if (retainedNote) {
-        retainedNote.innerHTML = `<i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i><span><strong>${retained.toLocaleString()} $SIVLET (${retainedPct}%)</strong> safely retained in your wallet for ecosystem &amp; contract reserves.</span>`;
+        retainedNote.innerHTML = `<i data-lucide="shield-check" class="w-4 h-4 text-emerald-400 shrink-0"></i><span><strong>${retained.toLocaleString()} $SIVLET (${retainedPct}%)</strong> safely retained in your wallet for ecosystem &amp; contract reserves.</span>`;
         if (window.lucide) window.lucide.createIcons();
       }
     }
 
     function setSivletDeposit(amount, label) {
-      const input = document.getElementById('dlmmSivletInput');
-      const pctLabel = document.getElementById('sivletPctLabel');
-      if (input) input.value = amount;
-      if (pctLabel) pctLabel.innerText = `${label} of Supply`;
-      updateSimulationPreview();
+      setDepositSivletAmount(amount, label);
     }
 
     function setSolDeposit(amount) {
@@ -860,9 +699,9 @@
     }
 
     function updateSimulationPreview() {
-      const sivletInput = document.getElementById('dlmmSivletInput');
+      const sivletInput = document.getElementById('depositSivletInput') || document.getElementById('dlmmSivletInput');
       const solInput = document.getElementById('dlmmSolInput');
-      const sivletAmount = parseFloat(sivletInput?.value) || 500000000;
+      const sivletAmount = parseFloat(sivletInput?.value) || 940000000;
       const solAmount = parseFloat(solInput?.value) || 0;
 
       const solPriceUsd = 150; // Reference SOL/USD
@@ -1142,6 +981,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       loadCustomRpc();
       updateSimulationPreview();
+      updateDepositPreview();
       setTimeout(() => {
         if (window.okxwallet?.solana || window.phantom?.solana || window.solana?.isOkxWallet) {
           connectBrowserWallet();
@@ -1320,8 +1160,8 @@
 
       const btn = document.getElementById('initDlmmBtn');
       const btnText = document.getElementById('initDlmmBtnText');
-      btn.setAttribute('disabled', 'true');
-      btnText.innerText = 'Initializing DLMM Pool...';
+      if (btn) btn.setAttribute('disabled', 'true');
+      if (btnText) btnText.innerText = 'Initializing DLMM Pool...';
       setStatus('INITIALIZING', 'amber');
 
       try {
@@ -1470,7 +1310,7 @@
         log(`DexScreener Link: https://dexscreener.com/solana/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh`, 'info');
 
         setStatus('DEPLOYED', 'emerald');
-        btnText.innerText = 'Pool Initialized Successfully!';
+        if (btnText) btnText.innerText = 'Pool Initialized Successfully!';
       } catch (err) {
         console.error('DLMM launch error:', err);
         let errMsg = 'Unknown transaction error';
@@ -1486,8 +1326,8 @@
         log(`DLMM Initialization Error: ${errMsg}`, 'error');
         log('💡 Tip: For 100% reliable 1-click launch without RPC limits, click "Open Meteora App Creator ↗" under Method B above!', 'warn');
         setStatus('FAILED', 'rose');
-        btn.removeAttribute('disabled');
-        btnText.innerText = 'Retry DLMM Pool Initialization';
+        if (btn) btn.removeAttribute('disabled');
+        if (btnText) btnText.innerText = 'Retry DLMM Pool Initialization';
       }
     }
   </script>
