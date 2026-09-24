@@ -44,7 +44,11 @@
   <!-- Solana Web3 SDK CDN -->
   <script src="https://unpkg.com/@solana/web3.js@1.98.0/lib/index.iife.min.js"></script>
 
-  <!-- Buffer Browser Polyfill CDN -->
+  <!-- Universal Browser Global, Process & Buffer Polyfills -->
+  <script>
+    window.global = window;
+    window.process = window.process || { env: { NODE_ENV: 'production', ANCHOR_BROWSER: 'true' }, version: '', browser: true, nextTick: function(cb) { setTimeout(cb, 0); } };
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/buffer/6.0.3/buffer.min.js"></script>
   <script>
     if (typeof window.Buffer === 'undefined' && typeof buffer !== 'undefined') {
@@ -53,7 +57,7 @@
   </script>
 
   <!-- Meteora DLMM SDK Browser Bundle -->
-  <script src="assets/meteora-dlmm.bundle.js"></script>
+  <script src="assets/meteora-dlmm.bundle.js?v=2.2.0"></script>
 
   <style>
     body { background-color: #08090c; color: #f8fafc; font-feature-settings: "cv02", "cv03", "cv04", "cv11"; }
@@ -736,7 +740,22 @@
         log(`- Mode: ${solDeposit <= 0 ? 'Single-Sided Ask (0 SOL Deposit / 100% Free Liquidity)' : (solDeposit + ' SOL Paired')}`);
 
         if (!window.MeteoraDLMM || !window.MeteoraDLMM.createCustomizablePermissionlessLbPair) {
-          throw new Error('Meteora DLMM SDK not loaded. Please refresh the page and retry.');
+          log('Meteora DLMM SDK initializing... Fetching latest module...', 'warn');
+          try {
+            await new Promise((resolve, reject) => {
+              const script = document.createElement('script');
+              script.src = 'assets/meteora-dlmm.bundle.js?v=' + Date.now();
+              script.onload = () => resolve();
+              script.onerror = () => reject(new Error('Network error loading Meteora DLMM SDK. Check network or use the direct Meteora app link below.'));
+              document.head.appendChild(script);
+            });
+          } catch (loadErr) {
+            throw new Error('Meteora DLMM SDK could not load. Please click "Meteora App Creator ↗" below to create directly on Meteora!');
+          }
+        }
+
+        if (!window.MeteoraDLMM || !window.MeteoraDLMM.createCustomizablePermissionlessLbPair) {
+          throw new Error('Meteora DLMM SDK is not supported by your browser sandbox. Please use the "Meteora App Creator ↗" button below to open Meteora directly.');
         }
 
         const [tokenX, tokenY] = window.sortTokenMints(NATIVE_SOL_PUBKEY, SIVLET_PUBKEY);
