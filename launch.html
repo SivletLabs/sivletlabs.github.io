@@ -128,33 +128,47 @@
     </div>
 
     <!-- Step Progress Tracker -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
       <!-- Step 1 Tile -->
-      <div class="lab-panel rounded-xl p-4 border border-emerald-500/40 bg-emerald-500/5 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-bold">
-            <i data-lucide="check" class="w-4 h-4"></i>
+      <div class="lab-panel rounded-xl p-3.5 border border-emerald-500/40 bg-emerald-500/5 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-bold">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i>
           </div>
           <div>
-            <div class="text-white font-bold text-xs">Step 1: SPL Token Genesis</div>
-            <div class="text-[11px] text-emerald-400">1B $SIVLET Minted &middot; 0% Inflation</div>
+            <div class="text-white font-bold text-xs">Step 1: Genesis</div>
+            <div class="text-[10px] text-emerald-400">1B Minted &middot; 0% Inf.</div>
           </div>
         </div>
-        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">COMPLETED</span>
+        <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[9px] font-bold">DONE</span>
       </div>
 
       <!-- Step 2 Tile -->
-      <div class="lab-panel rounded-xl p-4 border border-cyan-500/50 bg-cyan-500/5 flex items-center justify-between ring-1 ring-cyan-500/30">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center font-bold">
-            2
+      <div class="lab-panel rounded-xl p-3.5 border border-emerald-500/40 bg-emerald-500/5 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-bold">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i>
           </div>
           <div>
-            <div class="text-white font-bold text-xs">Step 2: Meteora DLMM Liquidity</div>
-            <div class="text-[11px] text-emerald-400">Concentrated LB Pair Pool Deployed</div>
+            <div class="text-white font-bold text-xs">Step 2: DLMM Pool</div>
+            <div class="text-[10px] text-emerald-400">Pair Deployed Live</div>
           </div>
         </div>
-        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">COMPLETED (LIVE)</span>
+        <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[9px] font-bold">DONE</span>
+      </div>
+
+      <!-- Step 3 Tile -->
+      <div class="lab-panel rounded-xl p-3.5 border border-cyan-500/60 bg-cyan-500/10 flex items-center justify-between ring-1 ring-cyan-500/40">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 flex items-center justify-center font-bold text-xs">
+            3
+          </div>
+          <div>
+            <div class="text-white font-bold text-xs">Step 3: Deposit Liquidity</div>
+            <div class="text-[10px] text-cyan-300">1-Click Sign in Wallet</div>
+          </div>
+        </div>
+        <span class="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[9px] font-bold animate-pulse">ACTIVE</span>
       </div>
     </div>
 
@@ -188,32 +202,38 @@
 
         <div class="p-3 rounded bg-lab-900 border border-lab-border">
           <div class="text-slate-500 text-[10px] uppercase">Detected SOL Balance</div>
-          <div class="text-white font-bold text-sm mt-0.5" id="userSolBalanceDisplay">0.0342 SOL</div>
-          <div class="text-[10px] text-emerald-400 mt-1" id="userSolStatusNote">Rent check passed (>=0.020 SOL)</div>
+          <div class="text-white font-bold text-sm mt-0.5" id="userSolBalanceDisplay">0.0089 SOL</div>
+          <div class="text-[10px] text-amber-400 mt-1" id="userSolStatusNote">Position rent needed (~0.042 SOL)</div>
         </div>
 
         <div class="p-3 rounded bg-lab-900 border border-lab-border">
-          <div class="text-slate-500 text-[10px] uppercase">Solana Network Rent Required</div>
-          <div class="text-cyan-400 font-bold text-sm mt-0.5">~0.018 SOL (~$2.70)</div>
-          <div class="text-[10px] text-slate-500 mt-1">One-time LB Pair State Allocation</div>
+          <div class="text-slate-500 text-[10px] uppercase">Refundable Position Rent</div>
+          <div class="text-cyan-400 font-bold text-sm mt-0.5">~0.042 SOL (~$6.00)</div>
+          <div class="text-[10px] text-slate-500 mt-1">100% Refundable if position closed</div>
         </div>
       </div>
 
       <!-- Dynamic Pre-Flight Rent Alert -->
-      <div id="rentWarningBox" class="hidden p-3.5 rounded-lg bg-amber-500/10 border border-amber-500/40 text-amber-300 space-y-1.5">
-        <div class="flex items-center gap-2 font-bold text-xs">
-          <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400 shrink-0"></i>
-          <span>Action Required: Minimum ~0.020 SOL Needed for Account Rent</span>
+      <div id="rentWarningBox" class="p-3.5 rounded-lg bg-amber-500/10 border border-amber-500/40 text-amber-300 space-y-2">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2 font-bold text-xs">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400 shrink-0"></i>
+            <span>Top-up Required: ~0.04 SOL (~$6 USD) Needed for Meteora Position Rent</span>
+          </div>
+          <button onclick="copyConnectedAddress()" class="px-2 py-0.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 text-[11px] font-mono flex items-center gap-1 shrink-0">
+            <i data-lucide="copy" class="w-3 h-3"></i>
+            <span>Copy Address</span>
+          </button>
         </div>
         <p class="text-[11px] text-amber-200/90 font-sans leading-relaxed">
-          Creating a DLMM liquidity pool on Solana requires allocating on-chain state accounts (<code class="font-mono bg-lab-900 px-1 py-0.5 rounded text-white">~0.018 SOL</code> one-time rent-exempt reserve). Please transfer at least <code class="font-mono bg-lab-900 px-1 py-0.5 rounded text-white">0.020 SOL</code> to your connected wallet (<code class="font-mono text-white text-[10px]" id="depositAddressHint">8XiwKV2K4TV8kN8ihUuZk4jZ7kAi5eHRFveU6wEcxsj3</code>).
+          Step 2 (Pool Creation) successfully allocated the on-chain pair state account. To execute Step 3 (depositing liquidity), Solana requires an additional <code class="font-mono bg-lab-900 px-1 py-0.5 rounded text-white">~0.042 SOL</code> one-time refundable rent-exempt reserve for the Position and BinArray accounts. Please transfer at least <code class="font-mono bg-lab-900 px-1 py-0.5 rounded text-white">~0.04 SOL</code> to your connected wallet (<code class="font-mono text-white text-[10px]" id="depositAddressHint">8XiwKV2K4TV8kN8ihUuZk4jZ7kAi5eHRFveU6wEcxsj3</code>).
         </p>
       </div>
 
-      <div id="rentSuccessBox" class="p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/40 text-emerald-300">
+      <div id="rentSuccessBox" class="hidden p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/40 text-emerald-300">
         <div class="flex items-center gap-2 font-bold text-xs">
           <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
-          <span>Wallet funded (0.034+ SOL detected). Rent &amp; gas checks passed! Ready to initialize Meteora DLMM pool.</span>
+          <span>Wallet funded (>=0.045 SOL detected)! Rent and network fee checks passed. Ready to 1-click sign and deposit liquidity!</span>
         </div>
       </div>
     </div>
@@ -278,15 +298,144 @@
       </div>
 
       <!-- Next Step: Liquidity Deposit Notice -->
-      <div class="p-3.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs font-mono space-y-1">
-        <div class="flex items-center gap-2 text-amber-300 font-bold">
-          <i data-lucide="info" class="w-4 h-4 text-amber-400 shrink-0"></i>
-          <span>Next Step to Enable Jupiter &amp; DexScreener Swaps:</span>
+      <div class="p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-200 text-xs font-mono space-y-1">
+        <div class="flex items-center gap-2 text-emerald-300 font-bold">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+          <span>Pool Account Finalized on Solana! Ready for Step 3:</span>
         </div>
         <p class="text-[11px] font-sans text-slate-300 leading-relaxed">
-          The LB Pair pool account is deployed, but its token reserves are currently empty (your connected wallet holds 100% of supply = 1,000,000,000 $SIVLET). Click <strong>"Deposit Liquidity on Meteora &nearr;"</strong> above to deposit your desired $SIVLET into the pool bins (0 SOL single-sided or paired with SOL). Once deposited, Jupiter and DexScreener will automatically route trades!
+          The LB Pair pool account is deployed, but its token reserves are currently empty (your connected wallet holds 100% of supply = 1,000,000,000 $SIVLET). Use <strong>Step 3 below</strong> to inject your $SIVLET tokens into the active bins with a <strong>1-click signature in OKX or Phantom</strong>. Once signed, Jupiter and DexScreener will automatically route swaps!
         </p>
       </div>
+    </div>
+
+    <!-- Step 3: 1-Click Liquidity Deposit & Swaps Activation Panel -->
+    <div id="step3DepositPanel" class="lab-panel rounded-xl p-6 sm:p-8 space-y-6 border-2 border-emerald-500/50 bg-gradient-to-b from-lab-900 to-lab-950">
+      
+      <!-- Section Title -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-5 border-b border-lab-border">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-bold text-xs">
+              3
+            </span>
+            <h2 class="font-display font-bold text-xl text-white">Step 3: 1-Click Liquidity Deposit</h2>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-mono font-bold animate-pulse">ACTION REQUIRED</span>
+          </div>
+          <p class="text-xs text-slate-400 font-sans mt-1">
+            Deposit your $SIVLET tokens into Meteora DLMM active bins to immediately activate liquidity routing on Jupiter Aggregator and DexScreener.
+          </p>
+        </div>
+        <div class="text-[11px] font-mono text-slate-400 bg-lab-900 px-3 py-1.5 rounded border border-lab-border shrink-0">
+          Target Pool: <span class="text-emerald-400 font-bold" title="CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh">CfoMtf...uthh</span>
+        </div>
+      </div>
+
+      <!-- Strategy & Active Bin Details -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
+        <div class="p-3 rounded bg-lab-900 border border-lab-border">
+          <div class="text-slate-500 text-[10px] uppercase">Active Bin ID</div>
+          <div class="text-cyan-400 font-bold text-sm mt-0.5" id="depositActiveBinDisplay">Bin #1429</div>
+          <div class="text-[10px] text-slate-500 mt-1">Bin Step: 100 bps (1%)</div>
+        </div>
+
+        <div class="p-3 rounded bg-lab-900 border border-lab-border">
+          <div class="text-slate-500 text-[10px] uppercase">Deposit Mode</div>
+          <div class="text-emerald-400 font-bold text-sm mt-0.5">Single-Sided Ask (0 SOL)</div>
+          <div class="text-[10px] text-slate-500 mt-1">0 SOL required &middot; Buyers inject SOL</div>
+        </div>
+
+        <div class="p-3 rounded bg-lab-900 border border-lab-border">
+          <div class="text-slate-500 text-[10px] uppercase">Refundable Position Rent</div>
+          <div class="text-white font-bold text-sm mt-0.5">~0.042 SOL (~$6 USD)</div>
+          <div class="text-[10px] text-slate-500 mt-1">100% refundable if position closed</div>
+        </div>
+      </div>
+
+      <!-- Deposit Form -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 font-mono text-xs">
+        
+        <!-- Base Asset: $SIVLET to Deposit -->
+        <div class="p-4 rounded-lg bg-lab-900 border border-emerald-500/30 space-y-3">
+          <div class="flex justify-between items-center text-slate-400">
+            <span>Tokens to Deposit ($SIVLET):</span>
+            <span class="text-emerald-400 font-semibold" id="depositSivletPctLabel">50% of Supply</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <input type="number" id="depositSivletInput" value="500000000" step="10000000" min="10000000" max="1000000000" oninput="updateDepositPreview()" class="w-full bg-lab-950 px-3 py-2 rounded border border-lab-border text-lg font-bold text-white focus:outline-none focus:border-emerald-500 font-mono">
+          </div>
+          <!-- Quick Amount Buttons -->
+          <div class="grid grid-cols-4 gap-1.5 text-[10px]">
+            <button type="button" onclick="setDepositSivletAmount(200000000, '20%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">20% (200M)</button>
+            <button type="button" onclick="setDepositSivletAmount(500000000, '50%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-emerald-400 font-bold text-center">50% (500M)</button>
+            <button type="button" onclick="setDepositSivletAmount(800000000, '80%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">80% (800M)</button>
+            <button type="button" onclick="setDepositSivletAmount(1000000000, '100%')" class="py-1 rounded bg-lab-850 hover:bg-lab-800 text-slate-300 text-center">100% (1B)</button>
+          </div>
+        </div>
+
+        <!-- Valuation Preview -->
+        <div class="p-4 rounded-lg bg-lab-900 border border-lab-border space-y-3">
+          <div class="text-slate-400">Liquidity &amp; Pricing Impact:</div>
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500">Initial Swap Price:</span>
+              <span class="text-white font-bold" id="depositPricePreview">$0.000100 (~0.00000067 SOL)</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500">Tokens per 1 SOL:</span>
+              <span class="text-cyan-300 font-bold" id="depositTokensPerSol">~1,500,000 SIVLET</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500">Trading Router Status:</span>
+              <span class="text-emerald-400 font-bold flex items-center gap-1">
+                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                <span>Enables Jupiter &amp; DexScreener</span>
+              </span>
+            </div>
+          </div>
+          <div class="text-[10px] text-slate-500 pt-1 border-t border-lab-border">
+            As soon as liquidity is deposited, Jupiter and DexScreener immediately start processing swaps!
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action Button -->
+      <div class="space-y-2 pt-2">
+        <button id="depositLiquidityBtn" onclick="executeDepositLiquidity()" class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black font-extrabold text-sm sm:text-base font-mono transition-all flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/20 cursor-pointer">
+          <i data-lucide="zap" class="w-5 h-5 fill-current"></i>
+          <span id="depositLiquidityBtnText">1-Click Sign &amp; Deposit 500,000,000 $SIVLET into Pool</span>
+        </button>
+        <div class="text-[11px] text-slate-400 text-center font-sans">
+          Click above &middot; Approve in your OKX Wallet or Phantom &middot; 100% Non-Custodial
+        </div>
+      </div>
+
+      <!-- Deposit Success Modal / Card (Hidden by default) -->
+      <div id="depositSuccessCard" class="hidden p-5 rounded-xl bg-emerald-500/10 border-2 border-emerald-500/50 space-y-3 font-mono text-xs">
+        <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+          <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+          <span>Liquidity Deposited Successfully! Trading is now LIVE!</span>
+        </div>
+        <p class="text-slate-300 text-xs font-sans">
+          Your $SIVLET liquidity is active in Meteora DLMM pool <code class="font-mono text-white bg-lab-900 px-1 py-0.5 rounded">CfoMtfSw...uthh</code>. Anyone can now buy and sell $SIVLET on Jupiter Aggregator and view live trading charts on DexScreener.
+        </p>
+        <div class="flex flex-wrap items-center gap-3 pt-2">
+          <a href="https://jup.ag/swap/SOL-8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos" target="_blank" class="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs flex items-center gap-1.5 transition-colors">
+            <i data-lucide="repeat" class="w-4 h-4"></i>
+            <span>Swap on Jupiter &nearr;</span>
+          </a>
+          <a href="https://dexscreener.com/solana/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh" target="_blank" class="px-4 py-2 rounded-lg bg-lab-850 hover:bg-lab-800 border border-lab-border text-white text-xs flex items-center gap-1.5 transition-colors">
+            <i data-lucide="line-chart" class="w-4 h-4 text-cyan-400"></i>
+            <span>View DexScreener Chart &nearr;</span>
+          </a>
+          <a id="depositTxSigLink" href="#" target="_blank" class="px-4 py-2 rounded-lg bg-lab-850 hover:bg-lab-800 border border-lab-border text-cyan-300 text-xs flex items-center gap-1.5 transition-colors">
+            <i data-lucide="external-link" class="w-4 h-4"></i>
+            <span>View Solscan Tx &nearr;</span>
+          </a>
+        </div>
+      </div>
+
     </div>
 
     <!-- Step 2: Meteora DLMM Liquidity Pool Initializer Panel -->
@@ -669,6 +818,23 @@
       }
     }
 
+    function setDepositSivletAmount(amount, label) {
+      const input = document.getElementById('depositSivletInput');
+      const pctLabel = document.getElementById('depositSivletPctLabel');
+      const btnText = document.getElementById('depositLiquidityBtnText');
+      if (input) input.value = amount;
+      if (pctLabel) pctLabel.innerText = `${label} of Supply`;
+      if (btnText) btnText.innerText = `1-Click Sign & Deposit ${amount.toLocaleString()} $SIVLET into Pool`;
+      updateDepositPreview();
+    }
+
+    function updateDepositPreview() {
+      const input = document.getElementById('depositSivletInput');
+      const btnText = document.getElementById('depositLiquidityBtnText');
+      const amount = parseFloat(input?.value) || 500000000;
+      if (btnText) btnText.innerText = `1-Click Sign & Deposit ${amount.toLocaleString()} $SIVLET into Pool`;
+    }
+
     function setSivletDeposit(amount, label) {
       const input = document.getElementById('dlmmSivletInput');
       const pctLabel = document.getElementById('sivletPctLabel');
@@ -880,18 +1046,19 @@
         const rentWarn = document.getElementById('rentWarningBox');
         const rentSuccess = document.getElementById('rentSuccessBox');
         const solNote = document.getElementById('userSolStatusNote');
-        if (balSol < 0.020) {
+        const minRentNeeded = 0.045; // ~0.042 SOL for position & bin array state rent
+        if (balSol < minRentNeeded) {
           if (rentWarn) rentWarn.classList.remove('hidden');
           if (rentSuccess) rentSuccess.classList.add('hidden');
           if (solNote) {
-            solNote.innerText = 'Rent minimum: ~0.020 SOL';
+            solNote.innerText = 'Position rent needed (~0.042 SOL)';
             solNote.className = 'text-[10px] text-amber-400 mt-1';
           }
         } else {
           if (rentWarn) rentWarn.classList.add('hidden');
           if (rentSuccess) rentSuccess.classList.remove('hidden');
           if (solNote) {
-            solNote.innerText = 'Rent check passed (>=0.020 SOL)';
+            solNote.innerText = 'Rent check passed (>=0.045 SOL)';
             solNote.className = 'text-[10px] text-emerald-400 mt-1';
           }
         }
@@ -971,6 +1138,166 @@
         }
       }, 600);
     });
+
+    // -------------------------------------------------------------------------
+    // Meteora DLMM 1-Click Liquidity Deposit Engine (Step 3)
+    // -------------------------------------------------------------------------
+    async function executeDepositLiquidity() {
+      if (!connectedUserPubkey || !walletProvider) {
+        alert('Please connect your Solana wallet first!');
+        return;
+      }
+
+      const btn = document.getElementById('depositLiquidityBtn');
+      const btnText = document.getElementById('depositLiquidityBtnText');
+      btn.setAttribute('disabled', 'true');
+      btnText.innerText = 'Preparing Liquidity Transaction...';
+      setStatus('DEPOSITING', 'amber');
+
+      try {
+        const { PublicKey, Keypair } = solanaWeb3;
+
+        log('Connecting to Solana RPC network...');
+        const { conn: connection, blockhash, lastValidBlockHeight, url: activeRpcUrl } = await getActiveConnection();
+        log(`Connected! Using RPC: ${activeRpcUrl} (Blockhash: ${blockhash.slice(0, 10)}...)`, 'success');
+
+        // Check wallet SOL balance
+        const userBalLamports = await connection.getBalance(connectedUserPubkey);
+        const userBalSol = userBalLamports / 1e9;
+        log(`Wallet Balance: ${userBalSol.toFixed(4)} SOL`);
+
+        const minRentNeeded = 0.045; // ~0.042 SOL position & bin array rent + network gas buffer
+        if (userBalSol < minRentNeeded) {
+          const shortfall = (minRentNeeded - userBalSol).toFixed(4);
+          throw new Error(`Insufficient SOL in wallet (${userBalSol.toFixed(4)} SOL). You need ~0.042 SOL to pay for the one-time refundable Solana account rent (position & bin array accounts). Please transfer at least ~${shortfall} SOL (~$6 USD) to ${connectedUserPubkey.toBase58()} and try again.`);
+        }
+
+        const sivletAmount = parseFloat(document.getElementById('depositSivletInput')?.value) || 500000000;
+        const POOL_PUBKEY = new PublicKey('CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh');
+
+        log(`Loading DLMM Pool state for ${POOL_PUBKEY.toBase58()}...`);
+        if (!window.MeteoraDLMM || !window.MeteoraDLMM.create) {
+          throw new Error('Meteora DLMM SDK not loaded. Please refresh the page or check your connection.');
+        }
+
+        const dlmmPool = await window.MeteoraDLMM.create(connection, POOL_PUBKEY);
+        const activeBinId = dlmmPool.lbPair.activeId;
+        log(`DLMM Pool loaded! Active Bin ID: ${activeBinId}`);
+
+        const activeDisp = document.getElementById('depositActiveBinDisplay');
+        if (activeDisp) activeDisp.innerText = `Bin #${activeBinId}`;
+
+        const newPosition = Keypair.generate();
+        log(`Allocating position account: ${newPosition.publicKey.toBase58()}...`);
+
+        const totalXAmount = new window.BN(0);
+        const totalYAmount = new window.BN(sivletAmount).mul(new window.BN(10).pow(new window.BN(9)));
+
+        log(`Building deposit transaction for ${sivletAmount.toLocaleString()} $SIVLET (0 SOL)...`);
+        const tx = await dlmmPool.initializePositionAndAddLiquidityByStrategy({
+          positionPubKey: newPosition.publicKey,
+          user: connectedUserPubkey,
+          totalXAmount,
+          totalYAmount,
+          strategy: {
+            maxBinId: activeBinId,
+            minBinId: activeBinId,
+            strategyType: (window.MeteoraDLMM.StrategyType ? window.MeteoraDLMM.StrategyType.Spot : 0)
+          }
+        });
+
+        if (solanaWeb3.ComputeBudgetProgram) {
+          tx.instructions.unshift(
+            solanaWeb3.ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 50000 }),
+            solanaWeb3.ComputeBudgetProgram.setComputeUnitLimit({ units: 250000 })
+          );
+        }
+
+        tx.feePayer = connectedUserPubkey;
+        tx.recentBlockhash = blockhash;
+
+        // Partial sign the newly generated position keypair
+        tx.partialSign(newPosition);
+
+        log('Requesting approval in your wallet... Please click "Approve" in OKX / Phantom.', 'warn');
+        setStatus('SIGNING', 'amber');
+
+        let txSig = null;
+        if (walletProvider.signTransaction) {
+          const signedTx = await walletProvider.signTransaction(tx);
+          const rawTx = signedTx.serialize();
+          log('Broadcasting liquidity transaction to Solana Mainnet...', 'info');
+          setStatus('BROADCASTING', 'amber');
+          txSig = await connection.sendRawTransaction(rawTx, {
+            skipPreflight: false,
+            preflightCommitment: 'confirmed'
+          });
+        } else if (walletProvider.signAndSendTransaction) {
+          const sendRes = await walletProvider.signAndSendTransaction(tx);
+          txSig = typeof sendRes === 'string' ? sendRes : (sendRes?.signature || sendRes?.txHash || sendRes);
+        } else {
+          throw new Error('Your wallet provider does not support signTransaction.');
+        }
+
+        if (!txSig) {
+          throw new Error('No signature received from wallet provider.');
+        }
+
+        log(`Transaction Broadcasted! Signature: ${txSig}`, 'info');
+        log('Waiting for network confirmation...', 'info');
+
+        try {
+          await connection.confirmTransaction({
+            blockhash,
+            lastValidBlockHeight,
+            signature: txSig
+          }, 'confirmed');
+        } catch (confirmErr) {
+          const statusRes = await connection.getSignatureStatus(txSig, { searchTransactionHistory: true });
+          if (statusRes && statusRes.value && !statusRes.value.err) {
+            log(`Transaction confirmed on-chain! Status: ${statusRes.value.confirmationStatus || 'finalized'}`, 'success');
+          } else {
+            throw confirmErr;
+          }
+        }
+
+        log('🎉 SUCCESS! Liquidity is deposited and finalized on Solana Mainnet!', 'success');
+        log(`Transaction: https://solscan.io/tx/${txSig}`, 'success');
+        log(`Jupiter Swap: https://jup.ag/swap/SOL-8XtGPfLuzutqEKRtAtwn9YN9JJhsyKzngqbC3rsyeNos`, 'success');
+        log(`DexScreener: https://dexscreener.com/solana/CfoMtfSw34cj75cMt7VXxA9nisNdzoW1iWfKCmQTuthh`, 'info');
+
+        setStatus('ACTIVE', 'emerald');
+        btnText.innerText = 'Liquidity Deposited Successfully!';
+
+        const successCard = document.getElementById('depositSuccessCard');
+        if (successCard) {
+          successCard.classList.remove('hidden');
+          const sigLink = document.getElementById('depositTxSigLink');
+          if (sigLink) {
+            sigLink.href = `https://solscan.io/tx/${txSig}`;
+            sigLink.innerText = 'Solscan: ' + txSig.slice(0, 6) + '...' + txSig.slice(-6);
+          }
+        }
+
+        checkWalletBalances(connectedUserPubkey);
+      } catch (err) {
+        console.error('Deposit error:', err);
+        let errMsg = 'Unknown deposit error';
+        if (typeof err === 'string') {
+          errMsg = err;
+        } else if (err) {
+          if (err.code === 4001 || String(err.message || '').includes('User rejected') || String(err.error || '').includes('User rejected')) {
+            errMsg = 'Transaction was declined in wallet.';
+          } else {
+            errMsg = err.message || err.error || err.description || (err.toString && err.toString() !== '[object Object]' ? err.toString() : JSON.stringify(err));
+          }
+        }
+        log(`Deposit Error: ${errMsg}`, 'error');
+        setStatus('FAILED', 'rose');
+        btn.removeAttribute('disabled');
+        btnText.innerText = 'Retry Liquidity Deposit';
+      }
+    }
 
     // -------------------------------------------------------------------------
     // Meteora DLMM Pool Initialization Engine
